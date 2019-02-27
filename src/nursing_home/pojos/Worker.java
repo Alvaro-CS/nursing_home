@@ -22,14 +22,14 @@ public class Worker implements Serializable{
 	}
 
 
-	public Worker(Integer id, String name, String job, Date hire_date, Double salary, byte[] photo) {
+	public Worker(Integer id, String name, String job, Date hire_date, Double salary) {//, byte[] photo) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.job = job;
 		this.hire_date = hire_date;
 		this.salary = salary;
-		this.photo = photo;
+		//this.photo = photo;
 	}
 	
 	@Override
