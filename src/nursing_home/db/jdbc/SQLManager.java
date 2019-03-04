@@ -1,5 +1,8 @@
 package nursing_home.db.jdbc;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -101,6 +104,20 @@ public class SQLManager {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void deleteWorker(Integer id)  {
+		try {
+			String sql = "DELETE FROM worker WHERE id=?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, id);
+			prep.executeUpdate();
+			System.out.println("Deletion finished.");
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	

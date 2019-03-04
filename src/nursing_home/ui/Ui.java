@@ -22,7 +22,7 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number");
 
-			System.out.println("1.New worker.\n" + "2.Select.\n" + "3.Salir.");
+			System.out.println("1.New worker.\n" + "2.Select.\n"+"3.Delete.\n" + "5.Salir.");
 			opcion = Integer.parseInt(consola.readLine());
 			switch (opcion) {
 			case 1:
@@ -58,12 +58,20 @@ public class Ui {
 				break;
 				
 			case 3:
+				sqlm.selectWorker();
+				System.out.println("Choose a worker to delete, type its ID: ");
+				int id = Integer.parseInt(consola.readLine());
+				sqlm.deleteWorker(id);
+				System.out.println("Deletion completed.");
+				break;
+				
+			case 5:
 				System.out.println("Exit.");
 				break;
 			default:
 				break;
 			}
-		} while (opcion != 3);
+		} while (opcion != 5);
 
 		sqlm.disconnect();
 	}
