@@ -9,9 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import nursing_home.pojos.Worker;
-import sample.db.pojos.Department;
 
 public class SQLManager {
+	
+	public SQLManager() {
+		super();
+	}
+	
 	private Connection c;
 	public void connect() {
 		try {
@@ -45,8 +49,8 @@ public class SQLManager {
 					" name TEXT NOT NULL," + 
 					" job TEXT NOT NULL," + 
 					" hire_date DATE," + 
-					" salary INTEGER NOT NULL," + 
-					" photo BLOB)";
+					" salary INTEGER NOT NULL)";
+			//	" photo BLOB)";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 		}
@@ -70,6 +74,7 @@ public class SQLManager {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
 		return w;//MIRAR QUE DEVUELVE 
 	}
@@ -97,5 +102,7 @@ public class SQLManager {
 		}
 		
 	}
+
+	
 	
 }
