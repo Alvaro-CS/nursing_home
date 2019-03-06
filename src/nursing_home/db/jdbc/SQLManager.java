@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import nursing_home.pojos.Worker;
 
@@ -63,7 +65,7 @@ public class SQLManager {
 		}
 	}
 	
-	public Worker insertWorker(Worker w) {
+	public void insertWorker(Worker w) {
 		try {
 		String sql = "INSERT INTO worker (name, job , hire_date , salary) " //falta foto
 				+ "VALUES (?,?,?,?);";
@@ -77,33 +79,59 @@ public class SQLManager {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
-		return w;//MIRAR QUE DEVUELVE 
+		 
 	}
 	
-	public void selectWorker() {//VER SI ESTO FUFA
+	public List<Worker> selectWorkers() {
 		try {
-		Statement stmt = c.createStatement();
-		String sqltext = "SELECT * FROM worker";
-		ResultSet rs = stmt.executeQuery(sqltext);
-		while (rs.next()) {
-			int id = rs.getInt("id");
-			String name = rs.getString("name");
-			String job = rs.getString("job");
-			Date hire_date = rs.getDate("hire_date");
-			Double salary = rs.getDouble("salary");
-			Worker worker = new Worker(id, name, job, hire_date, salary);//corregir esto
-			System.out.println(worker);
-		}
-		rs.close();
-		stmt.close();
-		System.out.println("Search finished.");
+			
+			Statement stmt = c.createStatement();
+			String sqltext = "SELECT * FROM worker";
+			ResultSet rs = stmt.executeQuery(sqltext);
+			List<Worker> workerList= new ArrayList<Worker>();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				String job = rs.getString("job");
+				Date hire_date = rs.getDate("hire_date");
+				Double salary = rs.getDouble("salary");
+				Worker worker = new Worker(id, name, job, hire_date, salary);
+				workerList.add(worker);
+				
+			}
+			rs.close();
+			stmt.close();
+			return workerList;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return null;
 		
+	}
+	
+	public Worker getWorker(Integer id) {
+		try {
+			String s= "SELECT * FROM worker WHERE id=?";
+			PreparedStatement p= c.prepareStatement(s);
+			p.setInt(1, id);
+			ResultSet rs= p.executeQuery();
+			Worker w = null;
+			while(rs.next()){
+				Integer w_id= rs.getInt("id");
+				String name= rs.getString("name");
+				String job= rs.getString("job");
+				Date hire_date = rs.getDate("hire_date");
+				Double salary = rs.getDouble("salary");	
+				w= new Worker(w_id, name, job, hire_date, salary);
+			}
+			return w;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void deleteWorker(Integer id)  {
@@ -111,14 +139,30 @@ public class SQLManager {
 			String sql = "DELETE FROM worker WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, id);
-			prep.executeUpdate();
-			System.out.println("Deletion finished.");
+			prep.executeUpdate();		
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 	}
+	public void updateWorker(Worker w) {
+		try {
+			String sql = "UPDATE worker SET name=?,job=?,salary=?  WHERE id=?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString(1, w.getName());
+			prep.setString(2, w.getJob());
+			prep.setDouble(3, w.getSalary());
+			prep.setInt(4, w.getId());
+
+			prep.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 	
 	

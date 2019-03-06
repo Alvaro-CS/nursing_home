@@ -22,7 +22,7 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number");
 
-			System.out.println("1.New worker.\n" + "2.Select.\n"+"3.Delete.\n" + "5.Salir.");
+			System.out.println("1.New worker.\n" + "2.Select.\n"+"3.Delete.\n" +"4.Update.\n"+ "5.Salir.");
 			opcion = Integer.parseInt(consola.readLine());
 			switch (opcion) {
 			case 1:
@@ -42,11 +42,6 @@ public class Ui {
 
 				Double salary = Double.parseDouble(consola.readLine());
 
-				/*
-				 * System.out.println("Introduce the salary");
-				 * 
-				 * Double salary=Double.parseDouble(consola.readLine());
-				 */
 				Worker w1 = new Worker(name, job, final_date, salary);
 				sqlm.insertWorker(w1);
 
@@ -54,17 +49,48 @@ public class Ui {
 				
 			case 2:
 				System.out.println("Showing the workers.");
-				sqlm.selectWorker();
+				System.out.println(sqlm.selectWorkers());
+				System.out.println("Search finished.");
 				break;
 				
 			case 3:
-				sqlm.selectWorker();
+				System.out.println(sqlm.selectWorkers());
 				System.out.println("Choose a worker to delete, type its ID: ");
 				int id = Integer.parseInt(consola.readLine());
 				sqlm.deleteWorker(id);
 				System.out.println("Deletion completed.");
 				break;
 				
+			case 4: 
+				System.out.println(sqlm.selectWorkers());
+				System.out.println("Choose a worker, type its ID: ");
+				id = Integer.parseInt(consola.readLine());
+				String answer;
+				Worker wu=sqlm.getWorker(id);
+				System.out.println("Do you want to change the name?");
+				System.out.println("Y/N");
+				answer = consola.readLine();
+				if(answer.equalsIgnoreCase("Y")) {
+				System.out.print("Type the new worker's name: ");
+				wu.setName(consola.readLine());					
+				}
+				System.out.println("Do you want to change the job?");
+				System.out.println("Y/N");
+				answer = consola.readLine();
+				if(answer.equalsIgnoreCase("Y")) {
+				System.out.print("Type the new worker's job: ");
+				wu.setJob(consola.readLine());					
+				}
+				System.out.println("Do you want to change the salary?");
+				System.out.println("Y/N");
+				answer = consola.readLine();
+				if(answer.equalsIgnoreCase("Y")) {
+				System.out.print("Type the new worker's salary: ");
+				wu.setSalary(Double.parseDouble(consola.readLine()));	
+				}
+				sqlm.updateWorker(wu);
+				System.out.println(sqlm.selectWorkers());
+				break;
 			case 5:
 				System.out.println("Exit.");
 				break;
