@@ -6,6 +6,10 @@ import java.util.Arrays;
 
 public class Drug implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3647401126213202256L;
 	private Integer id;
 	private String name;
 

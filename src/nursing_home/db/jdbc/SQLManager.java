@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nursing_home.pojos.Worker;
-
+//add DOB to sql
 public class SQLManager {
 	
 	public SQLManager() {
@@ -54,6 +54,7 @@ public class SQLManager {
 					" name TEXT NOT NULL," + 
 					" job TEXT NOT NULL," + 
 					" hire_date DATE," + 
+					" dob DATE," +
 					" salary INTEGER NOT NULL)";
 			//	" photo BLOB)";
 			stmt1.executeUpdate(sql1);
@@ -67,13 +68,14 @@ public class SQLManager {
 	
 	public void insertWorker(Worker w) {
 		try {
-		String sql = "INSERT INTO worker (name, job , hire_date , salary) " //falta foto
+		String sql = "INSERT INTO worker (name, job , hire_date, dob, salary) " //falta foto
 				+ "VALUES (?,?,?,?);";
 		PreparedStatement prep = c.prepareStatement(sql);
 		prep.setString(1, w.getName());
 		prep.setString(2, w.getJob());
 		prep.setDate(3,  w.getHire_date());
-		prep.setDouble(4, w.getSalary());
+		prep.setDate(4, w.getDob());
+		prep.setDouble(5, w.getSalary());
 		prep.executeUpdate();
 		prep.close();
 		}
@@ -95,8 +97,9 @@ public class SQLManager {
 				String name = rs.getString("name");
 				String job = rs.getString("job");
 				Date hire_date = rs.getDate("hire_date");
+				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");
-				Worker worker = new Worker(id, name, job, hire_date, salary);
+				Worker worker = new Worker(id, name, job, hire_date, dob, salary);
 				workerList.add(worker);
 				
 			}
@@ -123,8 +126,9 @@ public class SQLManager {
 				String name= rs.getString("name");
 				String job= rs.getString("job");
 				Date hire_date = rs.getDate("hire_date");
+				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");	
-				w= new Worker(w_id, name, job, hire_date, salary);
+				w= new Worker(w_id, name, job, hire_date, dob, salary);
 			}
 			return w;
 		}

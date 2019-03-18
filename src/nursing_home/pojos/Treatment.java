@@ -4,9 +4,14 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Treatment implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7466068630410510066L;
 	private Integer id;
 	private String name;
 	private Date initial_date;
@@ -15,7 +20,7 @@ public class Treatment implements Serializable {
 
 	public Treatment() {
 		super();
-		this.residents=new ArrayList<Resident>;
+		this.residents=new ArrayList<Resident>();
 	}
 
 	public Integer getId() {

@@ -5,11 +5,16 @@ import java.sql.Date;
 import java.util.Arrays;
 
 public class Worker implements Serializable{
-
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7225947562836015154L;
+	//serial version
 	private Integer id;
 	private String name;
 	private String job;
 	private Date hire_date;
+	private Date dob;
 	private Double salary;
 	private byte[] photo;
 	public Integer getId() {
@@ -23,30 +28,32 @@ public class Worker implements Serializable{
 
 
 	
-	public Worker(String name, String job, Date hire_date, Double salary) {//, byte[] photo) {
+	public Worker(String name, String job, Date hire_date, Date dob, Double salary) {//, byte[] photo) {
 		super();
 		
 		this.name = name;
 		this.job = job;
 		this.hire_date = hire_date;
+		this.dob= dob;
 		this.salary = salary;
 		//this.photo = photo;
 	}
 	
-	public Worker(Integer id,String name, String job, Date hire_date, Double salary) {//, byte[] photo) {
+	public Worker(Integer id,String name, String job, Date hire_date, Date dob, Double salary) {//, byte[] photo) {
 		super();
 		
 		this.id=id;
 		this.name = name;
 		this.job = job;
 		this.hire_date = hire_date;
+		this.dob= dob;
 		this.salary = salary;
 		//this.photo = photo;
 	}
 	
 	@Override
 	public String toString() {
-		return "Worker [id=" + id + ", name=" + name + ", job=" + job + ", hire_date=" + hire_date + ", salary="
+		return "Worker [id=" + id + ", name=" + name + ", job=" + job + ", hire_date=" + hire_date + ",dob=\" + dob + \", salary="
 				+ salary + "]"; //, photo=" + Arrays.toString(photo) + 
 	}
 
@@ -72,6 +79,17 @@ public class Worker implements Serializable{
 	public void setHire_date(Date hire_date) {
 		this.hire_date = hire_date;
 	}
+	
+	public Date getDob() {
+		return dob;
+	}
+
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+
+
 	public Double getSalary() {
 		return salary;
 	}

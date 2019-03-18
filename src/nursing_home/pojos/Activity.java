@@ -5,6 +5,10 @@ import java.sql.Date;
 import java.util.Arrays;
 
 public class Activity implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6896487450338046523L;
 	private Integer id;
 	private String name;
 	private String hours;

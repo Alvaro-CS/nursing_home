@@ -5,6 +5,10 @@ import java.sql.Date;
 import java.util.Arrays;
 
 public class Room implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6749324661753403309L;
 	private Integer id;
 	private String roomtype;
 	private Integer floor;
