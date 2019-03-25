@@ -1,8 +1,5 @@
 package nursing_home.db.jdbc;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -15,6 +12,8 @@ import java.util.List;
 
 import nursing_home.pojos.Worker;
 //add DOB to sql
+//ADD THE NEW PARAMETERS TO CREATE TABLES ETC
+//ADD ON UPDATE/ON DELETE
 public class SQLManager {
 	
 	public SQLManager() {
@@ -33,7 +32,6 @@ public class SQLManager {
 				e.printStackTrace();
 		}
 	}
-		
 	public void disconnect() {
 		try {
 			c.close();
@@ -46,8 +44,7 @@ public class SQLManager {
 	
 	public void create() {
 		try {
-			Statement stmt1;
-			stmt1 = c.createStatement();
+			Statement stmt1= c.createStatement();
 			//ON UPDATE-CASCADE
 			String sql1 = "CREATE TABLE worker " + 
 					"(id INTEGER PRIMARY KEY AUTOINCREMENT," + 
@@ -59,6 +56,26 @@ public class SQLManager {
 			//	" photo BLOB)";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
+			
+			
+			Statement stmt2= c.createStatement();
+			//ON UPDATE-CASCADE
+			String sql2 = "CREATE TABLE resident "+
+					"(id INTEGER PRIMARY KEY AUTOINCREMENT,"+
+					"name TEXT NOT NULL ,"+
+					"dob DATE,"+
+					"telephone INTEGER,"+
+					"grade TEXT NOT NULL,"+
+					"checkin DATE,"+
+					"room_id INTEGER,"+
+					"FOREIGN KEY(room_id) REFERENCES room (id))";
+
+			//	" photo BLOB)";
+			stmt2.executeUpdate(sql2);
+			stmt2.close();
+			
+			
+			
 		}
 		catch (SQLException e) {
 		
@@ -69,7 +86,7 @@ public class SQLManager {
 	public void insertWorker(Worker w) {
 		try {
 		String sql = "INSERT INTO worker (name, job , hire_date, dob, salary) " //falta foto
-				+ "VALUES (?,?,?,?);";
+				+ "VALUES (?,?,?,?,?);";
 		PreparedStatement prep = c.prepareStatement(sql);
 		prep.setString(1, w.getName());
 		prep.setString(2, w.getJob());
@@ -143,7 +160,8 @@ public class SQLManager {
 			String sql = "DELETE FROM worker WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, id);
-			prep.executeUpdate();		
+			prep.executeUpdate();	
+			prep.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -160,6 +178,7 @@ public class SQLManager {
 			prep.setInt(4, w.getId());
 
 			prep.executeUpdate();
+			prep.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
