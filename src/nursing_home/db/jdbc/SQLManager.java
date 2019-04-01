@@ -1,5 +1,8 @@
 package nursing_home.db.jdbc;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -64,8 +67,8 @@ public class SQLManager {
 					" job TEXT NOT NULL," + 
 					" hire_date DATE," + 
 					" dob DATE," +
-					" salary INTEGER NOT NULL)";
-			//	" photo BLOB)";
+					" salary INTEGER NOT NULL)"+
+					" photo BLOB)";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 
@@ -79,9 +82,9 @@ public class SQLManager {
 					"grade TEXT NOT NULL,"+
 					"checkin DATE,"+
 					"room_id INTEGER,"+
-					"FOREIGN KEY(room_id) REFERENCES room (id))";
+					"FOREIGN KEY(room_id) REFERENCES room (id))"+
 
-			//	" photo BLOB)";
+					"photo BLOB)";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 
@@ -120,14 +123,16 @@ public class SQLManager {
 	public void insertWorker(Worker w) {
 		try {
 
-			String sql = "INSERT INTO workers (name, job , hire_date, dob, salary) " // falta foto
-					+ "VALUES (?,?,?,?);";
+			String sql = "INSERT INTO workers (name, job , hire_date, dob, salary, photo) " 
+					+ "VALUES (?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, w.getName());
 			prep.setString(2, w.getJob());
 			prep.setDate(3, w.getHire_date());
 			prep.setDate(4, w.getDob());
 			prep.setDouble(5, w.getSalary());
+			prep.setBytes(6, w.getPhoto());
+			
 			prep.executeUpdate();
 			prep.close();
 		} 
@@ -195,7 +200,8 @@ public class SQLManager {
 				Date hire_date = rs.getDate("hire_date");
 				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");
-				Worker worker = new Worker(id, name, job, hire_date, dob, salary);
+				byte[] photo=rs.getBytes("photo");
+				Worker worker = new Worker(id, name, job, hire_date, dob, salary, photo);
 				workerList.add(worker);
 
 			}
@@ -208,6 +214,8 @@ public class SQLManager {
 		return null;
 
 	}
+	
+	
 
 	public List<Room> selectRooms() {
 		try {
@@ -294,7 +302,7 @@ public class SQLManager {
 				Date hire_date = rs.getDate("hire_date");
 				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");
-				w = new Worker(w_id, name, job, hire_date, dob, salary);
+				w = new Worker(w_id, name, job, hire_date, dob, salary,photo);
 			}
 			return w;
 		} catch (SQLException e) {

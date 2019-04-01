@@ -1,11 +1,15 @@
 package nursing_home.ui;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import nursing_home.db.jdbc.SQLManager;
 import nursing_home.pojos.Worker;
@@ -22,7 +26,7 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number");
 
-			System.out.println("1.New worker.\n" + "2.Select.\n"+"3.Delete.\n" +"4.Update.\n"+ "5.Salir.");
+			System.out.println("1.New worker.\n" + "2.Select.\n"+"3.See details of 1 worker."+"4.Delete.\n" +"5.Update.\n"+ "6.Salir.");
 			opcion = Integer.parseInt(consola.readLine());
 			switch (opcion) {
 			case 1:
@@ -33,6 +37,11 @@ public class Ui {
 				System.out.println("Introduce the job");
 				String job = consola.readLine();
 
+				System.out.println("Introduce the birth date(''yyyy-mm-dd'')");
+
+				String birth_date = consola.readLine();
+				Date dob = transform_date(birth_date);
+				
 				System.out.println("Introduce the hire date(''yyyy-mm-dd'')");
 
 				String hire_date = consola.readLine();
@@ -41,8 +50,16 @@ public class Ui {
 				System.out.println("Introduce the salary");
 
 				Double salary = Double.parseDouble(consola.readLine());
+				
+				System.out.println("Introduce the name of the photo as it appears in the folder");
+				String fileName= consola.readLine();;
+				
 
-				Worker w1 = new Worker(name, job, final_date, salary);
+				File photo = new File("./photos/" + fileName);
+				InputStream streamBlob = new FileInputStream(photo); 
+
+				byte[] bytesBlob = new byte[streamBlob.available()];
+				Worker w1 = new Worker(name, job, final_date,dob, salary,bytesBlob);
 				sqlm.insertWorker(w1);
 
 				break;
@@ -54,6 +71,16 @@ public class Ui {
 				break;
 				
 			case 3:
+				List<Worker> list = sqlm.selectWorkers();
+				for(Worker worker: list) {
+					System.out.println(worker.toStringpartial());
+				}
+				System.out.println("Type the name of the worker to see in detail.");
+				
+				Integer id = Integer.parseInt(consola.readLine());
+				
+				
+			case 4:
 				System.out.println(sqlm.selectWorkers());
 				System.out.println("Choose a worker to delete, type its ID: ");
 				int id = Integer.parseInt(consola.readLine());
@@ -61,7 +88,7 @@ public class Ui {
 				System.out.println("Deletion completed.");
 				break;
 				
-			case 4: 
+			case 5: 
 				System.out.println(sqlm.selectWorkers());
 				System.out.println("Choose a worker, type its ID: ");
 				id = Integer.parseInt(consola.readLine());
@@ -91,13 +118,13 @@ public class Ui {
 				sqlm.updateWorker(wu);
 				System.out.println(sqlm.selectWorkers());
 				break;
-			case 5:
+			case 6:
 				System.out.println("Exit.");
 				break;
 			default:
 				break;
 			}
-		} while (opcion != 5);
+		} while (opcion != 6);
 
 		sqlm.disconnect();
 	}
