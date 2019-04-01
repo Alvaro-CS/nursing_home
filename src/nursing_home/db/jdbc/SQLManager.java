@@ -1,12 +1,5 @@
 package nursing_home.db.jdbc;
 
-<<<<<<< HEAD
-import java.io.BufferedReader;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-=======
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -22,7 +15,6 @@ import nursing_home.pojos.Worker;
 import nursing_home.pojos.Room;
 import nursing_home.pojos.Activity;
 import nursing_home.pojos.Drug;
-import nursing_home.pojos.Treatment;
 
 //add DOB to sql
 //ADD THE NEW PARAMETERS TO CREATE TABLES ETC
@@ -51,10 +43,7 @@ public class SQLManager {
 			e.printStackTrace();
 		}
 	}
-<<<<<<< HEAD
 
-=======
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
 	public void disconnect() {
 		try {
 			c.close();
@@ -66,14 +55,7 @@ public class SQLManager {
 
 	public void create() {
 		try {
-<<<<<<< HEAD
-			Statement stmt1;
-			stmt1 = c.createStatement();
-			// ON UPDATE-CASCADE
-			String sql1 = "CREATE TABLE workers " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + " name TEXT NOT NULL,"
-					+ " job TEXT NOT NULL," + " hire_date DATE," + " dob DATE," + " salary INTEGER NOT NULL)";
-			// " photo BLOB)";
-=======
+
 			Statement stmt1= c.createStatement();
 			//ON UPDATE-CASCADE
 			String sql1 = "CREATE TABLE worker " + 
@@ -84,10 +66,24 @@ public class SQLManager {
 					" dob DATE," +
 					" salary INTEGER NOT NULL)";
 			//	" photo BLOB)";
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
-<<<<<<< HEAD
+
+			Statement stmt2= c.createStatement();
+			//ON UPDATE-CASCADE
+			String sql2 = "CREATE TABLE resident "+
+					"(id INTEGER PRIMARY KEY AUTOINCREMENT,"+
+					"name TEXT NOT NULL ,"+
+					"dob DATE,"+
+					"telephone INTEGER,"+
+					"grade TEXT NOT NULL,"+
+					"checkin DATE,"+
+					"room_id INTEGER,"+
+					"FOREIGN KEY(room_id) REFERENCES room (id))";
+
+			//	" photo BLOB)";
+			stmt2.executeUpdate(sql2);
+			stmt2.close();
 
 			Statement stmt3 = c.createStatement();
 			String sql3 = "CREATE TABLE rooms (" + "id INTEGER PRIMARY KEY AUTOINCREMENT," + "room_type TEXT NOT NULL,"
@@ -112,42 +108,18 @@ public class SQLManager {
 					+ "FOREIGN KEY(id_resident) REFERENCES resident (id),"
 					+ "FOREIGN KEY (id_drug) REFERENCES drug (id))";
 			stmt6.executeUpdate(sql6);
-			stmt6.close();
-
-		} catch (SQLException e) {
-
-=======
-			
-			
-			Statement stmt2= c.createStatement();
-			//ON UPDATE-CASCADE
-			String sql2 = "CREATE TABLE resident "+
-					"(id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-					"name TEXT NOT NULL ,"+
-					"dob DATE,"+
-					"telephone INTEGER,"+
-					"grade TEXT NOT NULL,"+
-					"checkin DATE,"+
-					"room_id INTEGER,"+
-					"FOREIGN KEY(room_id) REFERENCES room (id))";
-
-			//	" photo BLOB)";
-			stmt2.executeUpdate(sql2);
-			stmt2.close();
-			
-			
+			stmt6.close();	
 			
 		}
 		catch (SQLException e) {
 		
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
 			e.printStackTrace();
 		}
 	}
 
 	public void insertWorker(Worker w) {
 		try {
-<<<<<<< HEAD
+
 			String sql = "INSERT INTO workers (name, job , hire_date, dob, salary) " // falta foto
 					+ "VALUES (?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
@@ -158,21 +130,8 @@ public class SQLManager {
 			prep.setDouble(5, w.getSalary());
 			prep.executeUpdate();
 			prep.close();
-		} catch (SQLException e) {
-=======
-		String sql = "INSERT INTO worker (name, job , hire_date, dob, salary) " //falta foto
-				+ "VALUES (?,?,?,?,?);";
-		PreparedStatement prep = c.prepareStatement(sql);
-		prep.setString(1, w.getName());
-		prep.setString(2, w.getJob());
-		prep.setDate(3,  w.getHire_date());
-		prep.setDate(4, w.getDob());
-		prep.setDouble(5, w.getSalary());
-		prep.executeUpdate();
-		prep.close();
-		}
+		} 
 		catch (SQLException e) {
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
 			e.printStackTrace();
 		}
 	}
@@ -349,16 +308,10 @@ public class SQLManager {
 			String sql = "DELETE FROM workers WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, id);
-<<<<<<< HEAD
 			prep.executeUpdate();
 			prep.close();
-		} catch (SQLException e) {
-=======
-			prep.executeUpdate();	
-			prep.close();
-		}
+		 }
 		catch (SQLException e) {
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
 			e.printStackTrace();
 		}
 
@@ -439,12 +392,9 @@ public class SQLManager {
 			prep.setInt(4, w.getId());
 			prep.executeUpdate();
 			prep.close();
-<<<<<<< HEAD
-		} catch (SQLException e) {
-=======
-		}
+
+		} 
 		catch (SQLException e) {
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
 			e.printStackTrace();
 		}
 	}
