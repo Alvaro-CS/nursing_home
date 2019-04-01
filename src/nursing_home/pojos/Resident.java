@@ -27,6 +27,38 @@ public class Resident implements Serializable {
 		super();
 		this.rooms = new ArrayList<Room>();
 	}
+	
+
+	public Resident(Integer id, String name, String gender, Date dob, Integer teleph, Integer dep_grade, Date checkin,
+			String notes, List<Room> rooms) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.gender = gender;
+		this.dob = dob;
+		this.teleph = teleph;
+		this.dep_grade = dep_grade;
+		this.checkin = checkin;
+		this.notes = notes;
+		this.rooms = rooms;
+	}
+
+
+	public Resident(Integer id, String name, String gender, Date dob, Integer teleph, Integer dep_grade, Date checkin,
+			byte[] photo, String notes, List<Room> rooms) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.gender = gender;
+		this.dob = dob;
+		this.teleph = teleph;
+		this.dep_grade = dep_grade;
+		this.checkin = checkin;
+		this.photo = photo;
+		this.notes = notes;
+		this.rooms = rooms;
+	}
+
 
 	public Integer getId() {
 		return id;
