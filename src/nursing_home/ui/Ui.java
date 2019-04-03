@@ -1,6 +1,7 @@
 package nursing_home.ui;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import nursing_home.db.jdbc.SQLManager;
 import nursing_home.pojos.Worker;
+import sample.db.graphics.ImageWindow;
 
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
@@ -75,15 +77,20 @@ public class Ui {
 				for(Worker worker: list) {
 					System.out.println(worker.toStringpartial());
 				}
-				System.out.println("Type the name of the worker to see in detail.");
-				
+				System.out.println("Type the id of the worker to see in detail.");
 				Integer id = Integer.parseInt(consola.readLine());
-				
+				Worker w=sqlm.getWorker(id);
+				System.out.println(w);//It prints all the info of the person
+				//Now, we show the photo
+				ImageWindow window = new ImageWindow();
+				ByteArrayInputStream blobIn = new ByteArrayInputStream(w.getPhoto());
+				window.showBlob(blobIn);
+				break;
 				
 			case 4:
 				System.out.println(sqlm.selectWorkers());
 				System.out.println("Choose a worker to delete, type its ID: ");
-				int id = Integer.parseInt(consola.readLine());
+				id = Integer.parseInt(consola.readLine());
 				sqlm.deleteWorker(id);
 				System.out.println("Deletion completed.");
 				break;
