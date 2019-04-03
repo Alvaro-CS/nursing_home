@@ -60,13 +60,13 @@ public class SQLManager {
 
 			Statement stmt1= c.createStatement();
 			//ON UPDATE-CASCADE
-			String sql1 = "CREATE TABLE worker " + 
+			String sql1 = "CREATE TABLE workers " + 
 					"(id INTEGER PRIMARY KEY AUTOINCREMENT," + 
 					" name TEXT NOT NULL," + 
 					" job TEXT NOT NULL," + 
 					" hire_date DATE," + 
 					" dob DATE," +
-					" salary INTEGER NOT NULL)"+
+					" salary INTEGER NOT NULL,"+
 					" photo BLOB)";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
@@ -81,9 +81,9 @@ public class SQLManager {
 					"grade TEXT NOT NULL,"+
 					"checkin DATE,"+
 					"room_id INTEGER,"+
-					"photo BLOB)";
-					"FOREIGN KEY(room_id) REFERENCES room (id))"+
-					
+				
+					"photo BLOB,"+
+					"FOREIGN KEY(room_id) REFERENCES rooms (id))";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 
@@ -336,6 +336,7 @@ public class SQLManager {
 				Date hire_date = rs.getDate("hire_date");
 				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");
+				byte[] photo=rs.getBytes("photo");
 				w = new Worker(w_id, name, job, hire_date, dob, salary,photo);
 			}
 			return w;
