@@ -23,7 +23,6 @@ import nursing_home.pojos.Drug;
 //ADD THE NEW PARAMETERS TO CREATE TABLES ETC
 //ADD ON UPDATE/ON DELETE
 public class SQLManager {
-//create: worker,room,activities,drugs,treatments
 //insert: worker,room,activity,drug
 //select:worker,drug,activity,room
 //get
@@ -74,7 +73,7 @@ public class SQLManager {
 
 			Statement stmt2= c.createStatement();
 			//ON UPDATE-CASCADE
-			String sql2 = "CREATE TABLE resident "+
+			String sql2 = "CREATE TABLE residents "+
 					"(id INTEGER PRIMARY KEY AUTOINCREMENT,"+
 					"name TEXT NOT NULL ,"+
 					"dob DATE,"+
@@ -82,9 +81,9 @@ public class SQLManager {
 					"grade TEXT NOT NULL,"+
 					"checkin DATE,"+
 					"room_id INTEGER,"+
-					"FOREIGN KEY(room_id) REFERENCES room (id))"+
-
 					"photo BLOB)";
+					"FOREIGN KEY(room_id) REFERENCES room (id))"+
+					
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 
@@ -140,10 +139,32 @@ public class SQLManager {
 			e.printStackTrace();
 		}
 	}
+	
+	public void insertResident(Resident r) {
+		try {
+
+			String sql = "INSERT INTO residents (name, dob , telephone, grade, checkin, room_id, photo) " 
+					+ "VALUES (?,?,?,?,?,?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString (1, r.getName());
+			prep.setDate (2, r.getDob());
+			prep.setInt (3, r.getTeleph());
+			prep.setInt (4, r.getDep_grade());
+			prep.setDate (5,r.getCheckin());
+			prep.setInt (6, r.getRoom().getId());
+			prep.setBytes (7, r.getPhoto());
+			
+			prep.executeUpdate();
+			prep.close();
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void insertRoom(Room r) {
 		try {
-			String sql = "INSERT INTO rooms(roomtype, floor,gender,notes)" + "VALUES (?,?,?,?);";
+			String sql = "INSERT INTO rooms (roomtype, floor,gender,notes)" + "VALUES (?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, r.getRoomtype());
 			prep.setInt(2, r.getFloor());
@@ -185,6 +206,19 @@ public class SQLManager {
 			e.printStackTrace();
 		}
 	}
+	public void insertTreatment (Treatment t) {
+		try {
+			String sql = "INSERT INTO treatment () VALUES (?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString(1, d.getName());
+			prep.executeUpdate();
+			prep.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	public List<Worker> selectWorkers() {
 		try {

@@ -3,6 +3,7 @@ package nursing_home.pojos;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.List;
 
 public class Room implements Serializable {
 	/**
@@ -14,6 +15,7 @@ public class Room implements Serializable {
 	private Integer floor;
 	private String gender;
 	private String notes;
+	private List <Resident> residents;
 
 	public Room() {
 		super();
@@ -75,6 +77,15 @@ public class Room implements Serializable {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	
+	public List<Resident> getResidents() {
+		return residents;
+	}
+
+	public void setResidents(List<Resident> residents) {
+		this.residents = residents;
+	}
+	
 
 	@Override
 	public int hashCode() {

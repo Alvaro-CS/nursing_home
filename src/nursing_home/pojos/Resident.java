@@ -21,7 +21,7 @@ public class Resident implements Serializable {
 	private Date checkin;
 	private byte[] photo;
 	private String notes;
-	private List<Room> rooms;
+	private Room room;
 	
 	public Resident() {
 		super();
@@ -131,14 +131,16 @@ public class Resident implements Serializable {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-
-	public List<Room> getRooms() {
-		return rooms;
+	
+	public Room getRoom() {
+		return room;
 	}
 
-	public void setRooms(List<Room> rooms) {
-		this.rooms = rooms;
+
+	public void setRoom(Room room) {
+		this.room = room;
 	}
+
 
 	@Override
 	public String toString() {
