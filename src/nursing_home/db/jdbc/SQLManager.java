@@ -16,6 +16,7 @@ import java.util.List;
 import nursing_home.pojos.Resident;
 import nursing_home.pojos.Worker;
 import nursing_home.pojos.Room;
+import nursing_home.pojos.Treatment;
 import nursing_home.pojos.Activity;
 import nursing_home.pojos.Drug;
 
@@ -208,12 +209,17 @@ public class SQLManager {
 	}
 	public void insertTreatment (Treatment t) {
 		try {
-			String sql = "INSERT INTO treatment () VALUES (?);";
+			String sql = "INSERT INTO treatment () VALUES (?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setString(1, d.getName());
+			prep.setInt(1, t.getId());
+			prep.setString(2, t.getName());
+			prep.setDate(3, t.getInitial_date());
+			prep.setDate (4, t.getFinal_date());
+			prep.setInt (5, 1);
+			prep.setInt (3, 1);
 			prep.executeUpdate();
 			prep.close();
-
+//ASK RODRIGO HOW TO DO THIS MANY TO MANY TABLE WITH ATRIBUTES
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

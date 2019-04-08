@@ -22,15 +22,15 @@ public class Resident implements Serializable {
 	private byte[] photo;
 	private String notes;
 	private Room room;
+	private Treatment treatment;
 	
 	public Resident() {
 		super();
-		this.rooms = new ArrayList<Room>();
 	}
 	
 
 	public Resident(Integer id, String name, String gender, Date dob, Integer teleph, Integer dep_grade, Date checkin,
-			String notes, List<Room> rooms) {
+			String notes, Room r) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -40,12 +40,12 @@ public class Resident implements Serializable {
 		this.dep_grade = dep_grade;
 		this.checkin = checkin;
 		this.notes = notes;
-		this.rooms = rooms;
+		this.room = r;
 	}
 
 
 	public Resident(Integer id, String name, String gender, Date dob, Integer teleph, Integer dep_grade, Date checkin,
-			byte[] photo, String notes, List<Room> rooms) {
+			byte[] photo, String notes, Room r) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -56,7 +56,8 @@ public class Resident implements Serializable {
 		this.checkin = checkin;
 		this.photo = photo;
 		this.notes = notes;
-		this.rooms = rooms;
+		this.room = r;
+
 	}
 
 
@@ -139,6 +140,16 @@ public class Resident implements Serializable {
 
 	public void setRoom(Room room) {
 		this.room = room;
+	}
+
+
+	public Treatment getTreatment() {
+		return treatment;
+	}
+
+
+	public void setTreatment(Treatment treatment) {
+		this.treatment = treatment;
 	}
 
 
