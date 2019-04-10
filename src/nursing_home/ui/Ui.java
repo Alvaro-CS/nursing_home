@@ -15,14 +15,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import nursing_home.db.jdbc.SQLManager;
+import nursing_home.db.jpa.JPAManager;
 import nursing_home.pojos.Worker;
 import sample.db.graphics.ImageWindow;
 
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
-
+	public static JPAManager em = new JPAManager(); 
 	public static void main(String[] args) throws NumberFormatException, IOException {
-
+		em.connect();
 		sqlm.connect();
 		sqlm.create();
 		BufferedReader consola = new BufferedReader(new InputStreamReader(System.in));
@@ -142,6 +143,7 @@ public class Ui {
 		} while (opcion != 6);
 
 		sqlm.disconnect();
+		em.disconnect();
 	}
 
 	public static Date transform_date(String date) {

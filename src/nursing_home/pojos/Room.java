@@ -134,4 +134,8 @@ public class Room implements Serializable {
 				+ notes + "]";
 	}
 
+	public void addResident(Resident r) {
+		if (!residents.contains(r))
+			residents.add(r);
+	}
 }

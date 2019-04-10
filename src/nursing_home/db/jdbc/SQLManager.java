@@ -496,4 +496,10 @@ public class SQLManager implements DBManager{
 		}
 	}
 
+	@Override
+	public void insertResidentRoom(Room r, Resident re) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
