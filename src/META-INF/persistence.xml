@@ -10,9 +10,12 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
  
 		<!-- Entity Class AQUI VAN LOS PJOS--> 
-		<class>sample.db.pojos.Employee</class>
-		<class>sample.db.pojos.Department</class>
-		<class>sample.db.pojos.Report</class>
+		<class>nursing_home.pojos.Activity</class>
+		<class>nursing_home.pojos.Drug</class>
+		<class>nursing_home.pojos.Resident</class> 
+	    <class>nursing_home.pojos.Room</class>
+	    <class>nursing_home.pojos.Treatment</class> 
+	    <class>nursing_home.pojos.Worker</class> 
  
 		<properties>	
 			<!-- Connection properties -->
