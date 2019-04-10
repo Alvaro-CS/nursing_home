@@ -5,12 +5,28 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
+@Entity
+@Table (name="residents")
 public class Resident implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 421019080175306753L;
+	@Id
+	@GeneratedValue(generator="residents")
+	@TableGenerator (name="residents", table= "sqlite_sequence",
+		pkColumnName= "name", valueColumnName="seq", pkColumnValue="residents") //Create table
+	
 	//serial version
 	private Integer id;
 	private String name;
@@ -19,8 +35,12 @@ public class Resident implements Serializable {
 	private Integer teleph;
 	private Integer dep_grade;
 	private Date checkin;
+	@Basic(fetch=FetchType.LAZY)
+	@Lob
 	private byte[] photo;
 	private String notes;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="room_id")
 	private Room room;
 	private Treatment treatment;
 	
