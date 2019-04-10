@@ -9,18 +9,16 @@
 	<persistence-unit name="nursing_home-provider" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
  
-		<!-- Entity Class AQUI VAN LOS PJOS--> 
-		<class>nursing_home.pojos.Activity</class>
-		<class>nursing_home.pojos.Drug</class>
+		<!-- Entity Class AQUI VAN LOS PJOS ANOTADOS--> 
+
 		<class>nursing_home.pojos.Resident</class> 
 	    <class>nursing_home.pojos.Room</class>
-	    <class>nursing_home.pojos.Treatment</class> 
-	    <class>nursing_home.pojos.Worker</class> 
+
  
 		<properties>	
 			<!-- Connection properties -->
 			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
-		    <property name="javax.persistence.jdbc.url"	value="jdbc:sqlite:./db/company.db" />
+		    <property name="javax.persistence.jdbc.url"	value="jdbc:sqlite:./db/nursing_home.db" />
 			<!-- Fill if we need user and password -->
 			<property name="javax.persistence.jdbc.user" value="" />
 			<property name="javax.persistence.jdbc.password" value="" />

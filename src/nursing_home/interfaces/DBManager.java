@@ -1,5 +1,6 @@
 package nursing_home.interfaces;
 
-public class DBManager {
 
+public interface DBManager {
+	
 }

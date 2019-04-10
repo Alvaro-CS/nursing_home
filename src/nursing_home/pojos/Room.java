@@ -5,16 +5,32 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+
+@Entity 
+@Table(name = "rooms") 
 public class Room implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6749324661753403309L;
+	
+	@Id 
+	@GeneratedValue(generator="rooms")
+	@TableGenerator(name="rooms", table="sqlite_sequence",
+	    pkColumnName="name", valueColumnName="seq", pkColumnValue="rooms")
+	
 	private Integer id;
 	private String roomtype;
 	private Integer floor;
 	private String gender;
 	private String notes;
+	@OneToMany(mappedBy="room")
 	private List <Resident> residents;
 
 	public Room() {

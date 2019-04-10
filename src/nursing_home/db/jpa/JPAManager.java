@@ -1,5 +1,8 @@
 package nursing_home.db.jpa;
 
-public class JPAManager {
+import nursing_home.interfaces.DBManager;
+
+public class JPAManager implements DBManager {
+
 
 }

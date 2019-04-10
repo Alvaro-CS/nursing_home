@@ -17,13 +17,14 @@ import nursing_home.pojos.Resident;
 import nursing_home.pojos.Worker;
 import nursing_home.pojos.Room;
 import nursing_home.pojos.Treatment;
+import nursing_home.interfaces.DBManager;
 import nursing_home.pojos.Activity;
 import nursing_home.pojos.Drug;
 
 //add DOB to sql
 //ADD THE NEW PARAMETERS TO CREATE TABLES ETC
 //ADD ON UPDATE/ON DELETE
-public class SQLManager {
+public class SQLManager implements DBManager{
 //insert: worker,room,activity,drug
 //select:worker,drug,activity,room
 //get
