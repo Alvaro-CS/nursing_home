@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +30,8 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number");
 
-			System.out.println("1.New worker.\n" + "2.Select.\n"+"3.See details of 1 worker."+"4.Delete.\n" +"5.Update.\n"+ "6.Salir.");
+			System.out.println("1.New worker.\n" + "2.Select.\n" + "3.See details of 1 worker.\n" + "4.Delete.\n"
+					+ "5.Update.\n" + "6.Salir.");
 			opcion = Integer.parseInt(consola.readLine());
 			switch (opcion) {
 			case 1:
@@ -43,7 +46,7 @@ public class Ui {
 
 				String birth_date = consola.readLine();
 				Date dob = transform_date(birth_date);
-				
+
 				System.out.println("Introduce the hire date(''yyyy-mm-dd'')");
 
 				String hire_date = consola.readLine();
@@ -52,41 +55,46 @@ public class Ui {
 				System.out.println("Introduce the salary");
 
 				Double salary = Double.parseDouble(consola.readLine());
-				
+
 				System.out.println("Introduce the name of the photo as it appears in the folder");
-				String fileName= consola.readLine();;
-				
+				String fileName = consola.readLine();
+				;
 
 				File photo = new File("./photos/" + fileName);
-				InputStream streamBlob = new FileInputStream(photo); 
+				InputStream streamBlob = new FileInputStream(photo);
 
 				byte[] bytesBlob = new byte[streamBlob.available()];
-				Worker w1 = new Worker(name, job, final_date,dob, salary,bytesBlob);
+				streamBlob.read(bytesBlob);
+				streamBlob.close();
+				Worker w1 = new Worker(name, job, final_date, dob, salary, bytesBlob);
 				sqlm.insertWorker(w1);
 
 				break;
-				
+
 			case 2:
 				System.out.println("Showing the workers.");
 				System.out.println(sqlm.selectWorkers());
 				System.out.println("Search finished.");
 				break;
-				
+
 			case 3:
 				List<Worker> list = sqlm.selectWorkers();
-				for(Worker worker: list) {
+				for (Worker worker : list) {
 					System.out.println(worker.toStringpartial());
 				}
 				System.out.println("Type the id of the worker to see in detail.");
 				Integer id = Integer.parseInt(consola.readLine());
-				Worker w=sqlm.getWorker(id);
-				System.out.println(w);//It prints all the info of the person
-				//Now, we show the photo
-				ImageWindow window = new ImageWindow();
-				ByteArrayInputStream blobIn = new ByteArrayInputStream(w.getPhoto());
-				window.showBlob(blobIn);
+				Worker w = sqlm.getWorker(id);
+				System.out.println(w);// It prints all the info of the person
+				// Now, we show the photo
+				if (w.getPhoto() != null) {
+					ByteArrayInputStream blobIn = new ByteArrayInputStream(w.getPhoto());
+					System.out.println("test");
+					ImageWindow window = new ImageWindow();
+					window.showBlob(blobIn);
+				}
 				break;
-				
+
 			case 4:
 				System.out.println(sqlm.selectWorkers());
 				System.out.println("Choose a worker to delete, type its ID: ");
@@ -94,33 +102,33 @@ public class Ui {
 				sqlm.deleteWorker(id);
 				System.out.println("Deletion completed.");
 				break;
-				
-			case 5: 
+
+			case 5:
 				System.out.println(sqlm.selectWorkers());
 				System.out.println("Choose a worker, type its ID: ");
 				id = Integer.parseInt(consola.readLine());
 				String answer;
-				Worker wu=sqlm.getWorker(id);
+				Worker wu = sqlm.getWorker(id);
 				System.out.println("Do you want to change the name?");
 				System.out.println("Y/N");
 				answer = consola.readLine();
-				if(answer.equalsIgnoreCase("Y")) {
-				System.out.print("Type the new worker's name: ");
-				wu.setName(consola.readLine());					
+				if (answer.equalsIgnoreCase("Y")) {
+					System.out.print("Type the new worker's name: ");
+					wu.setName(consola.readLine());
 				}
 				System.out.println("Do you want to change the job?");
 				System.out.println("Y/N");
 				answer = consola.readLine();
-				if(answer.equalsIgnoreCase("Y")) {
-				System.out.print("Type the new worker's job: ");
-				wu.setJob(consola.readLine());					
+				if (answer.equalsIgnoreCase("Y")) {
+					System.out.print("Type the new worker's job: ");
+					wu.setJob(consola.readLine());
 				}
 				System.out.println("Do you want to change the salary?");
 				System.out.println("Y/N");
 				answer = consola.readLine();
-				if(answer.equalsIgnoreCase("Y")) {
-				System.out.print("Type the new worker's salary: ");
-				wu.setSalary(Double.parseDouble(consola.readLine()));	
+				if (answer.equalsIgnoreCase("Y")) {
+					System.out.print("Type the new worker's salary: ");
+					wu.setSalary(Double.parseDouble(consola.readLine()));
 				}
 				sqlm.updateWorker(wu);
 				System.out.println(sqlm.selectWorkers());

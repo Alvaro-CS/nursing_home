@@ -53,7 +53,7 @@ public class Worker implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Worker [id=" + id + ", name=" + name + ", job=" + job + ", hire_date=" + hire_date + ",dob=\" + dob + \", salary="
+		return "Worker [id=" + id + ", name=" + name + ", job=" + job + ", hire_date=" + hire_date + ",dob=" + dob + ", salary="
 				+ salary + "]"; 
 	}
 	public String toStringpartial() {
