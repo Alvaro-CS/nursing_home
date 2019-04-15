@@ -180,11 +180,11 @@ public class Resident implements Serializable {
 	public String toString() {
 		return "Resident [id=" + id + ", name=" + name + ", gender=" + gender + ", dob=" + dob + ", teleph=" + teleph
 				+ ", dep_grade=" + dep_grade + ", checkin=" + checkin + ", photo=" + Arrays.toString(photo) + ", notes="
-				+ notes + "]";
+				+ notes + "]\n";
 	}
 	
 	public String toStringpartial() {
-		return "Resident [id=" + id + ", name=" + name+"]"; 
+		return "Resident [id=" + id + ", name=" + name+"]\n"; 
 	}
 
 

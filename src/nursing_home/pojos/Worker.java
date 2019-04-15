@@ -41,7 +41,7 @@ public class Worker implements Serializable{
 		this.photo = photo;
 	}
 	
-	public Worker(Integer id,String name, String job, Date hire_date, Date dob, Double salary, byte[] photo) {
+	public Worker(Integer id,String name,String gender, String job, Date hire_date, Date dob, Double salary, byte[] photo) {
 		super();
 		
 		this.id=id;
@@ -56,7 +56,7 @@ public class Worker implements Serializable{
 	@Override
 	public String toString() {
 		return "Worker [id=" + id + ", name=" + name + ", job=" + job + ", hire_date=" + hire_date + ",dob=" + dob + ", salary="
-				+ salary + "]"; 
+				+ salary + "]\n"; 
 	}
 	public String getGender() {
 		return gender;
@@ -69,7 +69,7 @@ public class Worker implements Serializable{
 
 
 	public String toStringpartial() {
-		return "Worker [id=" + id + ", name=" + name+"]"; 
+		return "Worker [id=" + id + ", name=" + name+"]\n"; 
 	}
 
 

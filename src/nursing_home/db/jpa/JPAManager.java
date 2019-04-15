@@ -13,7 +13,7 @@ public class JPAManager implements DBManager {
 
 	public void connect() {
 
-		em = Persistence.createEntityManagerFactory("nursing_-provider").createEntityManager(); // same name as the one
+		em = Persistence.createEntityManagerFactory("nursing_home-provider").createEntityManager(); // same name as the one
 																								// of persistence.xml
 		em.getTransaction().begin();
 		em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate(); // to activate foreign keys.

@@ -4,12 +4,13 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.sql.DatabaseMetaData;
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -29,7 +30,12 @@ public class Ui {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		em.connect();
 		sqlm.connect();
-		sqlm.create();
+		
+		boolean exist= sqlm.Check_tables_exist();
+		if(exist==false) {
+			sqlm.create();
+		}
+		
 
 		Integer opcion1 = 0;
 		do {
@@ -38,8 +44,13 @@ public class Ui {
 		switch(opcion1) {
 			case 1:
 			worker();
+			break;
 			case 2:
 		    resident();
+		    break;
+			case 3:
+				System.out.println("Exit.");
+				break;
 		} 
 		}
 		while (opcion1 != 3);
@@ -172,7 +183,7 @@ public class Ui {
 			System.out.println(sqlm.selectWorkers());
 			break;
 		case 6:
-			System.out.println("Exit.");
+			System.out.println("Going back to the menu.");
 			break;
 		default:
 			break;
@@ -190,7 +201,7 @@ public class Ui {
 		do {
 		System.out.println("Introduce the number");
 
-		System.out.println("1.New resident.\n" + "2.Basic info.\n" + "3.See details of 1 worker.\n" + "4.Delete.\n"
+		System.out.println("1.New resident.\n" + "2.Basic info.\n" + "3.See details of 1 resident.\n" + "4.Delete.\n"
 				+ "5.Update.\n" + "6.Salir.");
 		opcionr = Integer.parseInt(consola.readLine());
 		switch (opcionr) {
@@ -219,7 +230,7 @@ public class Ui {
 			String checkin = consola.readLine();
 			Date date_check = transform_date(checkin);
 
-			System.out.println("Introduce any extra notes or details about the patient.");
+			System.out.println("Introduce any extra notes or details about the resident.");
 			String notes = consola.readLine();
 
 			System.out.println("Introduce the name of the photo as it appears in the folder");
@@ -259,7 +270,7 @@ public class Ui {
 			for (Resident r2 : listr) {
 				System.out.println(r2.toStringpartial());
 			}
-			System.out.println("Type the id of the worker to see in detail.");
+			System.out.println("Type the id of the resident to see in detail.");
 			Integer id1 = Integer.parseInt(consola.readLine());
 			Resident r2 = sqlm.getResident(id1);
 			System.out.println(r2);// It prints all the info of the person
@@ -332,7 +343,7 @@ public class Ui {
 			System.out.println(sqlm.selectWorkers());
 			break;
 		case 6:
-			System.out.println("Exit.");
+			System.out.println("Going back to the menu.");
 			break;
 		default:
 			break;
@@ -342,6 +353,7 @@ public class Ui {
 	sqlm.disconnect();em.disconnect();
 }
 
+	
 
 	
 }

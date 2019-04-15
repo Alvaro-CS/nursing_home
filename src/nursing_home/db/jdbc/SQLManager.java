@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -63,7 +64,7 @@ public class SQLManager implements DBManager {
 		try {
 
 			Statement stmt1 = c.createStatement();
-			// ON UPDATE-CASCADE
+			// ON UPDATE-CASCADE ASK RODRIGO IF IT CHANGES ALSO IN THE TABLES. ALSO HOW TO CODE IT HERE.
 			String sql1 = "CREATE TABLE workers " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + " name TEXT NOT NULL,"
 					+ " gender TEXT," + " job TEXT NOT NULL," + " hire_date DATE," + " dob DATE,"
 					+ " salary INTEGER NOT NULL," + " photo BLOB)";
@@ -73,7 +74,7 @@ public class SQLManager implements DBManager {
 			Statement stmt2 = c.createStatement();
 			// ON UPDATE-CASCADE
 			String sql2 = "CREATE TABLE residents " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + "name TEXT NOT NULL ,"
-					+ "dob DATE," + "telephone INTEGER," + "grade TEXT NOT NULL," + "checkin DATE," + "room_id INTEGER,"
+					+ "gender TEXT," +" dob DATE," + "telephone INTEGER," + "grade TEXT NOT NULL," + "checkin DATE," + "room_id INTEGER,"
 					+ "photo BLOB," + "FOREIGN KEY(room_id) REFERENCES rooms (id))";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
@@ -98,21 +99,21 @@ public class SQLManager implements DBManager {
 			Statement stmt6 = c.createStatement();
 			String sql6 = "CREATE TABLE treatments " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + "name TEXT NOT NULL,"
 					+ "ini_date TIMESTAMP," + "end_date TIMESTAMP," + "id_resident INTEGER,"
-					+ "FOREIGN KEY(id_resident) REFERENCES resident (id),";
+					+ "FOREIGN KEY(id_resident) REFERENCES resident (id))";
 			stmt6.executeUpdate(sql6);
 			stmt6.close();
 
 			Statement stmt7 = c.createStatement();
 			String sql7 = "CREATE TABLE drug_treatment " + "(id_drug INTEGER," + "id_treatment INTEGER,"
-					+ "dosis TEXT NOT NULL," + "FOREIGN KEY(id_treatment) REFERENCES treatments (id),"
-					+ "FOREIGN KEY (id_drug) REFERENCES drugs (id)," + "PRIMARY KEY (id_drug,id_treatment))";
+					+ "dosis TEXT NOT NULL," + "FOREIGN KEY(id_treatment) REFERENCES treatments (id) "
+					+ "FOREIGN KEY (id_drug) REFERENCES drugs (id) PRIMARY KEY (id_drug,id_treatment))";
 
 			stmt7.executeUpdate(sql7);
 			stmt7.close();
 
 			Statement stmt8 = c.createStatement();
 			String sql8 = "CREATE TABLE activity_distribution " + "(id_worker INTEGER," + "id_activity INTEGER,"
-					+ "FOREIGN KEY(id_worker) REFERENCES worker (id),"
+					+ "FOREIGN KEY(id_worker) REFERENCES worker (id) "
 					+ "FOREIGN KEY (id_activity) REFERENCES activity (id))";
 
 			stmt8.executeUpdate(sql8);
@@ -120,14 +121,14 @@ public class SQLManager implements DBManager {
 
 			Statement stmt9 = c.createStatement();
 			String sql9 = "CREATE TABLE activity_resident " + "(id_resident INTEGER," + "id_activity INTEGER,"
-					+ "FOREIGN KEY(id_resident) REFERENCES resident (id),"
+					+ "FOREIGN KEY(id_resident) REFERENCES resident (id) "
 					+ "FOREIGN KEY (id_activity) REFERENCES activity (id))";
 			stmt9.executeUpdate(sql9);
 			stmt9.close();
 
 			Statement stmt10 = c.createStatement();
 			String sql10 = "CREATE TABLE worker_distribution" + "(id_worker INTEGER," + "id_resident INTEGER,"
-					+ "FOREIGN KEY(id_worker) REFERENCES worker (id),"
+					+ "FOREIGN KEY(id_worker) REFERENCES worker (id) "
 					+ "FOREIGN KEY (id_resident) REFERENCES resident (id))";
 			stmt10.executeUpdate(sql10);
 			stmt10.close();
@@ -141,7 +142,7 @@ public class SQLManager implements DBManager {
 	public void insertWorker(Worker w) {
 		try {
 
-			String sql = "INSERT INTO workers (name, job , hire_date, dob, salary, photo) " + "VALUES (?,?,?,?,?,?);";
+			String sql = "INSERT INTO workers (name, gender, job , hire_date, dob, salary, photo) " + "VALUES (?,?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, w.getName());
 			prep.setString(2, w.getGender());
@@ -160,16 +161,17 @@ public class SQLManager implements DBManager {
 	public void insertResident(Resident r) {
 		try {
 
-			String sql = "INSERT INTO residents (name, dob , telephone, grade, checkin, room_id, photo) "
-					+ "VALUES (?,?,?,?,?,?);";
+			String sql = "INSERT INTO residents (name, gender, dob , telephone, grade, checkin, room_id, photo) "
+					+ "VALUES (?,?,?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, r.getName());
-			prep.setDate(2, r.getDob());
-			prep.setInt(3, r.getTeleph());
-			prep.setString(4, r.getDep_grade());
-			prep.setDate(5, r.getCheckin());
-			prep.setInt(6, r.getRoom().getId());
-			prep.setBytes(7, r.getPhoto());
+			prep.setString(2, r.getGender());
+			prep.setDate(3, r.getDob());
+			prep.setInt(4, r.getTeleph());
+			prep.setString(5, r.getDep_grade());
+			prep.setDate(6, r.getCheckin());
+			prep.setInt(7, r.getRoom().getId());
+			prep.setBytes(8, r.getPhoto());
 			prep.executeUpdate();
 			prep.close();
 		} catch (SQLException e) {
@@ -265,12 +267,13 @@ public class SQLManager implements DBManager {
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
+				String gender = rs.getString("gender");
 				String job = rs.getString("job");
 				Date hire_date = rs.getDate("hire_date");
 				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");
 				byte[] photo = rs.getBytes("photo");
-				Worker worker = new Worker(id, name, job, hire_date, dob, salary, photo);
+				Worker worker = new Worker(id, name, gender, job, hire_date, dob, salary, photo);
 				workerList.add(worker);
 
 			}
@@ -423,12 +426,13 @@ public class SQLManager implements DBManager {
 			while (rs.next()) {
 				Integer w_id = rs.getInt("id");
 				String name = rs.getString("name");
+				String gender = rs.getString("gender");
 				String job = rs.getString("job");
 				Date hire_date = rs.getDate("hire_date");
 				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");
 				byte[] photo = rs.getBytes("photo");
-				w = new Worker(w_id, name, job, hire_date, dob, salary, photo);
+				w = new Worker(w_id, name, gender, job, hire_date, dob, salary, photo);
 			}
 			return w;
 		} catch (SQLException e) {
@@ -456,7 +460,7 @@ public class SQLManager implements DBManager {
 				String notes = rs.getString("notes");
 				int room_id =rs.getInt("room_id");
 				Room room = getRoom(room_id);
-				r= new Resident(id,name,gender,dob,telephone,dep_grade,checkin,photo,notes,room);
+				r= new Resident(r_id,name,gender,dob,telephone,dep_grade,checkin,photo,notes,room);
 			}
 			return r;
 		} catch (SQLException e) {
@@ -612,5 +616,27 @@ public class SQLManager implements DBManager {
 		// TODO Auto-generated method stub
 
 	}
-
+public boolean Check_tables_exist() {
+		
+		String[] tables_array =new String[] {
+				
+				"workers","residents","rooms","activities","drugs","treatments","drug_treatment","activity_distribution","activity_resident","worker_distribution"};
+		for(int table=0;table<tables_array.length;table++) {
+			try {
+			DatabaseMetaData meta_data =this.c.getMetaData();
+			ResultSet tables =meta_data.getTables(null, null, tables_array[table], null);
+			if(tables.next()==false) {
+				return false;
+				
+			}
+			}
+			catch(SQLException check_error) {
+				
+				check_error.printStackTrace();
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }
