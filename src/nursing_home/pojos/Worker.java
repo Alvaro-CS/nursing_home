@@ -12,6 +12,7 @@ public class Worker implements Serializable{
 	//serial version
 	private Integer id;
 	private String name;
+	private String gender;
 	private String job;
 	private Date hire_date;
 	private Date dob;
@@ -28,10 +29,11 @@ public class Worker implements Serializable{
 
 
 	
-	public Worker(String name, String job, Date hire_date, Date dob, Double salary,byte[] photo) {
+	public Worker(String name, String gender, String job, Date hire_date, Date dob, Double salary,byte[] photo) {
 		super();
 		
 		this.name = name;
+		this.gender=gender;
 		this.job = job;
 		this.hire_date = hire_date;
 		this.dob= dob;
@@ -56,6 +58,16 @@ public class Worker implements Serializable{
 		return "Worker [id=" + id + ", name=" + name + ", job=" + job + ", hire_date=" + hire_date + ",dob=" + dob + ", salary="
 				+ salary + "]"; 
 	}
+	public String getGender() {
+		return gender;
+	}
+
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+
 	public String toStringpartial() {
 		return "Worker [id=" + id + ", name=" + name+"]"; 
 	}
