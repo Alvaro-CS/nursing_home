@@ -42,4 +42,148 @@ public class JPAManager implements DBManager {
 		em.getTransaction().commit();
 		
 	}
+
+	@Override
+	public void create() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertWorker(Worker w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertResident(Resident r) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertActivity(Activity a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertDrug(Drug d) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertTreatment(Treatment t, Drug drug, String dosage) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Worker> selectWorkers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Resident> selectResidents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Room> selectRooms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Room getRoom(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Activity> selectActivities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Drug> selectDrugs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Worker getWorker(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resident getResident(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteWorker(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteResident(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteRoom(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteActivity(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteDrug(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteTreatment(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateWorker(Worker w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateResident(Resident r) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateRoom(Room r) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateActivity(Activity a) {
+		// TODO Auto-generated method stub
+		
+	}
 }
