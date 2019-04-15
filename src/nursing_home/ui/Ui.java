@@ -261,8 +261,8 @@ public class Ui {
 			}
 			System.out.println("Type the id of the worker to see in detail.");
 			Integer id1 = Integer.parseInt(consola.readLine());
-			Resident r2 = sqlm.getResident(id);
-			System.out.println(r);// It prints all the info of the person
+			Resident r2 = sqlm.getResident(id1);
+			System.out.println(r2);// It prints all the info of the person
 			// Now, we show the photo
 			if (r2.getPhoto() != null) {
 				ByteArrayInputStream blobIn = new ByteArrayInputStream(r2.getPhoto());
@@ -273,7 +273,7 @@ public class Ui {
 
 		case 4:
 			List<Resident> listr2 = sqlm.selectResidents();
-			for (Resident r3 : listr) {
+			for (Resident r3 : listr2) {
 				System.out.println(r3.toStringpartial());
 			}
 			System.out.println("Choose a resident to delete, type its ID: ");

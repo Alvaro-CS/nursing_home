@@ -436,6 +436,35 @@ public class SQLManager implements DBManager {
 			return null;
 		}
 	}
+	
+	public Resident getResident(Integer id) {
+		try {
+			String s = "SELECT * FROM residents WHERE id=?";
+			PreparedStatement p = c.prepareStatement(s);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			Resident r = null;
+			while (rs.next()) {
+				Integer r_id = rs.getInt("id");
+				String name = rs.getString("name");
+				String gender =rs.getString("gender");
+				Date dob = rs.getDate("dob");
+				Integer telephone =rs.getInt("telephone");
+				String dep_grade=rs.getString("grade");
+				Date checkin= rs.getDate("checkin");
+				byte[] photo = rs.getBytes("photo");
+				String notes = rs.getString("notes");
+				int room_id =rs.getInt("room_id");
+				Room room = getRoom(room_id);
+				r= new Resident(id,name,gender,dob,telephone,dep_grade,checkin,photo,notes,room);
+			}
+			return r;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 
 	public void deleteWorker(Integer id) {
 		try {
