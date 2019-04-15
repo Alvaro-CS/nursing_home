@@ -24,7 +24,7 @@ import nursing_home.pojos.Drug;
 //add DOB to sql
 //ADD THE NEW PARAMETERS TO CREATE TABLES ETC
 //ADD ON UPDATE/ON DELETE
-public class SQLManager implements DBManager{
+public class SQLManager implements DBManager {
 //insert: worker,room,activity,drug
 //select:worker,drug,activity,room
 //get
@@ -60,32 +60,21 @@ public class SQLManager implements DBManager{
 	public void create() {
 		try {
 
-			Statement stmt1= c.createStatement();
-			//ON UPDATE-CASCADE
-			String sql1 = "CREATE TABLE workers " + 
-					"(id INTEGER PRIMARY KEY AUTOINCREMENT," + 
-					" name TEXT NOT NULL," + 
-					" job TEXT NOT NULL," + 
-					" hire_date DATE," + 
-					" dob DATE," +
-					" salary INTEGER NOT NULL,"+
-					" photo BLOB)";
+			Statement stmt1 = c.createStatement();
+			// ON UPDATE-CASCADE
+			String sql1 = "CREATE TABLE workers " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + " name TEXT NOT NULL,"
+					+ " job TEXT NOT NULL," + " hire_date DATE," + " dob DATE," + " salary INTEGER NOT NULL,"
+					+ " photo BLOB)";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 
-			Statement stmt2= c.createStatement();
-			//ON UPDATE-CASCADE
-			String sql2 = "CREATE TABLE residents "+
-					"(id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-					"name TEXT NOT NULL ,"+
-					"dob DATE,"+
-					"telephone INTEGER,"+
-					"grade TEXT NOT NULL,"+
-					"checkin DATE,"+
-					"room_id INTEGER,"+
-				
-					"photo BLOB,"+
-					"FOREIGN KEY(room_id) REFERENCES rooms (id))";
+			Statement stmt2 = c.createStatement();
+			// ON UPDATE-CASCADE
+			String sql2 = "CREATE TABLE residents " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + "name TEXT NOT NULL ,"
+					+ "dob DATE," + "telephone INTEGER," + "grade TEXT NOT NULL," + "checkin DATE," + "room_id INTEGER,"
+					+
+
+					"photo BLOB," + "FOREIGN KEY(room_id) REFERENCES rooms (id))";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 
@@ -112,11 +101,10 @@ public class SQLManager implements DBManager{
 					+ "FOREIGN KEY(id_resident) REFERENCES resident (id),"
 					+ "FOREIGN KEY (id_drug) REFERENCES drug (id))";
 			stmt6.executeUpdate(sql6);
-			stmt6.close();	
-			
-		}
-		catch (SQLException e) {
-		
+			stmt6.close();
+
+		} catch (SQLException e) {
+
 			e.printStackTrace();
 		}
 	}
@@ -128,12 +116,12 @@ public class SQLManager implements DBManager{
 					+ "VALUES (?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, w.getName());
-			prep.setString(2, w.getJob());
-			prep.setDate(3, w.getHire_date());
-			prep.setDate(4, w.getDob());
-			prep.setDouble(5, w.getSalary());
-			prep.setBytes(6, w.getPhoto());
-			
+			prep.setString(2, w.getGender());
+			prep.setString(3, w.getJob());
+			prep.setDate(4, w.getHire_date());
+			prep.setDate(5, w.getDob());
+			prep.setDouble(6, w.getSalary());
+			prep.setBytes(7, w.getPhoto());
 			prep.executeUpdate();
 			prep.close();
 		} 
@@ -141,25 +129,24 @@ public class SQLManager implements DBManager{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void insertResident(Resident r) {
 		try {
 
-			String sql = "INSERT INTO residents (name, dob , telephone, grade, checkin, room_id, photo) " 
+			String sql = "INSERT INTO residents (name, dob , telephone, grade, checkin, room_id, photo) "
 					+ "VALUES (?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setString (1, r.getName());
-			prep.setDate (2, r.getDob());
-			prep.setInt (3, r.getTeleph());
-			prep.setInt (4, r.getDep_grade());
-			prep.setDate (5,r.getCheckin());
-			prep.setInt (6, r.getRoom().getId());
-			prep.setBytes (7, r.getPhoto());
-			
+			prep.setString(1, r.getName());
+			prep.setDate(2, r.getDob());
+			prep.setInt(3, r.getTeleph());
+			prep.setString(4, r.getDep_grade());
+			prep.setDate(5, r.getCheckin());
+			prep.setInt(6, r.getRoom().getId());
+			prep.setBytes(7, r.getPhoto());
+
 			prep.executeUpdate();
 			prep.close();
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -208,24 +195,36 @@ public class SQLManager implements DBManager{
 			e.printStackTrace();
 		}
 	}
-	public void insertTreatment (Treatment t) {
+
+	public void insertTreatment(Treatment t, Drug drug, String dosage) {
 		try {
 			String sql = "INSERT INTO treatment () VALUES (?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, t.getId());
 			prep.setString(2, t.getName());
 			prep.setDate(3, t.getInitial_date());
-			prep.setDate (4, t.getFinal_date());
-			prep.setInt (5, 1);
-			prep.setInt (3, 1);
+			prep.setDate(4, t.getFinal_date());
+			prep.setInt(5, t.getResident().getId());
 			prep.executeUpdate();
 			prep.close();
-//ASK RODRIGO HOW TO DO THIS MANY TO MANY TABLE WITH ATRIBUTES
+
+			// Get the ID of treatment
+			String query = "SELECT last_insert_rowid() AS lastId";
+			PreparedStatement p1 = c.prepareStatement(query);
+			ResultSet rs = p1.executeQuery();
+			Integer lastId = rs.getInt("lastId");
+			// Insert into drug_treatment the ID of the treatment
+			// and the ID of the drug
+			PreparedStatement p2 = c.prepareStatement("INSERT INTO drug_treatment" + " (id_treatment, id_drug, dosage)" + " VALUES (?,?,?)");
+			p2.setInt(1, lastId);
+			p2.setInt(2, drug.getId());
+			p2.setString(3, dosage);
+			p2.executeUpdate();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public List<Worker> selectWorkers() {
 		try {
@@ -241,7 +240,7 @@ public class SQLManager implements DBManager{
 				Date hire_date = rs.getDate("hire_date");
 				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");
-				byte[] photo=rs.getBytes("photo");
+				byte[] photo = rs.getBytes("photo");
 				Worker worker = new Worker(id, name, job, hire_date, dob, salary, photo);
 				workerList.add(worker);
 
@@ -255,8 +254,6 @@ public class SQLManager implements DBManager{
 		return null;
 
 	}
-	
-	
 
 	public List<Room> selectRooms() {
 		try {
@@ -281,6 +278,30 @@ public class SQLManager implements DBManager{
 		}
 		return null;
 	}
+	
+	public Room getRoom (Integer id) {
+		try {
+			String s = "SELECT * FROM rooms WHERE id=?";
+			PreparedStatement p = c.prepareStatement(s);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			Room r = null;
+			while (rs.next()) {
+				Integer r_id = rs.getInt("id");
+				String r_name = rs.getString("roomtype");
+				Integer r_floor = rs.getInt("floor");
+				String r_gender = rs.getNString("gender");
+				String r_notes = rs.getString("notes");
+				
+				r = new Room(r_id, r_name, r_floor, r_gender, r_notes);
+			}
+			return r;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 
 	public List<Activity> selectActivities() {
 		try {
@@ -343,8 +364,8 @@ public class SQLManager implements DBManager{
 				Date hire_date = rs.getDate("hire_date");
 				Date dob = rs.getDate("dob");
 				Double salary = rs.getDouble("salary");
-				byte[] photo=rs.getBytes("photo");
-				w = new Worker(w_id, name, job, hire_date, dob, salary,photo);
+				byte[] photo = rs.getBytes("photo");
+				w = new Worker(w_id, name, job, hire_date, dob, salary, photo);
 			}
 			return w;
 		} catch (SQLException e) {
@@ -360,8 +381,7 @@ public class SQLManager implements DBManager{
 			prep.setInt(1, id);
 			prep.executeUpdate();
 			prep.close();
-		 }
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
@@ -421,7 +441,7 @@ public class SQLManager implements DBManager{
 
 	public void deleteTreatment(Integer id) {
 		try {
-			String sql = "DETLETE FROM treatments WHERE id=?";
+			String sql = "DELETE FROM treatments WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, id);
 			prep.executeUpdate();
@@ -443,8 +463,7 @@ public class SQLManager implements DBManager{
 			prep.executeUpdate();
 			prep.close();
 
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -455,7 +474,7 @@ public class SQLManager implements DBManager{
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, r.getName());
 			prep.setInt(2, r.getTeleph());
-			prep.setInt(4, r.getDep_grade());
+			prep.setString(4, r.getDep_grade());
 			prep.setString(5, r.getNotes());
 			prep.setInt(6, r.getId());
 			prep.close();
@@ -499,7 +518,6 @@ public class SQLManager implements DBManager{
 	@Override
 	public void insertResidentRoom(Room r, Resident re) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

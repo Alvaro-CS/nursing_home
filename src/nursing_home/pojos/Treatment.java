@@ -16,12 +16,7 @@ public class Treatment implements Serializable {
 	private String name;
 	private Date initial_date;
 	private Date final_date;
-	private List<Resident> residents;
-
-	public Treatment() {
-		super();
-		this.residents=new ArrayList<Resident>();
-	}
+	private Resident resident;
 
 	public Integer getId() {
 		return id;
@@ -55,12 +50,12 @@ public class Treatment implements Serializable {
 		this.final_date = final_date;
 	}
 
-	public List<Resident> getResidents() {
-		return residents;
+	public Resident getResident() {
+		return resident;
 	}
 
-	public void setResidents(List<Resident> residents) {
-		this.residents = residents;
+	public void setResident(Resident resident) {
+		this.resident = resident;
 	}
 
 	@Override

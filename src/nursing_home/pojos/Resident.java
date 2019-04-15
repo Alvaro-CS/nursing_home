@@ -33,7 +33,7 @@ public class Resident implements Serializable {
 	private String gender;
 	private Date dob;
 	private Integer teleph;
-	private Integer dep_grade;
+	private String dep_grade;
 	private Date checkin;
 	@Basic(fetch=FetchType.LAZY)
 	@Lob
@@ -42,29 +42,33 @@ public class Resident implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="room_id")
 	private Room room;
-	private Treatment treatment;
+	private List <Treatment> treatments;
+	
 	
 	public Resident() {
 		super();
+		this.treatments= new ArrayList<Treatment>();
 	}
 	
 
-	public Resident(Integer id, String name, String gender, Date dob, Integer teleph, Integer dep_grade, Date checkin,
-			String notes, Room r) {
+
+	public Resident(String name, String gender, Date dob, Integer teleph, String dep_grade, Date checkin, byte[] photo,
+			String notes, Room room) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.gender = gender;
 		this.dob = dob;
 		this.teleph = teleph;
 		this.dep_grade = dep_grade;
 		this.checkin = checkin;
+		this.photo = photo;
 		this.notes = notes;
-		this.room = r;
+		this.room = room;
 	}
 
 
-	public Resident(Integer id, String name, String gender, Date dob, Integer teleph, Integer dep_grade, Date checkin,
+
+	public Resident(Integer id, String name, String gender, Date dob, Integer teleph, String dep_grade, Date checkin,
 			byte[] photo, String notes, Room r) {
 		super();
 		this.id = id;
@@ -121,11 +125,11 @@ public class Resident implements Serializable {
 		this.teleph = teleph;
 	}
 
-	public Integer getDep_grade() {
+	public String getDep_grade() {
 		return dep_grade;
 	}
 
-	public void setDep_grade(Integer dep_grade) {
+	public void setDep_grade(String dep_grade) {
 		this.dep_grade = dep_grade;
 	}
 
@@ -162,14 +166,13 @@ public class Resident implements Serializable {
 		this.room = room;
 	}
 
-
-	public Treatment getTreatment() {
-		return treatment;
+	public List<Treatment> getTreatments() {
+		return treatments;
 	}
 
 
-	public void setTreatment(Treatment treatment) {
-		this.treatment = treatment;
+	public void setTreatments(List<Treatment> treatments) {
+		this.treatments = treatments;
 	}
 
 
@@ -179,6 +182,11 @@ public class Resident implements Serializable {
 				+ ", dep_grade=" + dep_grade + ", checkin=" + checkin + ", photo=" + Arrays.toString(photo) + ", notes="
 				+ notes + "]";
 	}
+	
+	public String toStringpartial() {
+		return "Resident [id=" + id + ", name=" + name+"]"; 
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -204,7 +212,6 @@ public class Resident implements Serializable {
 			return false;
 		return true;
 	}
-	
 	
 	
 
