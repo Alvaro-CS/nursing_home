@@ -131,7 +131,7 @@ public class Room implements Serializable {
 	@Override
 	public String toString() {
 		return "Room [id=" + id + ", roomtype=" + roomtype + ", floor=" + floor + ", gender=" + gender + ", notes="
-				+ notes + "]";
+				+ notes + "]\n";
 	}
 
 	public void addResident(Resident r) {
