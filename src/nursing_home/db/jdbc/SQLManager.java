@@ -74,14 +74,14 @@ public class SQLManager implements DBManager {
 			Statement stmt2 = c.createStatement();
 			// ON UPDATE-CASCADE
 			String sql2 = "CREATE TABLE residents " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + "name TEXT NOT NULL ,"
-					+ "gender TEXT," +" dob DATE," + "telephone INTEGER," + "grade TEXT NOT NULL," + "checkin DATE," + "room_id INTEGER,"
+					+ "gender TEXT," +" dob DATE," + "telephone INTEGER," + "grade TEXT NOT NULL," + "checkin DATE," +"notes TEXT,"+ "room_id INTEGER,"
 					+ "photo BLOB," + "FOREIGN KEY(room_id) REFERENCES rooms (id))";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 
 			Statement stmt3 = c.createStatement();
-			String sql3 = "CREATE TABLE rooms (" + "id INTEGER PRIMARY KEY AUTOINCREMENT," + "room_type TEXT NOT NULL,"
-					+ "floor INTEGER," + "facilities TEXT)";
+			String sql3 = "CREATE TABLE rooms (" + "id INTEGER PRIMARY KEY AUTOINCREMENT," + "roomtype TEXT NOT NULL,"
+					+ "floor INTEGER," + "gender TEXT," + "notes TEXT)";
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
 
@@ -161,8 +161,8 @@ public class SQLManager implements DBManager {
 	public void insertResident(Resident r) {
 		try {
 
-			String sql = "INSERT INTO residents (name, gender, dob , telephone, grade, checkin, room_id, photo) "
-					+ "VALUES (?,?,?,?,?,?,?,?);";
+			String sql = "INSERT INTO residents (name, gender, dob , telephone, grade, checkin,notes, room_id, photo) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, r.getName());
 			prep.setString(2, r.getGender());
@@ -170,8 +170,9 @@ public class SQLManager implements DBManager {
 			prep.setInt(4, r.getTeleph());
 			prep.setString(5, r.getDep_grade());
 			prep.setDate(6, r.getCheckin());
-			prep.setInt(7, r.getRoom().getId());
-			prep.setBytes(8, r.getPhoto());
+			prep.setString(7, r.getNotes());
+			prep.setInt(8, r.getRoom().getId());
+			prep.setBytes(9, r.getPhoto());
 			prep.executeUpdate();
 			prep.close();
 		} catch (SQLException e) {
@@ -566,13 +567,13 @@ public class SQLManager implements DBManager {
 
 	public void updateResident(Resident r) {
 		try {
-			String sql = "UPDATE residents SET name=?,teleph=?,,dep_grade=?, notes=? WHERE id=?";
+			String sql = "UPDATE residents SET name=?,telephone=?,grade=?, notes=? WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, r.getName());
 			prep.setInt(2, r.getTeleph());
-			prep.setString(4, r.getDep_grade());
-			prep.setString(5, r.getNotes());
-			prep.setInt(6, r.getId());
+			prep.setString(3, r.getDep_grade());
+			prep.setString(4, r.getNotes());
+			prep.setInt(5, r.getId());
 			prep.close();
 
 		} catch (SQLException e) {

@@ -35,7 +35,7 @@ public class Ui {
 
 		Integer opcion1 = 0;
 		do {
-			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Exit.");
+			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Exit.");
 			opcion1 = Integer.parseInt(consola.readLine());
 			switch (opcion1) {
 			case 1:
@@ -45,21 +45,25 @@ public class Ui {
 				resident();
 				break;
 			case 3:
-				System.out.println("Exit.");
+				room();
+			case 4:
+
 				break;
 			}
-		} while (opcion1 != 3);
-
+		} while (opcion1 != 4);
+		System.out.println("Exit.");
+		sqlm.disconnect();
+		em.disconnect();
 	}
 /////////////////////////////////////WORKER MENU///////////////////////////////////
 
 	public static void worker() throws IOException {
 		int opcionw = 0;
 		do {
-			System.out.println("Introduce the number");
+			System.out.println("Introduce the number:");
 
-			System.out.println("1.New worker.\n" + "2.Basic info.\n" + "3.See details of 1 worker.\n" + "4.Delete.\n"
-					+ "5.Update.\n" + "6.Salir.");
+			System.out.println("1.New worker.\n" + "2.Basic info.\n" + "3.Details of one worker.\n" + "4.Update.\n"
+					+ "5.Delete.\n" + "6.Return to the main menu.");
 			opcionw = Integer.parseInt(consola.readLine());
 			switch (opcionw) {
 
@@ -78,11 +82,11 @@ public class Ui {
 				break;
 
 			case 4:
-				deleteWorker();
+				updateWorker();
 				break;
 
 			case 5:
-				updateWorker();
+				deleteWorker();
 				break;
 			case 6:
 				System.out.println("Going back to the menu.");
@@ -92,8 +96,6 @@ public class Ui {
 			}
 		} while (opcionw != 6);
 
-		sqlm.disconnect();
-		em.disconnect();
 	}
 
 	public static void newWorker() throws IOException {
@@ -197,7 +199,7 @@ public class Ui {
 			w.setSalary(Double.parseDouble(consola.readLine()));
 		}
 		sqlm.updateWorker(w);
-		System.out.println(sqlm.selectWorkers());
+		System.out.println("Worker updated:\n"+w);
 
 	}
 
@@ -208,7 +210,7 @@ public class Ui {
 			System.out.println("Introduce the number");
 
 			System.out.println("1.New resident.\n" + "2.Basic info.\n" + "3.See details of 1 resident.\n"
-					+ "4.Delete.\n" + "5.Update.\n" + "6.Salir.");
+					+ "4.Update.\n" + "5.Delete.\n" + "6.Return to the main menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -218,7 +220,7 @@ public class Ui {
 
 			case 2:
 				System.out.println("Showing the residents.");
-				System.out.println(sqlm.selectWorkers());
+				System.out.println(sqlm.selectResidents());
 				break;
 
 			case 3:
@@ -226,11 +228,11 @@ public class Ui {
 				break;
 
 			case 4:
-				deleteResident();
+				updateResident();
 				break;
 
 			case 5:
-				updateResident();
+				deleteResident();
 				break;
 			case 6:
 				System.out.println("Going back to the menu.");
@@ -239,16 +241,13 @@ public class Ui {
 				break;
 			}
 		} while (option != 6);
-
-		sqlm.disconnect();
-		em.disconnect();
 	}
 	public static void newResident() throws IOException {
 
-		System.out.println("Introduce the name");
+		System.out.println("Introduce the name.");
 		String name = consola.readLine();
 
-		System.out.println("Introduce the gender");
+		System.out.println("Introduce the gender.");
 		String gender = consola.readLine();
 
 		System.out.println("Introduce the birth date(''yyyy-mm-dd'')");
@@ -256,10 +255,10 @@ public class Ui {
 		String birth_date = consola.readLine();
 		Date dob = transform_date(birth_date);
 
-		System.out.println("Introduce the contact telephone");
+		System.out.println("Introduce the contact telephone.");
 		Integer tel = Integer.parseInt(consola.readLine());
 
-		System.out.println("Introduce the grade of dependency");
+		System.out.println("Introduce the grade of dependency.");
 		String grade = consola.readLine();
 
 		System.out.println("Introduce the date of check-in(''yyyy-mm-dd'')");
@@ -270,7 +269,7 @@ public class Ui {
 		System.out.println("Introduce any extra notes or details about the resident.");
 		String notes = consola.readLine();
 
-		System.out.println("Introduce the name of the photo as it appears in the folder");
+		System.out.println("Introduce the name of the photo as it appears in the folder.");
 		String fileName = consola.readLine();
 
 		File photo = new File("./photos/" + fileName);
@@ -283,7 +282,7 @@ public class Ui {
 		System.out.println("Now, assign the patient into a room.");
 		System.out.println("Rooms available:");
 
-		List<Room> list = sqlm.selectRooms();// ver si funciona
+		List<Room> list = sqlm.selectRooms();// ¿Mostrar cuantas personas hay en las habitaciones?
 		for (Room r : list) {
 			System.out.println(r);
 		}
@@ -292,6 +291,7 @@ public class Ui {
 		Room r = sqlm.getRoom(id);
 		Resident r1 = new Resident(name, gender, dob, tel, grade, date_check, bytesBlob, notes, r);
 		sqlm.insertResident(r1);
+		System.out.println("Resident succesfully created.\n");
 		
 	}
 
@@ -376,11 +376,137 @@ public class Ui {
 		}
 
 		sqlm.updateResident(r);
-		System.out.println(sqlm.selectWorkers());
+		System.out.println("Resident updated:\n"+r);
 
 		
 	}
+	
+/////////////////////////////////////ROOM MENU///////////////////////////////////
+public static void room() throws IOException{
 
+	int opcionw = 0;
+	do {
+		System.out.println("Introduce the number");
+
+		System.out.println("1.Create new room.\n" + "2.Info about each room.\n" + "3.Details of one room.\n" + "4.Update room.\n"
+				+ "5.Delete room.\n" + "6.Return to the main menu.");
+		opcionw = Integer.parseInt(consola.readLine());
+		switch (opcionw) {
+
+		case 1:
+			newRoom();
+			break;
+
+		case 2:
+			System.out.println("Showing the information of the rooms.");
+			System.out.println(sqlm.selectRooms());
+			break;
+
+		case 3:
+			roomDetails();
+			break;
+
+		case 4:
+			updateRoom();
+			break;
+
+		case 5:
+			deleteRoom();
+			break;
+		case 6:
+			System.out.println("Going back to the menu.\n");
+			break;
+		default:
+			break;
+		}
+	} while (opcionw != 6);
+
+}
+public static void newRoom() throws IOException {
+
+	System.out.println("Introduce the room type.");
+	String roomtype = consola.readLine();
+
+	System.out.println("Introduce the floor in which the room is located.");
+	Integer floor = Integer.parseInt(consola.readLine());
+
+	System.out.println("Introduce the gender-type of the room (Male/female/mixed).");
+	String gender = consola.readLine();
+	
+	System.out.println("Introduce the facilities that the room has.");
+	String notes = consola.readLine();
+	Room room = new Room(roomtype, floor, notes, gender);
+	sqlm.insertRoom(room);
+	System.out.println("You have created succesfully a room in the floor "+floor+".\n");
+}
+public static void roomDetails() throws IOException{
+	
+	List<Room> list = sqlm.selectRooms();
+	for (Room r : list) {
+		System.out.println(r.toStringpartial());
+	}
+	System.out.println("Type the id of the room to see in detail.");
+	Integer id = Integer.parseInt(consola.readLine());
+	Room r = sqlm.getRoom(id);
+	System.out.println(r);// It prints all the room
+	// Now, we show the the people it has inside
+	System.out.println("Residents living in this room:");
+	List<Resident> listr = r.getResidents();
+	for (Resident re : listr) {
+		System.out.println(re.toStringpartial());
+	}
+	
+}
+public static void updateRoom() throws IOException {
+	
+
+	System.out.println(sqlm.selectRooms());
+	System.out.println("Choose a room, type its ID: ");
+	Integer id = Integer.parseInt(consola.readLine());
+	String answer;
+	Room r = sqlm.getRoom(id);
+	System.out.println("Do you want to change the room type?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new room type: ");
+		r.setRoomtype(consola.readLine());
+	}
+	
+	System.out.println("Do you want to change the gender of the room?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new gender of the room: ");
+		r.setGender(consola.readLine());
+	}
+
+	System.out.println("Do you want to change the facilities that the room has?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new facilities: ");
+		r.setNotes(((consola.readLine())));
+	}
+	sqlm.updateRoom(r);
+	System.out.println("Room updated:\n"+r);
+
+	
+}
+public static void deleteRoom() throws IOException {
+	
+	List<Room> list = sqlm.selectRooms();
+	for (Room r : list) {
+		System.out.println(r.toStringpartial());
+	}
+	System.out.println("Choose a room to delete, type its ID: ");
+	Integer id = Integer.parseInt(consola.readLine());
+	sqlm.deleteRoom(id);
+	System.out.println("Deletion completed.");
+	
+	
+}
+	
 	public static Date transform_date(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate final_date = LocalDate.parse(date, formatter);

@@ -179,8 +179,7 @@ public class Resident implements Serializable {
 	@Override
 	public String toString() {
 		return "Resident [id=" + id + ", name=" + name + ", gender=" + gender + ", dob=" + dob + ", teleph=" + teleph
-				+ ", dep_grade=" + dep_grade + ", checkin=" + checkin + ", photo=" + Arrays.toString(photo) + ", notes="
-				+ notes + "]\n";
+				+ ", dep_grade=" + dep_grade + ", checkin=" + checkin + ", notes="+ notes + ", room: "+room.getId() +"]\n";
 	}
 	
 	public String toStringpartial() {

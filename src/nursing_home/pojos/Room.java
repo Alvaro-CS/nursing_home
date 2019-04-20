@@ -133,7 +133,9 @@ public class Room implements Serializable {
 		return "Room [id=" + id + ", roomtype=" + roomtype + ", floor=" + floor + ", gender=" + gender + ", notes="
 				+ notes + "]\n";
 	}
-
+	public String toStringpartial() {
+		return "Room [id=" + id + ", roomtype=" + roomtype + ", floor=" + floor + ", gender=" + gender + "]\n";
+	}
 	public void addResident(Resident r) {
 		if (!residents.contains(r))
 			residents.add(r);
