@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import nursing_home.interfaces.DBManager;
 import nursing_home.pojos.*;
@@ -87,8 +88,9 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public List<Resident> selectResidents() {
-		// TODO Auto-generated method stub
-		return null;
+		Query q1 = em.createNativeQuery("SELECT * FROM residents", Resident.class); //this returns a query object 
+		List<Resident> residents = (List<Resident>) q1.getResultList(); //cast because it return a list of objects, but we want a list of residents.
+		return residents;
 	}
 
 	@Override
@@ -171,8 +173,13 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void updateResident(Resident r) {
-		// TODO Auto-generated method stub
-		
+		// Begin transaction
+		em.getTransaction().begin();
+		// Make changes
+		em.flush();
+		// End transaction
+		em.getTransaction().commit();
+			
 	}
 
 	@Override

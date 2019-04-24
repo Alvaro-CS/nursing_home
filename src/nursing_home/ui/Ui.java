@@ -436,18 +436,18 @@ public static void newRoom() throws IOException {
 	System.out.println("Introduce the facilities that the room has.");
 	String notes = consola.readLine();
 	Room room = new Room(roomtype, floor, notes, gender);
-	sqlm.insertRoom(room);
+	em.insertRoom(room);//jpa
 	System.out.println("You have created succesfully a room in the floor "+floor+".\n");
 }
 public static void roomDetails() throws IOException{
 	
-	List<Room> list = sqlm.selectRooms();
+	List<Room> list = em.selectRooms();//jpa
 	for (Room r : list) {
 		System.out.println(r.toStringpartial());
 	}
 	System.out.println("Type the id of the room to see in detail.");
 	Integer id = Integer.parseInt(consola.readLine());
-	Room r = sqlm.getRoom(id);
+	Room r = em.getRoom(id);//jpa
 	System.out.println(r);// It prints all the room
 	// Now, we show the the people it has inside
 	System.out.println("Residents living in this room:");
@@ -460,11 +460,11 @@ public static void roomDetails() throws IOException{
 public static void updateRoom() throws IOException {
 	
 
-	System.out.println(sqlm.selectRooms());
+	System.out.println(em.selectRooms());
 	System.out.println("Choose a room, type its ID: ");
 	Integer id = Integer.parseInt(consola.readLine());
 	String answer;
-	Room r = sqlm.getRoom(id);
+	Room r = em.getRoom(id);//with JPA 
 	System.out.println("Do you want to change the room type?");
 	System.out.println("Y/N");
 	answer = consola.readLine();
@@ -488,20 +488,20 @@ public static void updateRoom() throws IOException {
 		System.out.print("Type the new facilities: ");
 		r.setNotes(((consola.readLine())));
 	}
-	sqlm.updateRoom(r);
+	em.updateRoom(r);//with jpa
 	System.out.println("Room updated:\n"+r);
 
 	
 }
 public static void deleteRoom() throws IOException {
 	
-	List<Room> list = sqlm.selectRooms();
+	List<Room> list = em.selectRooms();//with jpa
 	for (Room r : list) {
 		System.out.println(r.toStringpartial());
 	}
 	System.out.println("Choose a room to delete, type its ID: ");
 	Integer id = Integer.parseInt(consola.readLine());
-	sqlm.deleteRoom(id);
+	em.deleteRoom(id);//jpa
 	System.out.println("Deletion completed.");
 	
 	
