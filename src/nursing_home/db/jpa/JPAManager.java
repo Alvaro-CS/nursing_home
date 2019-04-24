@@ -90,14 +90,16 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public List<Resident> selectResidents() {
-		// TODO Auto-generated method stub
-		return null;
+		Query q1 = em.createNativeQuery("SELECT * FROM residents", Resident.class); //this returns a query object 
+		List<Resident> residents = (List<Resident>) q1.getResultList(); //cast because it return a list of objects, but we want a list of residents.
+		return residents;
 	}
 
 	@Override
-	public List<Room> selectRooms() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Room> selectRooms () {
+		Query q1 = em.createNativeQuery("SELECT * FROM rooms", Room.class);
+		List <Room> rooms= (List<Room>) q1.getResultList();
+		return rooms;
 	}
 
 	@Override
@@ -195,13 +197,24 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void updateResident(Resident r) {
-		// TODO Auto-generated method stub
-		
+		// Begin transaction
+		em.getTransaction().begin();
+		// Make changes
+		em.flush();
+		// End transaction
+		em.getTransaction().commit();
+			
 	}
 
 	@Override
 	public void updateRoom(Room r) {
-		// TODO Auto-generated method stub
+		
+		// Begin transaction
+		em.getTransaction().begin();
+		// Make changes
+		em.flush();
+		// End transaction
+		em.getTransaction().commit();
 		
 	}
 
