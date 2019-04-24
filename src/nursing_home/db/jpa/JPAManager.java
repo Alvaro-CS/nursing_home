@@ -1,9 +1,12 @@
 package nursing_home.db.jpa;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import nursing_home.interfaces.DBManager;
 import nursing_home.pojos.*;
@@ -99,8 +102,11 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public Room getRoom(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		int room_id = id;
+		Query q1 = em.createNativeQuery("SELECT * FROM rooms WHERE id LIKE ?", Room.class);
+		q1.setParameter(1, room_id);
+		Room room = (Room) q1.getSingleResult();		
+		return room;
 	}
 
 	@Override
@@ -123,8 +129,11 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public Resident getResident(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		int resident_id = id;
+		Query q1 = em.createNativeQuery("SELECT * FROM residents WHERE id LIKE ?", Resident.class);
+		q1.setParameter(1, resident_id);
+		Resident resident = (Resident) q1.getSingleResult();		
+		return resident;
 	}
 
 	@Override
@@ -135,14 +144,29 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void deleteResident(Integer id) {
-		// TODO Auto-generated method stub
-		
+
+		int resident_id = id;
+		Query q2 = em.createNativeQuery("SELECT * FROM residents WHERE id = ?", Resident.class);
+		q2.setParameter(1, resident_id);
+		Resident r1 = (Resident) q2.getSingleResult();
+
+		em.getTransaction().begin();
+		em.remove(r1);
+		em.getTransaction().commit();		
 	}
 
 	@Override
 	public void deleteRoom(Integer id) {
-		// TODO Auto-generated method stub
-		
+
+		int room_id = id;
+		Query q2 = em.createNativeQuery("SELECT * FROM rooms WHERE id = ?", Room.class);
+		q2.setParameter(1, room_id);
+		Room r1 = (Room) q2.getSingleResult();
+
+		em.getTransaction().begin();
+		em.remove(r1);
+		em.getTransaction().commit();
+
 	}
 
 	@Override
