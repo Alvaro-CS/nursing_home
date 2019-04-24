@@ -10,7 +10,6 @@ import javax.persistence.Query;
 
 import nursing_home.interfaces.DBManager;
 import nursing_home.pojos.*;
-import sample.db.pojos.Department;
 
 public class JPAManager implements DBManager {
 	EntityManager em;
