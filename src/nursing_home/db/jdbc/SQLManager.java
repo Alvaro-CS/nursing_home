@@ -617,27 +617,4 @@ public class SQLManager implements DBManager {
 		// TODO Auto-generated method stub
 
 	}
-public boolean Check_tables_exist() {
-		
-		String[] tables_array =new String[] {
-				
-				"workers","residents","rooms","activities","drugs","treatments","drug_treatment","activity_distribution","activity_resident","worker_distribution"};
-		for(int table=0;table<tables_array.length;table++) {
-			try {
-			DatabaseMetaData meta_data =this.c.getMetaData();
-			ResultSet tables =meta_data.getTables(null, null, tables_array[table], null);
-			if(tables.next()==false) {
-				return false;
-				
-			}
-			}
-			catch(SQLException check_error) {
-				
-				check_error.printStackTrace();
-				return false;
-			}
-		}
-		
-		return true;
-	}
 }

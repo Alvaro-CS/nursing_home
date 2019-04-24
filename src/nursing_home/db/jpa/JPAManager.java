@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
@@ -60,7 +61,12 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void insertResident(Resident r) {
-		// TODO Auto-generated method stub
+		// Begin transaction
+		em.getTransaction().begin();
+		// Store the object
+		em.persist(r);
+		// End transaction
+		em.getTransaction().commit();
 		
 	}
 
@@ -210,11 +216,11 @@ public class JPAManager implements DBManager {
 	public void updateRoom(Room r) {
 		
 		// Begin transaction
-		em.getTransaction().begin();
+		EntityTransaction t = em.getTransaction();
 		// Make changes
-		em.flush();
+		t.begin();
+		t.commit();
 		// End transaction
-		em.getTransaction().commit();
 		
 	}
 

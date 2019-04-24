@@ -28,7 +28,8 @@ public class Ui {
 		em.connect();
 		sqlm.connect();
 
-		boolean exist = sqlm.Check_tables_exist();
+		// TODO Solve this
+		boolean exist = true;//sqlm.Check_tables_exist();
 		if (exist == false) {
 			sqlm.create();
 		}
@@ -282,28 +283,28 @@ public class Ui {
 		System.out.println("Now, assign the patient into a room.");
 		System.out.println("Rooms available:");
 
-		List<Room> list = sqlm.selectRooms();// ¿Mostrar cuantas personas hay en las habitaciones?
+		List<Room> list = em.selectRooms();// ¿Mostrar cuantas personas hay en las habitaciones?
 		for (Room r : list) {
 			System.out.println(r);
 		}
 		System.out.println("Type the id of the room you want to assign to the resident.");
 		Integer id = Integer.parseInt(consola.readLine());
-		Room r = sqlm.getRoom(id);
+		Room r = em.getRoom(id);
 		Resident r1 = new Resident(name, gender, dob, tel, grade, date_check, bytesBlob, notes, r);
-		sqlm.insertResident(r1);
+		em.insertResident(r1);
 		System.out.println("Resident succesfully created.\n");
 		
 	}
 
 	public static void detailsResident() throws IOException{
 		
-		List<Resident> list = sqlm.selectResidents();
+		List<Resident> list = em.selectResidents();
 		for (Resident r : list) {
 			System.out.println(r.toStringpartial());
 		}
 		System.out.println("Type the id of the resident to see in detail.");
 		Integer id = Integer.parseInt(consola.readLine());
-		Resident r = sqlm.getResident(id);
+		Resident r = em.getResident(id);
 		System.out.println(r);// It prints all the info of the person
 		// Now, we show the photo
 		if (r.getPhoto() != null) {
@@ -316,13 +317,13 @@ public class Ui {
 	
 	public static void deleteResident() throws IOException {
 		
-		List<Resident> list = sqlm.selectResidents();
+		List<Resident> list = em.selectResidents();
 		for (Resident r : list) {
 			System.out.println(r.toStringpartial());
 		}
 		System.out.println("Choose a resident to delete, type its ID: ");
 		Integer id = Integer.parseInt(consola.readLine());
-		sqlm.deleteResident(id);
+		em.deleteResident(id);
 		System.out.println("Deletion completed.");
 		
 		
@@ -330,11 +331,11 @@ public class Ui {
 	public static void updateResident() throws IOException {
 		
 
-		System.out.println(sqlm.selectResidents());
+		System.out.println(em.selectResidents());
 		System.out.println("Choose a resident, type its ID: ");
 		Integer id = Integer.parseInt(consola.readLine());
 		String answer;
-		Resident r = sqlm.getResident(id);
+		Resident r = em.getResident(id);
 		System.out.println("Do you want to change the name?");
 		System.out.println("Y/N");
 		answer = consola.readLine();
@@ -371,11 +372,11 @@ public class Ui {
 		if (answer.equalsIgnoreCase("Y")) {
 			System.out.print("Type the new residents's room (id): ");
 			int room_id = Integer.parseInt(consola.readLine());
-			Room ro = sqlm.getRoom(room_id);
+			Room ro = em.getRoom(room_id);
 			r.setRoom(ro);
 		}
 
-		sqlm.updateResident(r);
+		em.updateResident(r);
 		System.out.println("Resident updated:\n"+r);
 
 		

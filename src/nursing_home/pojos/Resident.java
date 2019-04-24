@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.Transient;
 
 @Entity
 @Table (name="residents")
@@ -32,7 +34,9 @@ public class Resident implements Serializable {
 	private String name;
 	private String gender;
 	private Date dob;
+	@Column(name="telephone")
 	private Integer teleph;
+	@Column(name="grade")
 	private String dep_grade;
 	private Date checkin;
 	@Basic(fetch=FetchType.LAZY)
@@ -42,6 +46,7 @@ public class Resident implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="room_id")
 	private Room room;
+	@Transient
 	private List <Treatment> treatments;
 	
 	
