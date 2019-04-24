@@ -1,12 +1,16 @@
 package nursing_home.db.jpa;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import nursing_home.interfaces.DBManager;
 import nursing_home.pojos.*;
+import sample.db.pojos.Department;
 
 public class JPAManager implements DBManager {
 	EntityManager em;
@@ -92,9 +96,10 @@ public class JPAManager implements DBManager {
 	}
 
 	@Override
-	public List<Room> selectRooms() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Room> selectRooms () {
+		Query q1 = em.createNativeQuery("SELECT * FROM rooms", Room.class);
+		List <Room> rooms= (List<Room>) q1.getResultList();
+		return rooms;
 	}
 
 	@Override
@@ -177,7 +182,13 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void updateRoom(Room r) {
-		// TODO Auto-generated method stub
+		
+		// Begin transaction
+		em.getTransaction().begin();
+		// Make changes
+		em.flush();
+		// End transaction
+		em.getTransaction().commit();
 		
 	}
 
