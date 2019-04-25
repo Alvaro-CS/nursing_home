@@ -157,6 +157,20 @@ public class SQLManager implements DBManager {
 			e.printStackTrace();
 		}
 	}
+	public void connectResidentWorker(Integer w_id , Integer r_id) {
+		try {
+
+			String sql = "INSERT INTO worker_distribution (id_worker,id_resident) "
+					+ "VALUES (?,?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, w_id);
+			prep.setInt(2, r_id);
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void insertResident(Resident r) {
 		try {

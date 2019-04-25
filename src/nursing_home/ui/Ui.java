@@ -64,7 +64,7 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New worker.\n" + "2.Basic info.\n" + "3.Details of one worker.\n" + "4.Update.\n"
-					+ "5.Delete.\n" + "6.Return to the main menu.");
+					+ "5.Delete.\n" + "6.Assign a resident to a worker.\n"+"7.Return to the main menu.");
 			opcionw = Integer.parseInt(consola.readLine());
 			switch (opcionw) {
 
@@ -79,7 +79,7 @@ public class Ui {
 				break;
 
 			case 3:
-				workerDetails();
+				workerDetails(); //TODO show the residents that the worker has in charge
 				break;
 
 			case 4:
@@ -90,12 +90,15 @@ public class Ui {
 				deleteWorker();
 				break;
 			case 6:
+				addResident2worker();
+				break;
+			case 7:
 				System.out.println("Going back to the menu.");
 				break;
 			default:
 				break;
 			}
-		} while (opcionw != 6);
+		} while (opcionw != 7);
 
 	}
 
@@ -203,6 +206,26 @@ public class Ui {
 		System.out.println("Worker updated:\n"+w);
 
 	}
+	public static void addResident2worker() throws IOException{
+	
+	System.out.println("Introduce the ID of the worker in which you want to assign a resident.");
+	List<Worker> listw=sqlm.selectWorkers();
+	for (Worker w : listw) {
+		System.out.println(w.toStringpartial());
+	}
+	Integer w_id=Integer.parseInt(consola.readLine());
+	
+	System.out.println("Now, introduce the ID of the resident you want to assign to the resident you chose");
+	List<Resident> listr=sqlm.selectResidents();
+	for (Resident r : listr) {
+		System.out.println(r.toStringpartial());
+	}
+	Integer r_id=Integer.parseInt(consola.readLine());
+	
+	sqlm.connectResidentWorker(w_id ,r_id);
+	System.out.println("Assignment done.\n");
+	}
+
 
 /////////////////////////////////////RESIDENT MENU///////////////////////////////////
 	public static void resident() throws IOException {
@@ -211,7 +234,7 @@ public class Ui {
 			System.out.println("Introduce the number");
 
 			System.out.println("1.New resident.\n" + "2.Basic info.\n" + "3.See details of 1 resident.\n"
-					+ "4.Update.\n" + "5.Delete.\n" + "6.Return to the main menu.");
+					+ "4.Update.\n" + "5.Delete.\n" + "6.Assign a worker to a resident.\n"+"7.Return to the main menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -225,7 +248,7 @@ public class Ui {
 				break;
 
 			case 3:
-				detailsResident();
+				detailsResident();//TODO show the workers in charge of him/her
 				break;
 
 			case 4:
@@ -236,6 +259,9 @@ public class Ui {
 				deleteResident();
 				break;
 			case 6:
+				addWorker2resident();
+				break;
+			case 7:
 				System.out.println("Going back to the menu.");
 				break;
 			default:
@@ -380,6 +406,26 @@ public class Ui {
 		System.out.println("Resident updated:\n"+r);
 
 		
+	}
+	
+	public static void addWorker2resident() throws IOException{
+		
+	System.out.println("Introduce the ID of the resident you want to assign a worker.");
+	List<Resident> listr=sqlm.selectResidents();
+	for (Resident r : listr) {
+		System.out.println(r.toStringpartial());
+	}
+	Integer r_id=Integer.parseInt(consola.readLine());
+	System.out.println("Now, introduce the ID of the worker you want to assign the resident you chose");
+
+	List<Worker> listw=sqlm.selectWorkers();
+	for (Worker w : listw) {
+		System.out.println(w.toStringpartial());
+	}
+	Integer w_id=Integer.parseInt(consola.readLine());
+	
+	sqlm.connectResidentWorker(w_id ,r_id);
+	System.out.println("Assignment done.\n");
 	}
 	
 /////////////////////////////////////ROOM MENU///////////////////////////////////
