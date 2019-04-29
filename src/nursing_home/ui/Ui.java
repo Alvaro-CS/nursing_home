@@ -30,7 +30,7 @@ public class Ui {
 
 		// TODO Solve this
 		boolean exist = true;//sqlm.Check_tables_exist();
-		if (exist == false) {
+		if (exist == true) {
 			sqlm.create();
 		}
 

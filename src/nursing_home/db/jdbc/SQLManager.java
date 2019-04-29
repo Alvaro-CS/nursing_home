@@ -113,25 +113,35 @@ public class SQLManager implements DBManager {
 
 			Statement stmt8 = c.createStatement();
 			String sql8 = "CREATE TABLE activity_distribution " + "(id_worker INTEGER," + "id_activity INTEGER,"
-					+ "FOREIGN KEY(id_worker) REFERENCES worker (id) "
-					+ "FOREIGN KEY (id_activity) REFERENCES activity (id))";
+					+ "FOREIGN KEY(id_worker) REFERENCES workers (id) "
+					+ "FOREIGN KEY (id_activity) REFERENCES activities (id))";
 
 			stmt8.executeUpdate(sql8);
 			stmt8.close();
 
 			Statement stmt9 = c.createStatement();
 			String sql9 = "CREATE TABLE activity_resident " + "(id_resident INTEGER," + "id_activity INTEGER,"
-					+ "FOREIGN KEY(id_resident) REFERENCES resident (id) "
-					+ "FOREIGN KEY (id_activity) REFERENCES activity (id))";
+					+ "FOREIGN KEY(id_resident) REFERENCES residents (id) "
+					+ "FOREIGN KEY (id_activity) REFERENCES activities (id))";
 			stmt9.executeUpdate(sql9);
 			stmt9.close();
 
 			Statement stmt10 = c.createStatement();
 			String sql10 = "CREATE TABLE worker_distribution" + "(id_worker INTEGER," + "id_resident INTEGER,"
-					+ "FOREIGN KEY(id_worker) REFERENCES worker (id) "
-					+ "FOREIGN KEY (id_resident) REFERENCES resident (id))";
+					+ "FOREIGN KEY(id_worker) REFERENCES workers (id) "
+					+ "FOREIGN KEY (id_resident) REFERENCES residents (id))";
 			stmt10.executeUpdate(sql10);
 			stmt10.close();
+			
+			Statement stmtSeq = c.createStatement();
+			
+			String sqlSeq = "INSERT INTO sqlite_sequence (name, seq) VALUES ('rooms', 1)";
+			stmtSeq.executeUpdate(sqlSeq);
+			
+			sqlSeq = "INSERT INTO sqlite_sequence (name, seq) VALUES ('residents', 1)";
+			stmtSeq.executeUpdate(sqlSeq);
+			stmtSeq.close();
+			
 
 		} catch (SQLException e) {
 
