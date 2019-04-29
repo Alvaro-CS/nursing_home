@@ -341,8 +341,8 @@ public class SQLManager implements DBManager {
 		try {
 
 			//Statement stmt = c.createStatement();
-			String sqltext = "SELECT r.id,r.name,r.gender,r.dob,r.telephone,r.grade,r.chekin,r.photo,r.notes,r.room_id "
-					+ "FROM worker_distribution AS w LEFT JOIN residents AS r  "
+			String sqltext = "SELECT r.id,r.name,r.gender,r.dob,r.telephone,r.grade,r.chekin,r.photo,r.notes,r.room_id"
+					+ "FROM worker_distribution AS w JOIN residents AS r"
 					+ "ON w.id_resident=r.id"
 					+ "WHERE w.id_worker=?";
 			PreparedStatement p = c.prepareStatement(sqltext);
@@ -378,14 +378,13 @@ public class SQLManager implements DBManager {
 	public List<Worker> selectWorkersFromResident(Integer idresident) {
 		try {
 
-			Statement stmt = c.createStatement();
 			String sqltext = "SELECT w.id,w.name,w.gender,w.job,w.hire_date,w.dob,w.salary,w.photo"
-					+ "FROM worker_distribution AS r LEFT JOIN workers AS w  "
-					+ "ON w.id_resident=r.id"
+					+ "FROM worker_distribution AS r LEFT JOIN workers AS w"
+					+ "ON r.id_worker=w.id"
 					+ "WHERE r.id_resident=?";
 			PreparedStatement p = c.prepareStatement(sqltext);
 			p.setInt(1, idresident);
-			ResultSet rs = stmt.executeQuery(sqltext);
+			ResultSet rs = p.executeQuery();
 			List<Worker> workerList = new ArrayList<Worker>();
 			while (rs.next()) {
 				int id = rs.getInt("id");
@@ -401,7 +400,6 @@ public class SQLManager implements DBManager {
 
 			}
 			rs.close();
-			stmt.close();
 			return workerList;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -409,7 +407,6 @@ public class SQLManager implements DBManager {
 		return null;
 
 	}
-
 	public List<Room> selectRooms() {
 		try {
 			Statement stmt = c.createStatement();
@@ -481,6 +478,29 @@ public class SQLManager implements DBManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public Activity getActivity (Integer id) {
+		try {
+			String s = "SELECT * FROM activities WHERE id=?";
+			PreparedStatement p = c.prepareStatement(s);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			Activity a = null;
+			while (rs.next()) {
+				Integer a_id = rs.getInt("id");
+				String a_name = rs.getString("name");
+				String a_hours= rs.getString("hours");				
+				String a_days = rs.getString("days");
+				String a_location = rs.getString("location");
+				
+				a=new Activity(a_id, a_name, a_hours, a_days, a_location);
+			}
+			return a;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public List<Drug> selectDrugs() {
