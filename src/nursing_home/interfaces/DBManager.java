@@ -38,6 +38,10 @@ public interface DBManager {
 	public void updateRoom(Room r);
 	public void updateActivity(Activity a);
 	public void insertResidentRoom(Room r, Resident re);
+	public void connectResidentWorker(Integer w_id , Integer r_id);
+	public List<Resident> selectResidentsFromWorker(Integer idworker);
+	public List<Worker> selectWorkersFromResident(Integer idresident);
+
 	
 	
 }

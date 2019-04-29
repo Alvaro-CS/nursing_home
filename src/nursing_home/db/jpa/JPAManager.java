@@ -229,4 +229,22 @@ public class JPAManager implements DBManager {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void connectResidentWorker(Integer w_id, Integer r_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Resident> selectResidentsFromWorker(Integer idworker) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Worker> selectWorkersFromResident(Integer idresident) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

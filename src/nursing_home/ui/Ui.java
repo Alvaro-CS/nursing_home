@@ -36,7 +36,7 @@ public class Ui {
 
 		Integer opcion1 = 0;
 		do {
-			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Exit.");
+			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Activities.\n5.Exit.");
 			opcion1 = Integer.parseInt(consola.readLine());
 			switch (opcion1) {
 			case 1:
@@ -48,10 +48,13 @@ public class Ui {
 			case 3:
 				room();
 			case 4:
-
+				activity();
 				break;
+			case 5:
+				break;
+				
 			}
-		} while (opcion1 != 4);
+		} while (opcion1 != 5);
 		System.out.println("Exit.");
 		sqlm.disconnect();
 		em.disconnect();
@@ -151,6 +154,10 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Worker w = sqlm.getWorker(id);
 		System.out.println(w);// It prints all the info of the person
+		List<Resident> listR = sqlm.selectResidentsFromWorker(id);
+		for (Resident r : listR) {
+			System.out.println(r.toStringpartial());
+		}
 		// Now, we show the photo
 		if (w.getPhoto() != null) {
 			ByteArrayInputStream blobIn = new ByteArrayInputStream(w.getPhoto());
@@ -553,6 +560,53 @@ public static void deleteRoom() throws IOException {
 	
 	
 }
+
+//////////////////////////////////////ACTIVITY MENU///////////////////////////////////////////////////
+public static void activity() throws IOException {
+	int opcionw = 0;
+	do {
+		System.out.println("Introduce the number:");
+
+		System.out.println("1.New worker.\n" + "2.Basic info.\n" + "3.Details of one worker.\n" + "4.Update.\n"
+				+ "5.Delete.\n" + "6.Assign a resident to a worker.\n"+"7.Return to the main menu.");
+		opcionw = Integer.parseInt(consola.readLine());
+		switch (opcionw) {
+
+		case 1:
+			newWorker();
+			break;
+
+		case 2:
+			System.out.println("Showing the workers.");
+			System.out.println(sqlm.selectWorkers());
+			System.out.println("Search finished.");
+			break;
+
+		case 3:
+			workerDetails(); //TODO show the residents that the worker has in charge
+			break;
+
+		case 4:
+			updateWorker();
+			break;
+
+		case 5:
+			deleteWorker();
+			break;
+		case 6:
+			addResident2worker();
+			break;
+		case 7:
+			System.out.println("Going back to the menu.");
+			break;
+		default:
+			break;
+		}
+	} while (opcionw != 7);
+
+}
+
+
 	
 	public static Date transform_date(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
