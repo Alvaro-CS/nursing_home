@@ -18,6 +18,14 @@ public class Treatment implements Serializable {
 	private Date final_date;
 	private Resident resident;
 
+	public Treatment(String name, Date initial_date, Date final_date, Resident resident) {
+		super();
+		this.name = name;
+		this.initial_date = initial_date;
+		this.final_date = final_date;
+		this.resident = resident;
+	}
+
 	public Integer getId() {
 		return id;
 	}

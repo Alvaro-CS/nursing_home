@@ -28,8 +28,7 @@ import nursing_home.interfaces.DBManager;
 import nursing_home.pojos.Activity;
 import nursing_home.pojos.Drug;
 
-//add DOB to sql
-//ADD THE NEW PARAMETERS TO CREATE TABLES ETC
+
 //ADD ON UPDATE/ON DELETE
 public class SQLManager implements DBManager {
 
@@ -87,7 +86,7 @@ public class SQLManager implements DBManager {
 
 			Statement stmt4 = c.createStatement();
 			String sql4 = "CREATE TABLE activities " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + "name TEXT NOT NULL,"
-					+ "timetable TEXT NOT NULL," + "location TEXT)";
+					+ "days TEXT NOT NULL,"+ "hours TEXT NOT NULL," + "location TEXT)";
 			stmt4.executeUpdate(sql4);
 			stmt4.close();
 

@@ -14,10 +14,15 @@ import java.util.List;
 
 import nursing_home.db.jdbc.SQLManager;
 import nursing_home.db.jpa.JPAManager;
-import nursing_home.pojos.Resident;
-import nursing_home.pojos.Room;
-import nursing_home.pojos.Worker;
+import nursing_home.pojos.*;
 import sample.db.graphics.ImageWindow;
+//ARREGLAR TABLAS TRYCATCH
+//MENU ACTIVITY. RELACION CON WORKER Y RESIDENT.
+//WORKER Y RESIDENT RELACIÓN MUTUA. DISEÑO EN MAIN. ¿FUNCIONA?
+//ON UPDATE/CASCADE. ERROR EN CREATE. ¿COMO AFECTA CUANDO EDITO/BORRO)
+//ENcapsular informacion basica de todos: mostrar solo el tostring partial
+//Mostrar cuantas personas hay en las habitaciones antes de introducir un resident a una?
+//Insertar treatment: ¿Puede haber un treatment sin drug y dosage?
 
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
@@ -34,11 +39,11 @@ public class Ui {
 			sqlm.create();
 		}
 
-		Integer opcion1 = 0;
+		Integer option = 0;
 		do {
-			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Activities.\n5.Exit.");
-			opcion1 = Integer.parseInt(consola.readLine());
-			switch (opcion1) {
+			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Activities. \n5.Drugs. \n6.Treatments. \n7.Exit");
+			option = Integer.parseInt(consola.readLine());
+			switch (option) {
 			case 1:
 				worker();
 				break;
@@ -51,10 +56,16 @@ public class Ui {
 				activity();
 				break;
 			case 5:
+				drug();
+				break;
+			case 6:
+				treatment();
+				break;
+			case 7:
 				break;
 				
 			}
-		} while (opcion1 != 5);
+		} while (option != 7);
 		System.out.println("Exit.");
 		sqlm.disconnect();
 		em.disconnect();
@@ -62,14 +73,14 @@ public class Ui {
 /////////////////////////////////////WORKER MENU///////////////////////////////////
 
 	public static void worker() throws IOException {
-		int opcionw = 0;
+		int option = 0;
 		do {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New worker.\n" + "2.Basic info.\n" + "3.Details of one worker.\n" + "4.Update.\n"
 					+ "5.Delete.\n" + "6.Assign a resident to a worker.\n"+"7.Return to the main menu.");
-			opcionw = Integer.parseInt(consola.readLine());
-			switch (opcionw) {
+			option = Integer.parseInt(consola.readLine());
+			switch (option) {
 
 			case 1:
 				newWorker();
@@ -78,7 +89,6 @@ public class Ui {
 			case 2:
 				System.out.println("Showing the workers.");
 				System.out.println(sqlm.selectWorkers());
-				System.out.println("Search finished.");
 				break;
 
 			case 3:
@@ -101,7 +111,7 @@ public class Ui {
 			default:
 				break;
 			}
-		} while (opcionw != 7);
+		} while (option != 7);
 
 	}
 
@@ -274,7 +284,7 @@ public class Ui {
 			default:
 				break;
 			}
-		} while (option != 6);
+		} while (option != 7);
 	}
 	public static void newResident() throws IOException {
 
@@ -316,7 +326,7 @@ public class Ui {
 		System.out.println("Now, assign the patient into a room.");
 		System.out.println("Rooms available:");
 
-		List<Room> list = em.selectRooms();// ¿Mostrar cuantas personas hay en las habitaciones?
+		List<Room> list = em.selectRooms();//TODO ¿Mostrar cuantas personas hay en las habitaciones?
 		for (Room r : list) {
 			System.out.println(r);
 		}
@@ -438,14 +448,14 @@ public class Ui {
 /////////////////////////////////////ROOM MENU///////////////////////////////////
 public static void room() throws IOException{
 
-	int opcionw = 0;
+	int option = 0;
 	do {
 		System.out.println("Introduce the number");
 
 		System.out.println("1.Create new room.\n" + "2.Info about each room.\n" + "3.Details of one room.\n" + "4.Update room.\n"
 				+ "5.Delete room.\n" + "6.Return to the main menu.");
-		opcionw = Integer.parseInt(consola.readLine());
-		switch (opcionw) {
+		option = Integer.parseInt(consola.readLine());
+		switch (option) {
 
 		case 1:
 			newRoom();
@@ -473,7 +483,7 @@ public static void room() throws IOException{
 		default:
 			break;
 		}
-	} while (opcionw != 6);
+	} while (option != 6);
 
 }
 public static void newRoom() throws IOException {
@@ -563,38 +573,221 @@ public static void deleteRoom() throws IOException {
 
 //////////////////////////////////////ACTIVITY MENU///////////////////////////////////////////////////
 public static void activity() throws IOException {
-	int opcionw = 0;
+	int option = 0;
 	do {
 		System.out.println("Introduce the number:");
 
-		System.out.println("1.New worker.\n" + "2.Basic info.\n" + "3.Details of one worker.\n" + "4.Update.\n"
-				+ "5.Delete.\n" + "6.Assign a resident to a worker.\n"+"7.Return to the main menu.");
-		opcionw = Integer.parseInt(consola.readLine());
-		switch (opcionw) {
+		System.out.println("1.New activity.\n" + "2.General information about all activities.\n" + "3.Details of one activity.\n"+ "4.Update activity.\n" + "5.Delete activity.\n"
+				+ "6.Return to menu.\n");//Activity with worker and resident
+		option = Integer.parseInt(consola.readLine());
+		switch (option) {
 
 		case 1:
-			newWorker();
+			newActivity();
 			break;
 
 		case 2:
-			System.out.println("Showing the workers.");
-			System.out.println(sqlm.selectWorkers());
-			System.out.println("Search finished.");
+			infoActivity();
 			break;
 
 		case 3:
-			workerDetails(); //TODO show the residents that the worker has in charge
+			activityDetails(); 
 			break;
 
 		case 4:
-			updateWorker();
+			updateActivity();
 			break;
 
 		case 5:
-			deleteWorker();
+			deleteActivity();
 			break;
 		case 6:
-			addResident2worker();
+			System.out.println("Going back to the menu.");
+			break;
+		default:
+			break;
+		}
+	} while (option != 6);
+
+}
+public static void newActivity() throws IOException {
+
+	System.out.println("Introduce the name of the activity.");
+	String name = consola.readLine();
+
+	System.out.println("Introduce the days of the week when the activity takes place.");
+	String days = consola.readLine();
+	
+	System.out.println("Introduce the hours when the activity takes place.");
+	String hours = consola.readLine();
+	
+	System.out.println("Introduce where the activity takes place.");
+	String location = consola.readLine();
+
+	Activity a = new Activity(name,hours,days,location);
+	sqlm.insertActivity(a);
+	System.out.println("You have created succesfully the activity "+name+".\n");
+	
+}
+public static void infoActivity() throws IOException {
+	
+	System.out.println("Showing the activities.");
+	List<Activity> list = sqlm.selectActivities();
+	for (Activity a: list) {
+		System.out.println(a.toStringpartial());
+	}
+}
+public static void activityDetails() throws IOException {
+	
+	List<Activity> list = sqlm.selectActivities();
+	for (Activity a: list) {
+		System.out.println(a.toStringpartial());
+	}
+	System.out.println("Type the id of the activity to see in detail.");
+	Integer id = Integer.parseInt(consola.readLine());
+	Activity a = sqlm.getActivity(id);
+	System.out.println(a);
+	
+}
+public static void updateActivity() throws IOException {
+	
+
+	System.out.println(sqlm.selectActivities());
+	System.out.println("Choose an activity, type its ID: ");
+	Integer id = Integer.parseInt(consola.readLine());
+	String answer;
+	Activity a = sqlm.getActivity(id); 
+	System.out.println("Do you want to change the name of the activity?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new activity name: ");
+		a.setName(consola.readLine());
+	}
+	
+	System.out.println("Do you want to change the hours when the activity takes place?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new hours: ");
+		a.setHours(consola.readLine());
+	}
+
+	System.out.println("Do you want to change the days when the activity takes place?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new days: ");
+		a.setDays(((consola.readLine())));
+	}
+sqlm.updateActivity(a);
+
+System.out.println("Activity updated:\n"+a);
+	
+}
+public static void deleteActivity() throws IOException {
+	
+	List<Activity> list = sqlm.selectActivities();
+	for (Activity a : list) {
+		System.out.println(a.toStringpartial());
+	}
+	System.out.println("Choose an activity to delete, type its ID: ");
+	Integer id = Integer.parseInt(consola.readLine());
+	sqlm.deleteActivity(id);
+	System.out.println("Deletion completed.");
+	
+}
+
+
+/////////////////////////////////////DRUG MENU///////////////////////////////////
+
+public static void drug() throws IOException {
+	int option = 0;
+	do {
+		System.out.println("Introduce the number:");
+
+		System.out.println("1.New drug.\n" + "2.List of drugs.\n" + "3.Delete.\n" + "4.Return to the main menu.\n");
+		option = Integer.parseInt(consola.readLine());
+		switch (option) {
+
+		case 1:
+			newDrug();
+			break;
+
+		case 2:
+			System.out.println("Showing the drugs.");
+			System.out.println(sqlm.selectDrugs());
+			break;
+
+		case 3:
+			deleteDrug();
+			break;
+
+		case 4:
+			System.out.println("Going back to the menu.");
+			break;
+		default:
+			break;
+		}
+	} while (option != 4);
+
+}
+
+public static void newDrug() throws IOException {
+
+	System.out.println("Introduce the name of the drug.");
+	String name = consola.readLine();
+	Drug d = new Drug(name);
+	sqlm.insertDrug(d);
+	System.out.println("You have created succesfully the drug "+name+".\n");
+	
+}
+
+public static void deleteDrug() throws IOException {
+	
+	List<Drug> list = sqlm.selectDrugs();
+	for (Drug d: list) {
+		System.out.println(d);
+	}
+	System.out.println("Choose an activity to delete, type its ID: ");
+	Integer id = Integer.parseInt(consola.readLine());
+	sqlm.deleteActivity(id);
+	System.out.println("Deletion completed.");
+	
+}
+/////////////////////////////////////TREATMENT MENU///////////////////////////////////
+
+public static void treatment() throws IOException {
+	int option = 0;
+	do {
+		System.out.println("Introduce the number:");
+
+		System.out.println("1.New treatment.\n" + "2.Basic info.\n" + "3.Details of one treatment.\n" + "4.Update treatment.\n"
+				+ "5.Delete treatment.\n" + "6.Assign a drug to a treatment.\n"+"7.Return to the main menu.");//TODO ¿Menu extra?
+		option = Integer.parseInt(consola.readLine());
+		switch (option) {
+
+		case 1:
+			newTreatment();
+			break;
+
+		case 2:
+			infoTreatment();
+			break;
+
+		case 3:
+			treatmentDetails();
+			break;
+
+		case 4:
+			updateTreatment();
+			break;
+
+		case 5:
+			deleteTreatment();
+			break;
+		case 6:
+			//addResident2worker();
 			break;
 		case 7:
 			System.out.println("Going back to the menu.");
@@ -602,10 +795,39 @@ public static void activity() throws IOException {
 		default:
 			break;
 		}
-	} while (opcionw != 7);
+	} while (option != 7);
 
 }
+public static void newTreatment() throws IOException {
 
+	System.out.println("Introduce the name of the treatment.");
+	String name = consola.readLine();
+
+	System.out.println("Introduce when the treatment starts(''yyyy-mm-dd'')");
+
+	String dateini = consola.readLine();
+	Date start_date = transform_date(dateini);
+
+	System.out.println("Introduce when the treatment ends(''yyyy-mm-dd'')");
+
+	String dateend = consola.readLine();
+	Date end_date = transform_date(dateend);
+
+	System.out.println("Now, assign the treatment into a resident.");
+	System.out.println("Residents:");
+
+	List<Resident> list = sqlm.selectResidents(); 
+	for (Resident r : list) {
+		System.out.println(r);
+	}
+	System.out.println("Type the id of the resident you want to assign the treartment.");
+	Integer id = Integer.parseInt(consola.readLine());
+	Resident r = sqlm.getResident(id);
+	Treatment t = new Treatment(name,start_date,end_date,r);
+	//TODO insert treatment 
+	System.out.println("Resident succesfully created.\n");
+	
+}
 
 	
 	public static Date transform_date(String date) {

@@ -107,4 +107,8 @@ public class Activity implements Serializable {
 				+ location + "]";
 	}
 
+	public String toStringpartial() {
+		return "Activity [id=" + id + ", name=" + name +"]";
+	}
+	
 }
