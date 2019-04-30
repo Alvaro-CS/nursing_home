@@ -16,6 +16,7 @@ import nursing_home.db.jdbc.SQLManager;
 import nursing_home.db.jpa.JPAManager;
 import nursing_home.pojos.*;
 import sample.db.graphics.ImageWindow;
+//TODO
 //ARREGLAR TABLAS TRYCATCH
 //MENU ACTIVITY. RELACION CON WORKER Y RESIDENT.
 //WORKER Y RESIDENT RELACIÓN MUTUA. DISEÑO EN MAIN. ¿FUNCIONA?
@@ -23,6 +24,8 @@ import sample.db.graphics.ImageWindow;
 //ENcapsular informacion basica de todos: mostrar solo el tostring partial
 //Mostrar cuantas personas hay en las habitaciones antes de introducir un resident a una?
 //Insertar treatment: ¿Puede haber un treatment sin drug y dosage?
+//Get Treatment/select treatment
+//Update treatment
 
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
@@ -762,7 +765,7 @@ public static void treatment() throws IOException {
 	do {
 		System.out.println("Introduce the number:");
 
-		System.out.println("1.New treatment.\n" + "2.Basic info.\n" + "3.Details of one treatment.\n" + "4.Update treatment.\n"
+		System.out.println("1.New treatment.\n" + "2.List all treatments.\n" + "3.Details of one treatment.\n" + "4.Update treatment.\n"
 				+ "5.Delete treatment.\n" + "6.Assign a drug to a treatment.\n"+"7.Return to the main menu.");//TODO ¿Menu extra?
 		option = Integer.parseInt(consola.readLine());
 		switch (option) {
@@ -776,7 +779,7 @@ public static void treatment() throws IOException {
 			break;
 
 		case 3:
-			treatmentDetails();
+			detailsTreatment();
 			break;
 
 		case 4:
@@ -825,7 +828,81 @@ public static void newTreatment() throws IOException {
 	Resident r = sqlm.getResident(id);
 	Treatment t = new Treatment(name,start_date,end_date,r);
 	//TODO insert treatment 
-	System.out.println("Resident succesfully created.\n");
+	System.out.println("Treatment succesfully created.\n");
+	
+}
+public static void infoTreatment() throws IOException {
+	
+	System.out.println("Showing the treatments.");
+	List<Treatment> list = sqlm.selectTreatments;
+	for (Treatment t: list) {
+		System.out.println(t.toStringpartial());//TODO ¿Qué mostramos del treatment? ID,name,resident
+	}
+}
+public static void detailsTreatment() throws IOException{
+	
+	List<Treatment> list = sqlm.selectTreatments;
+	for (Treatment t: list) {
+		System.out.println(t);
+	}
+	System.out.println("Type the id of the treatment to see in detail.");
+	Integer id = Integer.parseInt(consola.readLine());
+	Treatment t= sqlm.getTreatment(id);
+	System.out.println(t);// It prints all the info of the person
+	
+	
+}
+
+public static void updateTreatment() throws IOException {
+	
+
+	System.out.println(sqlm.selectTreatments());
+	System.out.println("Choose a treatment, type its ID: ");
+	Integer id = Integer.parseInt(consola.readLine());
+	String answer;
+	Treatment t= sqlm.getTreatment();
+	System.out.println("Do you want to change the name of the Treatment?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new treatment's name: ");
+		t.setName(consola.readLine());
+	}
+	System.out.println("Do you want to change when the treatment ends?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new treatment's end date: ");
+		String dateend = consola.readLine();
+		Date end_date = transform_date(dateend);
+		t.setFinal_date(end_date);
+	}
+	/* TODO update persona que tiene un treatment
+	System.out.println("Do you want to change the treatment's owner?");
+	System.out.println("Y/N");
+	answer = consola.readLine();
+	if (answer.equalsIgnoreCase("Y")) {
+		System.out.print("Type the new residents's room (id): ");
+		int room_id = Integer.parseInt(consola.readLine());
+		Room ro = em.getRoom(room_id);
+		r.setRoom(ro);
+	}*/
+
+	sqlm.updateTreatment();
+	System.out.println("Treatment updated:\n"+t);
+
+	
+}
+public static void deleteTreatment() throws IOException {
+	
+	List<Treatment> list = sqlm.selectTreatments();
+	for (Treatment t: list) {
+		System.out.println(t);
+	}
+	System.out.println("Choose a treatment to delete, type its ID: ");
+	Integer id = Integer.parseInt(consola.readLine());
+	sqlm.deleteTreatment(id);
+	System.out.println("Deletion completed.");
 	
 }
 

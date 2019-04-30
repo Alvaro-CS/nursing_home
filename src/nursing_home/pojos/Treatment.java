@@ -18,6 +18,7 @@ public class Treatment implements Serializable {
 	private Date final_date;
 	private Resident resident;
 
+	
 	public Treatment(String name, Date initial_date, Date final_date, Resident resident) {
 		super();
 		this.name = name;
@@ -94,7 +95,10 @@ public class Treatment implements Serializable {
 	@Override
 	public String toString() {
 		return "Treatment [id=" + id + ", name=" + name + ", initial_date=" + initial_date + ", final_date="
-				+ final_date + "]";
+				+ final_date + "resident:"+resident.getName() +"]";
+	}
+	public String toStringpartial() {
+		return "Treatment [id=" + id + ", name=" + name +"resident:"+resident.getName() +"]";
 	}
 
 }
