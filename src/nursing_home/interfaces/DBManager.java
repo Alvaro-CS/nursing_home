@@ -17,6 +17,7 @@ public interface DBManager {
 	public void insertResident(Resident r);
 	public void insertRoom(Room r);
 	public void insertActivity(Activity a);
+	public Activity getActivity (Integer id);
 	public void insertDrug(Drug d);
 	public void insertTreatment(Treatment t, Drug drug, String dosage);
 	public List<Worker> selectWorkers();

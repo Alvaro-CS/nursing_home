@@ -247,4 +247,10 @@ public class JPAManager implements DBManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Activity getActivity(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
