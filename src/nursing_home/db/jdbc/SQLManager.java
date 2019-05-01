@@ -104,8 +104,8 @@ public class SQLManager implements DBManager {
 
 			Statement stmt7 = c.createStatement();
 			String sql7 = "CREATE TABLE drug_treatment " + "(id_drug INTEGER," + "id_treatment INTEGER,"
-					+ "dosis TEXT NOT NULL," + "FOREIGN KEY(id_treatment) REFERENCES treatments (id) "
-					+ "FOREIGN KEY (id_drug) REFERENCES drugs (id) PRIMARY KEY (id_drug,id_treatment))";
+					+ "dosis TEXT NOT NULL," + "FOREIGN KEY(id_treatment) REFERENCES treatments (id), "
+					+ "FOREIGN KEY (id_drug) REFERENCES drugs (id), PRIMARY KEY (id_drug,id_treatment))";
 
 			stmt7.executeUpdate(sql7);
 			stmt7.close();
@@ -128,7 +128,7 @@ public class SQLManager implements DBManager {
 			Statement stmt10 = c.createStatement();
 			String sql10 = "CREATE TABLE worker_distribution" + "(id_worker INTEGER," + "id_resident INTEGER,"
 					+ "FOREIGN KEY(id_worker) REFERENCES worker (id) "
-					+ "FOREIGN KEY (id_resident) REFERENCES resident (id))";
+					+ "FOREIGN KEY (id_resident) REFERENCES resident (id) ON DELETE CASCADE)";
 			stmt10.executeUpdate(sql10);
 			stmt10.close();
 
@@ -340,9 +340,9 @@ public class SQLManager implements DBManager {
 		try {
 
 			//Statement stmt = c.createStatement();
-			String sqltext = "SELECT r.id,r.name,r.gender,r.dob,r.telephone,r.grade,r.chekin,r.photo,r.notes,r.room_id"
-					+ "FROM worker_distribution AS w JOIN residents AS r"
-					+ "ON w.id_resident=r.id"
+			String sqltext = "SELECT r.id,r.name,r.gender,r.dob,r.telephone,r.grade,r.checkin,r.photo,r.notes,r.room_id "
+					+ "FROM worker_distribution AS w JOIN residents AS r "
+					+ "ON w.id_resident=r.id "
 					+ "WHERE w.id_worker=?";
 			PreparedStatement p = c.prepareStatement(sqltext);
 			p.setInt(1, idworker);
