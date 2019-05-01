@@ -19,6 +19,15 @@ public class Treatment implements Serializable {
 	private Resident resident;
 
 	
+	public Treatment(Integer id, String name, Date initial_date, Date final_date, Resident resident) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.initial_date = initial_date;
+		this.final_date = final_date;
+		this.resident = resident;
+	}
+
 	public Treatment(String name, Date initial_date, Date final_date, Resident resident) {
 		super();
 		this.name = name;
