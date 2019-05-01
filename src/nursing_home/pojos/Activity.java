@@ -4,15 +4,29 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Activity")
+@XmlType(propOrder = {"name","hours","days","location"})
+
 public class Activity implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6896487450338046523L;
+	@XmlAttribute
 	private Integer id;
+	@XmlAttribute
 	private String name;
+	@XmlAttribute
 	private String hours;
+	@XmlAttribute
 	private String days;
+	@XmlAttribute
 	private String location;
 
 	public Activity() {

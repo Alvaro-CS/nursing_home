@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Resident")
-@XmlType(propOrder = { "id", "name", "gender","dob","teleph","dep_grade","checkin","photo","notes","treatments" })
+@XmlType(propOrder = {"name", "gender","dob","teleph","dep_grade","checkin","photo","notes","treatments" })
 
 public class Resident implements Serializable {
 	
@@ -47,18 +47,18 @@ public class Resident implements Serializable {
 	private Integer id;
 	@XmlAttribute
 	private String name;
-	@XmlElement
+	@XmlAttribute
 	private String gender;
-	@XmlElement
+	@XmlAttribute
 	@XmlJavaTypeAdapter(nursing_home.db.xml.utils.SQLDateAdapter.class)
 	private Date dob;
 	@Column(name="telephone")
-	@XmlElement
+	@XmlAttribute
 	private Integer teleph;
 	@Column(name="grade")
-	@XmlElement
+	@XmlAttribute
 	private String dep_grade;
-	@XmlElement
+	@XmlAttribute
 	@XmlJavaTypeAdapter(nursing_home.db.xml.utils.SQLDateAdapter.class)
 	private Date checkin;
 	@Basic(fetch=FetchType.LAZY)

@@ -6,16 +6,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Treatment")
+@XmlType(propOrder = {"name", "initial_date","final_date","resident"})
+
 public class Treatment implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7466068630410510066L;
+	@XmlAttribute
 	private Integer id;
+	@XmlAttribute
 	private String name;
+	@XmlAttribute
 	private Date initial_date;
+	@XmlAttribute
 	private Date final_date;
+	@XmlTransient
 	private Resident resident;
 
 	

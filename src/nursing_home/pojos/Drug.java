@@ -4,13 +4,24 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Drug")
+@XmlType(propOrder = {"name"})
+
 public class Drug implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3647401126213202256L;
+	@XmlAttribute
 	private Integer id;
+	@XmlAttribute
 	private String name;
 
 	public Drug() {
