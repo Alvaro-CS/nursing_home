@@ -131,6 +131,15 @@ public class SQLManager implements DBManager {
 					+ "FOREIGN KEY (id_resident) REFERENCES resident (id) ON DELETE CASCADE)";
 			stmt10.executeUpdate(sql10);
 			stmt10.close();
+			
+			Statement stmtSeq = c.createStatement();
+
+			String sqlSeq = "INSERT INTO sqlite_sequence (name, seq) VALUES ('rooms', 1)";
+			stmtSeq.executeUpdate(sqlSeq);
+
+			sqlSeq = "INSERT INTO sqlite_sequence (name, seq) VALUES ('residents', 1)";
+			stmtSeq.executeUpdate(sqlSeq);
+			stmtSeq.close();
 
 		} catch (SQLException e) {
 
