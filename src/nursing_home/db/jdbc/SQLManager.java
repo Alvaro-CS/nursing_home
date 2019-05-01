@@ -104,7 +104,7 @@ public class SQLManager implements DBManager {
 
 			Statement stmt7 = c.createStatement();
 			String sql7 = "CREATE TABLE drug_treatment " + "(id_drug INTEGER," + "id_treatment INTEGER,"
-					+ "dosis TEXT NOT NULL," + "FOREIGN KEY(id_treatment) REFERENCES treatments (id), "
+					+ "dosage TEXT NOT NULL," + "FOREIGN KEY(id_treatment) REFERENCES treatments (id), "
 					+ "FOREIGN KEY (id_drug) REFERENCES drugs (id), PRIMARY KEY (id_drug,id_treatment))";
 
 			stmt7.executeUpdate(sql7);
