@@ -4,20 +4,43 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Worker")
+@XmlType(propOrder = { "name", "gender", "job","hire_date", "dob", "salary", "photo" })
+
+
 public class Worker implements Serializable{
 /**
 	 * 
 	 */
 	private static final long serialVersionUID = 7225947562836015154L;
 	//serial version
+	@XmlAttribute
 	private Integer id;
+	@XmlAttribute
 	private String name;
+	@XmlAttribute
 	private String gender;
+	@XmlAttribute
 	private String job;
+	@XmlAttribute
+	@XmlJavaTypeAdapter(nursing_home.db.xml.utils.SQLDateAdapter.class)
 	private Date hire_date;
+	@XmlAttribute
 	private Date dob;
+	@XmlAttribute
 	private Double salary;
+	@XmlAttribute
 	private byte[] photo;
+	
 	public Integer getId() {
 		return id;
 	}			

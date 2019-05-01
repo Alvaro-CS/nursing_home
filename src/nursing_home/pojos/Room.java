@@ -11,9 +11,21 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @Entity 
 @Table(name = "rooms") 
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Room")
+@XmlType(propOrder = { "id", "roomtype", "floor","gender","notes","residents" })
 public class Room implements Serializable {
 	/**
 	 * 
@@ -25,12 +37,20 @@ public class Room implements Serializable {
 	@TableGenerator(name="rooms", table="sqlite_sequence",
 	    pkColumnName="name", valueColumnName="seq", pkColumnValue="rooms")
 	
+	@XmlAttribute
 	private Integer id;
+	@XmlAttribute
 	private String roomtype;
+	@XmlAttribute
 	private Integer floor;
+	@XmlAttribute
 	private String gender;
+	@XmlAttribute
 	private String notes;
 	@OneToMany(mappedBy="room")
+	@Transient
+	@XmlElement(name = "Resident")
+    @XmlElementWrapper(name = "Residents")
 	private List <Resident> residents;
 
 	public Room() {
