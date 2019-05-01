@@ -71,7 +71,7 @@ public class Drug implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Drug [id=" + id + ", name=" + name + "]";
+		return "Drug [id=" + id + ", name=" + name + "]\n";
 	}
 
 }

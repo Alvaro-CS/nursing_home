@@ -823,11 +823,17 @@ public static void newTreatment() throws IOException {
 	for (Resident r : list) {
 		System.out.println(r);
 	}
-	System.out.println("Type the id of the resident you want to assign the treartment.");
+	System.out.println("Type the id of the resident you want to assign the treatment.\n");
 	Integer id = Integer.parseInt(consola.readLine());
 	Resident r = sqlm.getResident(id);
 	Treatment t = new Treatment(name,start_date,end_date,r);
-	//TODO insert treatment 
+	System.out.println("Type the id of the drug you want to assign to the treatment.");
+	System.out.println(sqlm.selectDrugs());
+	Integer id_drug = Integer.parseInt(consola.readLine());
+	System.out.println("Type the dosage of that drug.");
+	String dosage=consola.readLine();
+	Drug d=sqlm.getDrug(id_drug);//TODO
+	sqlm.insertTreatment(t, d, dosage);
 	System.out.println("Treatment succesfully created.\n");
 	
 }
@@ -836,7 +842,7 @@ public static void infoTreatment() throws IOException {
 	System.out.println("Showing the treatments.");
 	List<Treatment> list = sqlm.selectTreatments;
 	for (Treatment t: list) {
-		System.out.println(t.toStringpartial());//TODO ¿Qué mostramos del treatment? ID,name,resident
+		System.out.println(t.toStringpartial());
 	}
 }
 public static void detailsTreatment() throws IOException{
@@ -848,7 +854,8 @@ public static void detailsTreatment() throws IOException{
 	System.out.println("Type the id of the treatment to see in detail.");
 	Integer id = Integer.parseInt(consola.readLine());
 	Treatment t= sqlm.getTreatment(id);
-	System.out.println(t);// It prints all the info of the person
+	System.out.println(t);
+	//A parte, mostrar la dosis y el drug.getname del treatment
 	
 	
 }
@@ -856,10 +863,11 @@ public static void detailsTreatment() throws IOException{
 public static void updateTreatment() throws IOException {
 	
 
-	System.out.println(sqlm.selectTreatments());
+	System.out.println(sqlm.selectTreatments());//A parte, mostrar la dosis y el drug.getname del treatment
+
 	System.out.println("Choose a treatment, type its ID: ");
 	Integer id = Integer.parseInt(consola.readLine());
-	String answer;
+	String answer,dosage;
 	Treatment t= sqlm.getTreatment();
 	System.out.println("Do you want to change the name of the Treatment?");
 	System.out.println("Y/N");
@@ -877,18 +885,16 @@ public static void updateTreatment() throws IOException {
 		Date end_date = transform_date(dateend);
 		t.setFinal_date(end_date);
 	}
-	/* TODO update persona que tiene un treatment
-	System.out.println("Do you want to change the treatment's owner?");
+	System.out.println("Do you want to change the dosage of the Treatment?");
 	System.out.println("Y/N");
 	answer = consola.readLine();
 	if (answer.equalsIgnoreCase("Y")) {
-		System.out.print("Type the new residents's room (id): ");
-		int room_id = Integer.parseInt(consola.readLine());
-		Room ro = em.getRoom(room_id);
-		r.setRoom(ro);
-	}*/
+		System.out.print("Type the new treatment's dosage: ");
+		dosage= consola.readLine();//TODO si no quiere cambiar el dosage, que dosage tenga el valor anterior
+	}
+	
 
-	sqlm.updateTreatment();
+	sqlm.updateTreatment(t,dosage);
 	System.out.println("Treatment updated:\n"+t);
 
 	
