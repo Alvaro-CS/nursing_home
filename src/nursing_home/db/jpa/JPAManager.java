@@ -253,4 +253,28 @@ public class JPAManager implements DBManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Treatment> selectTreatments() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Drug getDrug(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Treatment getTreatment(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateTreatment(Treatment t) {
+		// TODO Auto-generated method stub
+		
+	}
 }

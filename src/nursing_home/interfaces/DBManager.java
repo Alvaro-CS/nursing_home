@@ -13,31 +13,41 @@ public interface DBManager {
 	public void connect();
 	public void disconnect();
 	public void create();
+	
 	public void insertWorker(Worker w);
 	public void insertResident(Resident r);
 	public void insertRoom(Room r);
 	public void insertActivity(Activity a);
-	public Activity getActivity (Integer id);
 	public void insertDrug(Drug d);
 	public void insertTreatment(Treatment t, Drug drug, String dosage);
+	
 	public List<Worker> selectWorkers();
 	public List<Resident> selectResidents();
 	public List<Room> selectRooms();
-	public Room getRoom (Integer id);
 	public List<Activity> selectActivities();
 	public List<Drug> selectDrugs();
+	public List<Treatment> selectTreatments();
+	
 	public Worker getWorker(Integer id);
-	public Resident getResident(Integer id);
+	public Resident getResident(Integer id);	
+	public Room getRoom (Integer id);
+	public Activity getActivity (Integer id);
+	public Drug getDrug(Integer id);
+	public Treatment getTreatment(Integer id);
+
 	public void deleteWorker(Integer id);
 	public void deleteResident(Integer id);
 	public void deleteRoom(Integer id);
 	public void deleteActivity(Integer id);
 	public void deleteDrug(Integer id);
 	public void deleteTreatment(Integer id);
+	
 	public void updateWorker(Worker w);
 	public void updateResident(Resident r);
 	public void updateRoom(Room r);
 	public void updateActivity(Activity a);
+	public void updateTreatment(Treatment t);
+	
 	public void insertResidentRoom(Room r, Resident re);
 	public void connectResidentWorker(Integer w_id , Integer r_id);
 	public List<Resident> selectResidentsFromWorker(Integer idworker);
