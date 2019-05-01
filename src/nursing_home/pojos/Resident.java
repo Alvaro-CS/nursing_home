@@ -18,9 +18,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @Entity
 @Table (name="residents")
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Resident")
+@XmlType(propOrder = { "id", "name", "gender","dob","teleph","dep_grade","checkin","photo","notes","treatments" })
+
 public class Resident implements Serializable {
 	
 	private static final long serialVersionUID = 421019080175306753L;
@@ -29,24 +43,37 @@ public class Resident implements Serializable {
 	@TableGenerator (name="residents", table= "sqlite_sequence",
 		pkColumnName= "name", valueColumnName="seq", pkColumnValue="residents") //Create table
 	
-	//serial version
+	@XmlAttribute
 	private Integer id;
+	@XmlAttribute
 	private String name;
+	@XmlElement
 	private String gender;
+	@XmlElement
+	@XmlJavaTypeAdapter(nursing_home.db.xml.utils.SQLDateAdapter.class)
 	private Date dob;
 	@Column(name="telephone")
+	@XmlElement
 	private Integer teleph;
 	@Column(name="grade")
+	@XmlElement
 	private String dep_grade;
+	@XmlElement
+	@XmlJavaTypeAdapter(nursing_home.db.xml.utils.SQLDateAdapter.class)
 	private Date checkin;
 	@Basic(fetch=FetchType.LAZY)
 	@Lob
+	@XmlElement
 	private byte[] photo;
+	@XmlElement
 	private String notes;
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="room_id")
+	@XmlTransient
 	private Room room;
 	@Transient
+	@XmlElement(name = "Treatment")
+    @XmlElementWrapper(name = "Treatments")
 	private List <Treatment> treatments;
 	
 	

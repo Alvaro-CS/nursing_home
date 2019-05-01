@@ -897,7 +897,7 @@ public static void updateTreatment() throws IOException {
 	sqlm.updateTreatment(t,dosage);
 	System.out.println("Treatment updated:\n"+t);
 
-	
+
 }
 public static void deleteTreatment() throws IOException {
 	

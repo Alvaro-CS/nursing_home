@@ -800,7 +800,7 @@ public class SQLManager implements DBManager {
 	}
 
 	public void updateTreatment(Treatment t) {
-		try {
+		try {//TODO
 			String sql = "UPDATE treatments SET name=?, end_dates=? WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, t.getName());
