@@ -12,10 +12,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Treatment")
-@XmlType(propOrder = {"name", "initial_date","final_date","resident"})
+@XmlType(propOrder = {"name", "initial_date","final_date"})
 
 public class Treatment implements Serializable {
 
@@ -28,8 +29,10 @@ public class Treatment implements Serializable {
 	@XmlAttribute
 	private String name;
 	@XmlAttribute
+	@XmlJavaTypeAdapter(nursing_home.db.xml.utils.SQLDateAdapter.class)
 	private Date initial_date;
 	@XmlAttribute
+	@XmlJavaTypeAdapter(nursing_home.db.xml.utils.SQLDateAdapter.class)
 	private Date final_date;
 	@XmlTransient
 	private Resident resident;
@@ -42,6 +45,10 @@ public class Treatment implements Serializable {
 		this.initial_date = initial_date;
 		this.final_date = final_date;
 		this.resident = resident;
+	}
+
+	public Treatment() {
+		super();
 	}
 
 	public Treatment(String name, Date initial_date, Date final_date, Resident resident) {

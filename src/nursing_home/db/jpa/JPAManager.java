@@ -21,7 +21,7 @@ public class JPAManager implements DBManager {
 																								// of persistence.xml
 		em.getTransaction().begin();
 		em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate(); // to activate foreign keys.
-		em.getTransaction().commit();// Jpa doesn't have autocommit
+		em.getTransaction().commit();
 	}
 
 	public void disconnect() {
