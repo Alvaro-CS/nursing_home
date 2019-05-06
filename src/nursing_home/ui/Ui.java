@@ -899,7 +899,7 @@ public static void updateTreatment() throws IOException {
 	}
 	
 
-	sqlm.updateTreatment(t,dosage);//TODO
+	sqlm.updateTreatment(t);//TODO PASS THE DOSAGE
 	System.out.println("Treatment updated:\n"+t);
 
 

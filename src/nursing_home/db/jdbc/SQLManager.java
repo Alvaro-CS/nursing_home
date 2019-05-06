@@ -253,7 +253,7 @@ public class SQLManager implements DBManager {
 		}
 	}
 
-	public void insertTreatment(Treatment t, Drug drug, String dosage) {
+	public void insertTreatment(Treatment t, Integer id_drug, String dosage) {
 		try {
 			String sql = "INSERT INTO treatment () VALUES (?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
@@ -277,7 +277,7 @@ public class SQLManager implements DBManager {
 			PreparedStatement p2 = c.prepareStatement(
 					"INSERT INTO drug_treatment" + " (id_treatment, id_drug, dosage)" + " VALUES (?,?,?)");
 			p2.setInt(1, lastId);
-			p2.setInt(2, drug.getId());
+			p2.setInt(2, id_drug);
 			p2.setString(3, dosage);
 			p2.executeUpdate();
 

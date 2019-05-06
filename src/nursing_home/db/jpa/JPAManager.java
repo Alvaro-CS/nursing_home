@@ -83,7 +83,7 @@ public class JPAManager implements DBManager {
 	}
 
 	@Override
-	public void insertTreatment(Treatment t, Drug drug, String dosage) {
+	public void insertTreatment(Treatment t, Integer id_drug, String dosage) {
 		// TODO Auto-generated method stub
 		
 	}

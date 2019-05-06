@@ -19,7 +19,7 @@ public interface DBManager {
 	public void insertRoom(Room r);
 	public void insertActivity(Activity a);
 	public void insertDrug(Drug d);
-	public void insertTreatment(Treatment t, Drug drug, String dosage);
+	public void insertTreatment(Treatment t, Integer id_drug, String dosage);
 	
 	public List<Worker> selectWorkers();
 	public List<Resident> selectResidents();
