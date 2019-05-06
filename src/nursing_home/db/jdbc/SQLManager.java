@@ -541,7 +541,137 @@ public class SQLManager implements DBManager {
 		}
 		return null;
 	}
+	
+	public List<Activity> selectActivitiesFromResident(Integer idresident) {
+		try {
 
+			String sqltext = "SELECT a.id,a.name,a.hours,a.days,a.location "
+					+ "FROM activity_resident AS ar JOIN activities AS a "
+					+ "ON ar.id_activity=a.id "
+					+ "WHERE w.id_resident=?";
+			PreparedStatement p = c.prepareStatement(sqltext);
+			p.setInt(1, idresident);
+			ResultSet rs = p.executeQuery();
+			List<Activity> activityList = new ArrayList<Activity>();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				String hours = rs.getString("hours");
+				String days = rs.getString("days");
+				String location = rs.getString("location");
+				Activity activity = new Activity(id, name, hours, days, location);
+				activityList.add(activity);
+
+			}
+			rs.close();
+			p.close();
+			return activityList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	public List<Worker> selectWorkersFromActivity(Integer idactivity) {
+		try {
+
+			String sqltext = "SELECT w.id,w.name,w.gender,w.job,w.hire_date,w.dob,w.salary,w.photo "
+					+ "FROM activity_distribution AS ad JOIN workers AS w "
+					+ "ON ad.id_worker=w.id "
+					+ "WHERE ad.id_activity=?";
+			PreparedStatement p = c.prepareStatement(sqltext);
+			p.setInt(1, idactivity);
+			ResultSet rs = p.executeQuery();
+			List<Worker> workerList = new ArrayList<Worker>();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				String gender = rs.getString("gender");
+				String job = rs.getString("job");
+				Date hire_date = rs.getDate("hire_date");
+				Date dob = rs.getDate("dob");
+				Double salary = rs.getDouble("salary");
+				byte[] photo = rs.getBytes("photo");
+				Worker worker = new Worker(id, name, gender, job, hire_date, dob, salary, photo);
+				workerList.add(worker);
+
+			}
+			rs.close();
+			return workerList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
+	public List<Activity> selectActivitiesFromWorker(Integer idworker) {
+		try {
+
+			String sqltext = "SELECT a.id,a.name,a.hours,a.days,a.location "
+					+ "FROM activity_distribution AS ad JOIN activities AS a "
+					+ "ON ad.id_activity=a.id "
+					+ "WHERE w.id_worker=?";
+			PreparedStatement p = c.prepareStatement(sqltext);
+			p.setInt(1, idworker);
+			ResultSet rs = p.executeQuery();
+			List<Activity> activityList = new ArrayList<Activity>();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				String hours = rs.getString("hours");
+				String days = rs.getString("days");
+				String location = rs.getString("location");
+				Activity activity = new Activity(id, name, hours, days, location);
+				activityList.add(activity);
+
+			}
+			rs.close();
+			p.close();
+			return activityList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	public List<Resident> selectResidentsFromActivity(Integer idactivity) {
+		try {
+
+			String sqltext = "SELECT r.id,r.name,r.gender,r.dob,r.telephone,r.grade,r.checkin,r.photo,r.notes,r.room_id "
+					+ "FROM activity_resident AS ar JOIN residents AS r " 
+					+ "ON ar.id_resident=r.id "
+					+ "WHERE a.id_activity=?";
+			PreparedStatement p = c.prepareStatement(sqltext);
+			p.setInt(1, idactivity);
+			ResultSet rs = p.executeQuery();
+			List<Resident> residentList = new ArrayList<Resident>();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				String gender = rs.getString("gender");
+				Date dob = rs.getDate("dob");
+				int teleph = rs.getInt("telephone");
+				String dep_grade = rs.getString("grade");
+				Date checkin = rs.getDate("checkin");
+				byte[] photo = rs.getBytes("photo");
+				String notes = rs.getString("notes");
+				int room_id = rs.getInt("room_id");
+				Room room = getRoom(room_id);
+				Resident resident = new Resident(id, name, gender, dob, teleph, dep_grade, checkin, photo, notes, room);
+				residentList.add(resident);
+
+			}
+			rs.close();
+			p.close();
+			return residentList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
 	public Activity getActivity(Integer id) {
 		try {
 			String s = "SELECT * FROM activities WHERE id=?";

@@ -38,7 +38,7 @@ public class Worker implements Serializable{
 	private Date dob;
 	@XmlAttribute
 	private Double salary;
-	@XmlAttribute
+	@XmlElement
 	private byte[] photo;
 	
 	public Integer getId() {

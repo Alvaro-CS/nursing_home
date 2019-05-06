@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 @Entity 
@@ -48,7 +49,7 @@ public class Room implements Serializable {
 	@XmlAttribute
 	private String notes;
 	@OneToMany(mappedBy="room")
-	@Transient
+	@XmlTransient
 	@XmlElement(name = "Resident")
     @XmlElementWrapper(name = "Residents")
 	private List <Resident> residents;
@@ -151,7 +152,7 @@ public class Room implements Serializable {
 	@Override
 	public String toString() {
 		return "Room [id=" + id + ", roomtype=" + roomtype + ", floor=" + floor + ", gender=" + gender + ", notes="
-				+ notes + "]\n";
+				+ notes + "]";
 	}
 	public String toStringpartial() {
 		return "Room [id=" + id + ", roomtype=" + roomtype + ", floor=" + floor + ", gender=" + gender + "]\n";
