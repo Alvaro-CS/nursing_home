@@ -26,6 +26,7 @@ import sample.db.graphics.ImageWindow;
 //Insertar treatment: ¿Puede haber un treatment sin drug y dosage?
 //Get Treatment/select treatment
 //Update treatment
+//TODO change parameters in insertTreatment and updateTreatment
 
 
 public class Ui {

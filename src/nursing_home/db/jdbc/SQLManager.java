@@ -255,15 +255,13 @@ public class SQLManager implements DBManager {
 
 	public void insertTreatment(Treatment t, Integer id_drug, String dosage) {
 		try {
-			String sql = "INSERT INTO treatment () VALUES (?,?,?,?,?,?);";
+			String sql = "INSERT INTO treatment () VALUES (?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, t.getId());
 			prep.setString(2, t.getName());
 			prep.setDate(3, t.getInitial_date());
 			prep.setDate(4, t.getFinal_date());
 			prep.setInt(5, t.getResident().getId());
-			prep.setInt(5, 1);
-			prep.setInt(3, 1);
 			prep.executeUpdate();
 			prep.close();
 
@@ -932,20 +930,27 @@ public class SQLManager implements DBManager {
 		}
 	}
 
-	public void updateTreatment(Treatment t) {
-		try {// TODO
+	public void updateTreatment(Treatment t, Integer id_drug, String dosage) {
+		try {
 			String sql = "UPDATE treatments SET name=?, end_dates=? WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, t.getName());
 			prep.setDate(2, t.getFinal_date());
 			prep.setInt(3, t.getId());
 			prep.close();
+			
+			PreparedStatement p2 = c.prepareStatement(
+					"UPDATE drug_treatment SET dosage=?  WHERE  id_treatment=? AND id_drug=?");
+			p2.setString(1, dosage );
+			p2.setInt(2, t.getId() );
+			p2.setInt(3, id_drug);
+			p2.executeUpdate();
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
 	public void insertResidentRoom(Room r, Resident re) {
 
 	}
