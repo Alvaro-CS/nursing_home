@@ -46,7 +46,7 @@ public interface DBManager {
 	public void updateResident(Resident r);
 	public void updateRoom(Room r);
 	public void updateActivity(Activity a);
-	public void updateTreatment(Treatment t);
+	public void updateTreatment(Treatment t, Integer id_drug, String dosage);
 	
 	public void insertResidentRoom(Room r, Resident re);
 	public void connectResidentWorker(Integer w_id , Integer r_id);

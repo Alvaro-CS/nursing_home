@@ -272,8 +272,9 @@ public class JPAManager implements DBManager {
 		return null;
 	}
 
+
 	@Override
-	public void updateTreatment(Treatment t) {
+	public void updateTreatment(Treatment t, Integer id_drug, String dosage) {
 		// TODO Auto-generated method stub
 		
 	}

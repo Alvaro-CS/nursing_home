@@ -838,8 +838,7 @@ public static void newTreatment() throws IOException {
 	Integer id_drug = Integer.parseInt(consola.readLine());
 	System.out.println("Type the dosage of that drug.");
 	String dosage=consola.readLine();
-	Drug d=sqlm.getDrug(id_drug);//TODO
-	sqlm.insertTreatment(t, d, dosage);
+	sqlm.insertTreatment(t, id_drug, dosage);
 	System.out.println("Treatment succesfully created.\n");
 	
 }
@@ -900,7 +899,7 @@ public static void updateTreatment() throws IOException {
 	}
 	
 
-	sqlm.updateTreatment(t);//TODO PASS THE DOSAGE
+	sqlm.updateTreatment(t, id_drug, dosage);;//TODO PASS THE DOSAGE
 	System.out.println("Treatment updated:\n"+t);
 
 
