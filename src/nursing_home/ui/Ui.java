@@ -1,16 +1,15 @@
 package nursing_home.ui;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import javax.persistence.Query;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import nursing_home.db.jdbc.SQLManager;
 import nursing_home.db.jpa.JPAManager;
@@ -27,12 +26,13 @@ import sample.db.graphics.ImageWindow;
 //Get Treatment/select treatment
 //Update treatment
 
+
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
 	public static JPAManager em = new JPAManager();
 	static BufferedReader consola = new BufferedReader(new InputStreamReader(System.in));
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
+	public static void main(String[] args) throws NumberFormatException, IOException, JAXBException {
 		em.connect();
 		sqlm.connect();
 
@@ -44,7 +44,7 @@ public class Ui {
 
 		Integer option = 0;
 		do {
-			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Activities. \n5.Drugs. \n6.Treatments. \n7.Exit");
+			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Activities. \n5.Drugs. \n6.Treatments. \n7.XML. \n8.Exit");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 			case 1:
@@ -55,6 +55,7 @@ public class Ui {
 				break;
 			case 3:
 				room();
+				break;
 			case 4:
 				activity();
 				break;
@@ -65,10 +66,13 @@ public class Ui {
 				treatment();
 				break;
 			case 7:
+				xml();
+				break;
+			case 8:
 				break;
 				
 			}
-		} while (option != 7);
+		} while (option != 8);
 		System.out.println("Exit.");
 		sqlm.disconnect();
 		em.disconnect();
@@ -264,7 +268,7 @@ public class Ui {
 
 			case 2:
 				System.out.println("Showing the residents.");
-				System.out.println(sqlm.selectResidents());
+				System.out.println(sqlm.selectResidents());//TODO mostrar solo strinpartial
 				break;
 
 			case 3:
@@ -466,7 +470,7 @@ public static void room() throws IOException{
 
 		case 2:
 			System.out.println("Showing the information of the rooms.");
-			System.out.println(sqlm.selectRooms());
+			System.out.println(sqlm.selectRooms());//TODO info partcial
 			break;
 
 		case 3:
@@ -840,14 +844,14 @@ public static void newTreatment() throws IOException {
 public static void infoTreatment() throws IOException {
 	
 	System.out.println("Showing the treatments.");
-	List<Treatment> list = sqlm.selectTreatments;
+	List<Treatment> list = sqlm.selectTreatments();
 	for (Treatment t: list) {
 		System.out.println(t.toStringpartial());
 	}
 }
 public static void detailsTreatment() throws IOException{
 	
-	List<Treatment> list = sqlm.selectTreatments;
+	List<Treatment> list = sqlm.selectTreatments();
 	for (Treatment t: list) {
 		System.out.println(t);
 	}
@@ -868,7 +872,7 @@ public static void updateTreatment() throws IOException {
 	System.out.println("Choose a treatment, type its ID: ");
 	Integer id = Integer.parseInt(consola.readLine());
 	String answer,dosage;
-	Treatment t= sqlm.getTreatment();
+	Treatment t= sqlm.getTreatment(id);
 	System.out.println("Do you want to change the name of the Treatment?");
 	System.out.println("Y/N");
 	answer = consola.readLine();
@@ -894,7 +898,7 @@ public static void updateTreatment() throws IOException {
 	}
 	
 
-	sqlm.updateTreatment(t,dosage);
+	sqlm.updateTreatment(t,dosage);//TODO
 	System.out.println("Treatment updated:\n"+t);
 
 
@@ -909,6 +913,58 @@ public static void deleteTreatment() throws IOException {
 	Integer id = Integer.parseInt(consola.readLine());
 	sqlm.deleteTreatment(id);
 	System.out.println("Deletion completed.");
+	
+}
+/////////////////////////////////////XML MENU///////////////////////////////////
+
+public static void xml() throws IOException, JAXBException {
+int option = 0;
+do {
+System.out.println("Introduce the number:");
+
+System.out.println("1.Marshall resident.\n2.Back to menu.\n");
+option = Integer.parseInt(consola.readLine());
+switch (option) {
+
+case 1:
+	marshall();
+	break;
+case 2:
+System.out.println("Going back to the menu.");
+break;
+default:
+break;
+}
+} while (option != 2);
+
+}
+
+public static void marshall() throws IOException, JAXBException{
+	
+			// Create the JAXBContext
+			JAXBContext jaxbContext = JAXBContext.newInstance(Resident.class);
+			// Get the marshaller
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			
+			// Pretty formatting
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
+			
+			// Choose the report to turn into an XML
+			// Choose his new department
+			System.out.print("Choose a resident to turn into a XML file:");
+
+			List<Resident> list = sqlm.selectResidents();
+			for (Resident r: list) {
+				System.out.println(r.toStringpartial());
+			}
+			int id = Integer.parseInt(consola.readLine());
+			Resident r=sqlm.getResident(id);
+			// Use the Marshaller to marshal the Java object to a file
+			File file = new File("./xmls/Sample-Report.xml");
+			marshaller.marshal(r, file);
+			// Printout
+			marshaller.marshal(r, System.out);
+
 	
 }
 
