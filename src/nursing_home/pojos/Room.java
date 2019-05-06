@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Room")
-@XmlType(propOrder = { "id", "roomtype", "floor","gender","notes","residents" })
+@XmlType(propOrder = {"roomtype", "floor","gender","notes","residents" })
 public class Room implements Serializable {
 	/**
 	 * 
@@ -42,14 +42,13 @@ public class Room implements Serializable {
 	private Integer id;
 	@XmlAttribute
 	private String roomtype;
-	@XmlAttribute
+	@XmlElement
 	private Integer floor;
 	@XmlAttribute
 	private String gender;
-	@XmlAttribute
+	@XmlElement
 	private String notes;
 	@OneToMany(mappedBy="room")
-	@XmlTransient
 	@XmlElement(name = "Resident")
     @XmlElementWrapper(name = "Residents")
 	private List <Resident> residents;

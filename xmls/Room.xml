@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Room roomtype="single" gender="Mixed" id="2">
+    <floor>1</floor>
+    <notes>Shower</notes>
+    <Residents>
+        <Resident name="Anastasio" gender="male" id="2">
+            <dob>1111-11-11</dob>
+            <teleph>1231312</teleph>
+            <dep_grade>FUll</dep_grade>
+            <checkin>1111-11-11</checkin>
+            <notes>He has neumonias and many respiratory illnesses</notes>
+        </Resident>
+        <Resident name="Marisa" gender="Female" id="52">
+            <dob>1111-11-11</dob>
+            <teleph>2313</teleph>
+            <dep_grade>Half</dep_grade>
+            <checkin>2018-01-01</checkin>
+            <notes>Very pretty. She has good health and likes badminton.</notes>
+        </Resident>
+    </Residents>
+</Room>

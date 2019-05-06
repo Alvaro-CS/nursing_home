@@ -485,7 +485,7 @@ public class SQLManager implements DBManager {
 				int floor = rs.getInt("floor");
 				String gender = rs.getString("gender");
 				String notes = rs.getString("notes");
-				Room room = new Room(id, roomtype, floor, gender, notes);
+				Room room = new Room(id, roomtype, floor, notes, gender);
 				roomList.add(room);
 			}
 			rs.close();

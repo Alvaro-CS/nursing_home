@@ -923,7 +923,7 @@ int option = 0;
 do {
 System.out.println("Introduce the number:");
 
-System.out.println("1.Marshall resident.\n2.Back to menu.\n");
+System.out.println("1.Marshall room.\n2.Back to menu.\n");
 option = Integer.parseInt(consola.readLine());
 switch (option) {
 
@@ -943,7 +943,7 @@ break;
 public static void marshall() throws IOException, JAXBException{
 	
 			// Create the JAXBContext
-			JAXBContext jaxbContext = JAXBContext.newInstance(Resident.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(Room.class);
 			// Get the marshaller
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			
@@ -952,16 +952,16 @@ public static void marshall() throws IOException, JAXBException{
 			
 			// Choose the report to turn into an XML
 			// Choose his new department
-			System.out.print("Choose a resident to turn into a XML file:");
+			System.out.print("Choose a room to turn into a XML file:");
 
-			List<Resident> list = sqlm.selectResidents();
-			for (Resident r: list) {
+			List<Room> list = sqlm.selectRooms();
+			for (Room r: list) {
 				System.out.println(r.toStringpartial());
 			}
 			int id = Integer.parseInt(consola.readLine());
-			Resident r=sqlm.getResident(id);
+			Room r=em.getRoom(id);
 			// Use the Marshaller to marshal the Java object to a file
-			File file = new File("./xmls/Sample-Report.xml");
+			File file = new File("./xmls/Room.xml");
 			marshaller.marshal(r, file);
 			// Printout
 			marshaller.marshal(r, System.out);
