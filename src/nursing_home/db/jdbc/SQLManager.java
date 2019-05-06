@@ -144,8 +144,11 @@ public class SQLManager implements DBManager {
 			stmtSeq.close();
 
 		} catch (SQLException e) {
-
-			e.printStackTrace();
+			if (e.getMessage().contains("already exists")) {
+				System.out.println("Tables are already created");
+			} else {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -606,7 +609,7 @@ public class SQLManager implements DBManager {
 			return null;
 		}
 	}
-	
+
 	public List<Treatment> selectTreatments() {
 		try {
 			Statement stmt = c.createStatement();
@@ -616,12 +619,12 @@ public class SQLManager implements DBManager {
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date ini_date=rs.getDate("ini_date");
-				Date end_date=rs.getDate("end_date");
-				int id_resident=rs.getInt("id_resident");
+				Date ini_date = rs.getDate("ini_date");
+				Date end_date = rs.getDate("end_date");
+				int id_resident = rs.getInt("id_resident");
 
-				Resident resident= getResident(id_resident);
-				Treatment treatment =new Treatment(id, name, ini_date, end_date, resident);
+				Resident resident = getResident(id_resident);
+				Treatment treatment = new Treatment(id, name, ini_date, end_date, resident);
 				treatmentList.add(treatment);
 			}
 			rs.close();
@@ -646,10 +649,10 @@ public class SQLManager implements DBManager {
 				String name = rs.getString("name");
 				Date ini_date = rs.getDate("ini_date");
 				Date end_date = rs.getDate("end_date");
-				int resident_id=rs.getInt("id_resident");
-				
-				Resident resident=getResident(resident_id);
-				t=new Treatment(t_id, name, ini_date, end_date, resident);
+				int resident_id = rs.getInt("id_resident");
+
+				Resident resident = getResident(resident_id);
+				t = new Treatment(t_id, name, ini_date, end_date, resident);
 			}
 			return t;
 		} catch (SQLException e) {
@@ -800,7 +803,7 @@ public class SQLManager implements DBManager {
 	}
 
 	public void updateTreatment(Treatment t) {
-		try {//TODO
+		try {// TODO
 			String sql = "UPDATE treatments SET name=?, end_dates=? WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, t.getName());
@@ -810,15 +813,11 @@ public class SQLManager implements DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 
 	public void insertResidentRoom(Room r, Resident re) {
 
 	}
-
-
-
-	
 
 }

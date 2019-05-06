@@ -2,6 +2,7 @@ package nursing_home.ui;
 
 import java.io.*;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -33,15 +34,15 @@ public class Ui {
 	static BufferedReader consola = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String[] args) throws NumberFormatException, IOException, JAXBException {
+		
 		em.connect();
 		sqlm.connect();
 
 		// TODO Solve this
-		boolean exist = true;//sqlm.Check_tables_exist();
-		if (exist == true) {
+		
 			sqlm.create();
-		}
-
+		
+	
 		Integer option = 0;
 		do {
 			System.out.println("Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Activities. \n5.Drugs. \n6.Treatments. \n7.XML. \n8.Exit");
