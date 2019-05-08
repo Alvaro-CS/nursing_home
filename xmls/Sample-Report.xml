@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Resident name="Anastasio" gender="male" id="2">
-    <dob>1111-11-11</dob>
-    <teleph>1231312</teleph>
-    <dep_grade>FUll</dep_grade>
-    <checkin>1111-11-11</checkin>
-    <notes>He has neumonias and many respiratory illnesses</notes>
-</Resident>

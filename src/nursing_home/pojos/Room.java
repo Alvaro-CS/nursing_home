@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -48,7 +49,7 @@ public class Room implements Serializable {
 	private String gender;
 	@XmlElement
 	private String notes;
-	@OneToMany(mappedBy="Room")
+	@OneToMany(mappedBy="Room",fetch=FetchType.LAZY)
 	@XmlElement(name = "Resident")
     @XmlElementWrapper(name = "Residents")
 	private List <Resident> residents;

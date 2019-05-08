@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Room_list>
-    <rooms roomtype="single" gender="Mixed" id="2">
-        <floor>1</floor>
+    <rooms roomtype="Double" gender="Mixed" id="2">
+        <floor>2</floor>
         <notes>Shower</notes>
+        <Residents>
+            <Resident name="Amapola" gender="Female" id="52">
+                <dob>1111-11-11</dob>
+                <teleph>726374877</teleph>
+                <dep_grade>Independent</dep_grade>
+                <checkin>1111-11-11</checkin>
+                <notes>She likes badminton</notes>
+            </Resident>
+        </Residents>
     </rooms>
-    <rooms roomtype="Colourful" gender="Mixed" id="52">
-        <floor>4</floor>
+    <rooms roomtype="Single" gender="Mixed" id="3">
+        <floor>3</floor>
         <notes>Jacuzzi</notes>
+        <Residents>
+            <Resident name="Anastasio" gender="Male" id="2">
+                <dob>1111-11-11</dob>
+                <teleph>111111</teleph>
+                <dep_grade>Full</dep_grade>
+                <checkin>1111-11-11</checkin>
+                <notes>He has neumonia and respiratory illnesses</notes>
+            </Resident>
+        </Residents>
     </rooms>
 </Room_list>

@@ -11,6 +11,11 @@ import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import nursing_home.db.jdbc.SQLManager;
 import nursing_home.db.jpa.JPAManager;
@@ -24,6 +29,7 @@ import sample.db.graphics.ImageWindow;
 //Get Treatment/select treatment
 //Update treatment
 //TODO change parameters in insertTreatment and updateTreatment
+import sample.db.pojos.Report;
 
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
@@ -420,7 +426,7 @@ public class Ui {
 		System.out.println("Type the id of the resident to see in detail.");
 		Integer id = Integer.parseInt(consola.readLine());
 		Resident r = em.getResident(id);
-		System.out.println(r);// It prints all the info of the person
+		System.out.println(r.toStringRID());// It prints all the info of the person
 		// Now, we show the photo
 		if (r.getPhoto() != null) {
 			ByteArrayInputStream blobIn = new ByteArrayInputStream(r.getPhoto());
@@ -995,7 +1001,7 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number:");
 
-			System.out.println("1.Marshall room.\n2.Back to menu.\n");
+			System.out.println("1.Marshall rooms.\n2.Unmarshall rooms.\n3.HTML convertion.\n4.Back to menu.\n");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1003,12 +1009,18 @@ public class Ui {
 				marshall();
 				break;
 			case 2:
+				unmarshall();
+				break;
+			case 3:
+				xlst();
+				break;
+			case 4:
 				System.out.println("Going back to the menu.");
 				break;
 			default:
 				break;
 			}
-		} while (option != 2);
+		} while (option != 3);
 
 	}
 
@@ -1026,19 +1038,53 @@ public class Ui {
 		// Choose his new department
 		// System.out.print("Choose a room to turn into a XML file:");
 
-		List<Room> list = sqlm.selectRooms();
+		List<Room> list = em.selectRooms();
 		/*
 		 * for (Room r: list) { System.out.println(r.toStringpartial()); } int id =
 		 * Integer.parseInt(consola.readLine()); Room r=em.getRoom(id);
 		 */
 		Room_list rooms = new Room_list(list);
 		// Use the Marshaller to marshal the Java object to a file
-		File file = new File("./xmls/Rooms.xml");
+		File file = new File("./xmls/Rooms.xml");//TODO nombre personalizado
 		marshaller.marshal(rooms, file);
 		// Printout
 		marshaller.marshal(rooms, System.out);
 
 	}
+	public static void unmarshall() throws IOException, JAXBException {
+
+		// Create the JAXBContext
+		JAXBContext jaxbContext = JAXBContext.newInstance(Room_list.class);
+		// Get the marshaller
+		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+		// Pretty formatting
+		File file = new File("./xmls/Rooms.xml");//TODO que el usuario meta lo que quiere
+		Room_list rooms = (Room_list) unmarshaller.unmarshal(file);
+		for(Room r: rooms.getRooms() ) {
+			System.out.println(r);
+			for(Resident res: r.getResidents()) {
+				System.out.println(res);
+				em.insertResident(res);
+				res.setRoom(r);
+			}
+			em.insertRoom(r);}
+			
+		}
+	public static void xlst() throws IOException {
+		simpleTransform("./xmls/Roomst.xml", "./xmls/Rooms-Style.xslt", "./xmls/Rooms.html");
+		
+	}
+
+	public static void simpleTransform(String sourcePath, String xsltPath,String resultDir) {
+		TransformerFactory tFactory = TransformerFactory.newInstance();
+		try {
+			Transformer transformer = tFactory.newTransformer(new StreamSource(new File(xsltPath)));
+			transformer.transform(new StreamSource(new File(sourcePath)),new StreamResult(new File(resultDir)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}//TODO XMLmanager package?
 
 	public static Date transform_date(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

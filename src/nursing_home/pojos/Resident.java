@@ -55,7 +55,7 @@ public class Resident implements Serializable {
 	private byte[] photo;
 	@XmlElement
 	private String notes;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="room_id")
 	@XmlTransient
 	private Room room;
@@ -201,7 +201,12 @@ public class Resident implements Serializable {
 	@Override
 	public String toString() {
 		return "Resident [id=" + id + ", name=" + name + ", gender=" + gender + ", dob=" + dob + ", teleph=" + teleph
-				+ ", dep_grade=" + dep_grade + ", checkin=" + checkin + ", notes="+ notes + ", room: "+room.getId() +"]\n";
+				+ ", dep_grade=" + dep_grade + ", checkin=" + checkin + ", notes="+ notes+"]\n";
+	}
+	
+	public String toStringRID() {
+		return "Resident [id=" + id + ", name=" + name + ", gender=" + gender + ", dob=" + dob + ", teleph=" + teleph
+				+ ", dep_grade=" + dep_grade + ", checkin=" + checkin + ", notes="+ notes + ", room: "+ this.getRoom().getId() +"]\n";
 	}
 	
 	public String toStringpartial() {

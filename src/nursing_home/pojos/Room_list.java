@@ -14,8 +14,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {"rooms" })
 
 public class Room_list {
-	@XmlAttribute
-	private Integer id;
 	@XmlElement
 	private List<Room> rooms;
 
