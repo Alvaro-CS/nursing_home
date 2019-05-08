@@ -832,9 +832,9 @@ public class Ui {
 		for (Drug d : list) {
 			System.out.println(d);
 		}
-		System.out.println("Choose an activity to delete, type its ID: ");
+		System.out.println("Choose a drug to delete, type its ID: ");
 		Integer id = Integer.parseInt(consola.readLine());
-		sqlm.deleteActivity(id);
+		sqlm.deleteDrug(id);
 		System.out.println("Deletion completed.");
 
 	}
@@ -846,8 +846,7 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New treatment.\n" + "2.List all treatments.\n" + "3.Details of one treatment.\n"
-					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Assign a drug to a treatment.\n"
-					+ "7.Return to the main menu.");// TODO ¿Menu extra?
+					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Return to the main menu.");// TODO ¿Menu extra?
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -871,15 +870,12 @@ public class Ui {
 				deleteTreatment();
 				break;
 			case 6:
-				// addResident2worker();
-				break;
-			case 7:
 				System.out.println("Going back to the menu.");
 				break;
 			default:
 				break;
 			}
-		} while (option != 7);
+		} while (option != 6);
 
 	}
 
@@ -903,7 +899,7 @@ public class Ui {
 
 		List<Resident> list = sqlm.selectResidents();
 		for (Resident r : list) {
-			System.out.println(r);
+			System.out.println(r.toStringpartial());
 		}
 		System.out.println("Type the id of the resident you want to assign the treatment.\n");
 		Integer id = Integer.parseInt(consola.readLine());

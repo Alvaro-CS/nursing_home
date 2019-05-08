@@ -99,7 +99,7 @@ public class SQLManager implements DBManager {
 			Statement stmt6 = c.createStatement();
 			String sql6 = "CREATE TABLE treatments " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + "name TEXT NOT NULL,"
 					+ "ini_date TIMESTAMP," + "end_date TIMESTAMP," + "id_resident INTEGER,"
-					+ "FOREIGN KEY(id_resident) REFERENCES resident (id))";
+					+ "FOREIGN KEY(id_resident) REFERENCES residents (id))";
 			stmt6.executeUpdate(sql6);
 			stmt6.close();
 
@@ -113,23 +113,23 @@ public class SQLManager implements DBManager {
 
 			Statement stmt8 = c.createStatement();
 			String sql8 = "CREATE TABLE activity_distribution " + "(id_worker INTEGER," + "id_activity INTEGER,"
-					+ "FOREIGN KEY(id_worker) REFERENCES worker (id) "
-					+ "FOREIGN KEY (id_activity) REFERENCES activity (id)," + "PRIMARY KEY (id_worker, id_activity))";
+					+ "FOREIGN KEY(id_worker) REFERENCES workers (id) "
+					+ "FOREIGN KEY (id_activity) REFERENCES activities (id)," + "PRIMARY KEY (id_worker, id_activity))";
 
 			stmt8.executeUpdate(sql8);
 			stmt8.close();
 
 			Statement stmt9 = c.createStatement();
 			String sql9 = "CREATE TABLE activity_resident " + "(id_resident INTEGER," + "id_activity INTEGER,"
-					+ "FOREIGN KEY(id_resident) REFERENCES resident (id) "
-					+ "FOREIGN KEY (id_activity) REFERENCES activity (id)," + "PRIMARY KEY (id_resident, id_activity))";
+					+ "FOREIGN KEY(id_resident) REFERENCES residents (id) "
+					+ "FOREIGN KEY (id_activity) REFERENCES activities (id)," + "PRIMARY KEY (id_resident, id_activity))";
 			stmt9.executeUpdate(sql9);
 			stmt9.close();
 
 			Statement stmt10 = c.createStatement();
 			String sql10 = "CREATE TABLE worker_distribution" + "(id_worker INTEGER," + "id_resident INTEGER,"
-					+ "FOREIGN KEY(id_worker) REFERENCES worker (id) "
-					+ "FOREIGN KEY (id_resident) REFERENCES resident (id) ON DELETE CASCADE,"
+					+ "FOREIGN KEY(id_worker) REFERENCES workers (id) "
+					+ "FOREIGN KEY (id_resident) REFERENCES residents (id) ON DELETE CASCADE,"
 					+ "PRIMARY KEY (id_worker, id_resident))";
 			stmt10.executeUpdate(sql10);
 			stmt10.close();
@@ -255,13 +255,12 @@ public class SQLManager implements DBManager {
 
 	public void insertTreatment(Treatment t, Integer id_drug, String dosage) {
 		try {
-			String sql = "INSERT INTO treatment () VALUES (?,?,?,?,?);";
+			String sql = "INSERT INTO treatments (name,ini_date,end_date,id_resident) VALUES (?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, t.getId());
-			prep.setString(2, t.getName());
-			prep.setDate(3, t.getInitial_date());
-			prep.setDate(4, t.getFinal_date());
-			prep.setInt(5, t.getResident().getId());
+			prep.setString(1, t.getName());
+			prep.setDate(2, t.getInitial_date());
+			prep.setDate(3, t.getFinal_date());
+			prep.setInt(4, t.getResident().getId());
 			prep.executeUpdate();
 			prep.close();
 
@@ -741,7 +740,7 @@ public class SQLManager implements DBManager {
 	public List<Treatment> selectTreatments() {
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "SELECT * FROM treatment";
+			String sql = "SELECT * FROM treatments";
 			ResultSet rs = stmt.executeQuery(sql);
 			List<Treatment> treatmentList = new ArrayList<Treatment>();
 			while (rs.next()) {

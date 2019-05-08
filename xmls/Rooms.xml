@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Room_list>
-    <Rooms>
-        <Room roomtype="single" gender="Mixed" id="2">
-            <floor>1</floor>
-            <notes>Shower</notes>
-        </Room>
-        <Room roomtype="Colourful" gender="Mixed" id="52">
-            <floor>4</floor>
-            <notes>Jacuzzi</notes>
-        </Room>
-    </Rooms>
+    <rooms roomtype="single" gender="Mixed" id="2">
+        <floor>1</floor>
+        <notes>Shower</notes>
+    </rooms>
+    <rooms roomtype="Colourful" gender="Mixed" id="52">
+        <floor>4</floor>
+        <notes>Jacuzzi</notes>
+    </rooms>
 </Room_list>

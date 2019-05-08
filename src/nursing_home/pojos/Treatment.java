@@ -130,7 +130,7 @@ public class Treatment implements Serializable {
 				+ final_date + "resident:"+resident.getName() +"]";
 	}
 	public String toStringpartial() {
-		return "Treatment [id=" + id + ", name=" + name +"resident:"+resident.getName() +"]";
+		return "Treatment [id=" + id + ", name=" + name +", Resident:"+resident.getName() +"]";
 	}
 
 }
