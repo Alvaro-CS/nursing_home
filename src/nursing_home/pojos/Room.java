@@ -48,7 +48,7 @@ public class Room implements Serializable {
 	private String gender;
 	@XmlElement
 	private String notes;
-	@OneToMany(mappedBy="room")
+	@OneToMany(mappedBy="Room")
 	@XmlElement(name = "Resident")
     @XmlElementWrapper(name = "Residents")
 	private List <Resident> residents;
