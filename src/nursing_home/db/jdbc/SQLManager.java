@@ -186,6 +186,21 @@ public class SQLManager implements DBManager {
 		}
 	}
 
+	public void disconnectResidentWorker(Integer w_id, Integer r_id) {
+	
+	try {
+	String sql = "DELETE FROM worker_distribution WHERE id_worker= ? AND id_resident=?;";
+	PreparedStatement prep = c.prepareStatement(sql);
+	prep.setInt(1, w_id);
+	prep.setInt(2, r_id);
+	prep.executeUpdate();
+	prep.close();
+} catch (SQLException e) {
+	e.printStackTrace();
+}
+}
+	
+
 	public void insertResident(Resident r) {
 		try {
 
@@ -695,6 +710,60 @@ public class SQLManager implements DBManager {
 		}
 	}
 
+	public void connectActivityWorker(Integer w_id, Integer a_id) {
+		try {
+
+			String sql = "INSERT INTO activity_distribution (id_worker,id_activity) " + "VALUES (?,?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, w_id);
+			prep.setInt(2, a_id);
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void disconnectActivityWorker(Integer w_id, Integer a_id) {
+	
+	try {
+	String sql = "DELETE FROM activity_distribution WHERE id_worker= ? AND id_activity=?;";
+	PreparedStatement prep = c.prepareStatement(sql);
+	prep.setInt(1, w_id);
+	prep.setInt(2, a_id);
+	prep.executeUpdate();
+	prep.close();
+} catch (SQLException e) {
+	e.printStackTrace();
+}
+}
+	public void connectActivityResident(Integer r_id, Integer a_id) {
+		try {
+
+			String sql = "INSERT INTO activity_resident (id_resident,id_activity) " + "VALUES (?,?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, r_id);
+			prep.setInt(2, a_id);
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void disconnectActivityResident(Integer r_id, Integer a_id) {
+	
+	try {
+	String sql = "DELETE FROM activity_resident WHERE id_resident= ? AND id_activity=?;";
+	PreparedStatement prep = c.prepareStatement(sql);
+	prep.setInt(1, r_id);
+	prep.setInt(2, a_id);
+	prep.executeUpdate();
+	prep.close();
+} catch (SQLException e) {
+	e.printStackTrace();
+}
+}
 	public List<Drug> selectDrugs() {
 		try {
 			Statement stmt = c.createStatement();
@@ -736,6 +805,35 @@ public class SQLManager implements DBManager {
 			return null;
 		}
 	}
+	
+	public void connectDrugTreatment(Integer d_id, Integer t_id) {
+		try {
+
+			String sql = "INSERT INTO drug_treatment (id_drug,id_treatment) " + "VALUES (?,?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, d_id);
+			prep.setInt(2, t_id);
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void disconnectDrugTreatment(Integer d_id, Integer t_id) {
+		
+		try {
+		String sql = "DELETE FROM drug_treatment WHERE id_drug= ? AND id_treatment=?;";
+		PreparedStatement prep = c.prepareStatement(sql);
+		prep.setInt(1, d_id);
+		prep.setInt(2, t_id);
+		prep.executeUpdate();
+		prep.close();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	}
+
 
 	public List<Treatment> selectTreatments() {
 		try {
@@ -786,6 +884,64 @@ public class SQLManager implements DBManager {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	public List<Drug> selectDrugsFromTreatment(Integer id_treatment) {
+		try {
+
+			String sqltext = "SELECT d.id,d.name "
+					+ "FROM drug_treatment AS dt JOIN drugs AS d " + "ON d.id=dt.id_drug "
+					+ "WHERE dt.id_treatment=?";
+			PreparedStatement p = c.prepareStatement(sqltext);
+			p.setInt(1, id_treatment);
+			ResultSet rs = p.executeQuery();
+			List<Drug> drugList = new ArrayList<Drug>();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				Drug drug=new Drug(id, name);
+				drugList.add(drug);
+
+			}
+			rs.close();
+			p.close();
+			// stmt.close();
+			return drugList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	public List<Treatment> selectTreatmentsFromDrug(Integer id_drug) {
+		try {
+
+			String sqltext = "SELECT t.id,t.name,t.ini_date,t.end_date,t.id_resident "
+					+ "FROM drug_treatment AS dt JOIN treatments AS t " + "ON t.id=dt.id_treatment "
+					+ "WHERE dt.id_drug=?";
+			PreparedStatement p = c.prepareStatement(sqltext);
+			p.setInt(1, id_drug);
+			ResultSet rs = p.executeQuery();
+			List<Treatment> treatmentList = new ArrayList<Treatment>();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				Date initial_date=rs.getDate("ini_date");
+				Date final_date=rs.getDate("end_date");							
+				int resident_id = rs.getInt("id_resident");
+				Resident resident=getResident(resident_id);
+
+				Treatment treatment=new Treatment(id, name, initial_date, final_date, resident);
+				treatmentList.add(treatment);
+
+			}
+			rs.close();
+			p.close();
+			return treatmentList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
 	}
 
 	public void deleteWorker(Integer id) {
