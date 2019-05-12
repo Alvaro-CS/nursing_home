@@ -22,15 +22,13 @@ import nursing_home.db.jpa.JPAManager;
 import nursing_home.pojos.*;
 import sample.db.graphics.ImageWindow;
 //TODO
-//XML rooms doesnt show also the residents
+//Schema? DTD
 //MENU ACTIVITY. RELACION CON WORKER Y RESIDENT.
 //WORKER Y RESIDENT RELACIÓN MUTUA. DISEÑO EN MAIN. ¿FUNCIONA?
 //Mostrar cuantas personas hay en las habitaciones antes de introducir un resident a una?
 //Get Treatment/select treatment
 //Update treatment
 //TODO change parameters in insertTreatment and updateTreatment
-import sample.db.pojos.Report;
-
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
 	public static JPAManager em = new JPAManager();
@@ -86,7 +84,7 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New worker.\n" + "2.Basic info.\n" + "3.Details of one worker.\n" + "4.Update.\n"
-					+ "5.Delete.\n" + "6.Assign a resident to a worker.\n" + "7.Return to the main menu.");
+					+ "5.Delete.\n" + "6.Manage relationship worker-resident.\n" + "7.Return to the main menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -180,9 +178,10 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Worker w = sqlm.getWorker(id);
 		System.out.println(w);// It prints all the info of the person
+		System.out.println("Residents assigned to "+w.getName()+":");
 		List<Resident> listR = sqlm.selectResidentsFromWorker(id);
 		for (Resident r : listR) {
-			System.out.println(r.toStringpartial());
+			System.out.println(r.toStringpartial());//TODO ver si funciona
 		}
 		// Now, we show the photo
 		if (w.getPhoto() != null) {
@@ -247,7 +246,7 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.Assign a resident to a worker.\n"
-					+ "2.Delete a relationship between a resident and a worker.\n" + "3.Return to the main menu.\n");
+					+ "2.Delete a relationship between a resident and a worker.\n" + "3.Return to \"Worker\".\n");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -265,7 +264,7 @@ public class Ui {
 			default:
 				break;
 			}
-		} while (option != 7);
+		} while (option != 3);
 
 	}
 
@@ -307,8 +306,8 @@ public class Ui {
 			}
 			Integer r_id = Integer.parseInt(consola.readLine());
 
-			sqlm.deleteResidentWorker(w_id, r_id); //TODO
-			System.out.println("Assignment done.\n");
+			sqlm.disconnectResidentWorker(w_id, r_id);
+			System.out.println("Deletion done.\n");
 		}
 	}
 
@@ -320,7 +319,7 @@ public class Ui {
 
 			System.out
 					.println("1.New resident.\n" + "2.Basic info.\n" + "3.See details of 1 resident.\n" + "4.Update.\n"
-							+ "5.Delete.\n" + "6.Assign a worker to a resident.\n" + "7.Return to the main menu.");
+							+ "5.Delete.\n" + "6.Manage relationship resident-worker.\n" + "7.Return to the main menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -333,7 +332,7 @@ public class Ui {
 				break;
 
 			case 3:
-				detailsResident();// TODO show the workers in charge of him/her
+				detailsResident();
 				break;
 
 			case 4:
@@ -344,7 +343,7 @@ public class Ui {
 				deleteResident();
 				break;
 			case 6:
-				addWorker2resident();
+				residentWorker();
 				break;
 			case 7:
 				System.out.println("Going back to the menu.");
@@ -395,7 +394,7 @@ public class Ui {
 		System.out.println("Now, assign the patient into a room.");
 		System.out.println("Rooms available:");
 
-		List<Room> list = em.selectRooms();// TODO ¿Mostrar cuantas personas hay en las habitaciones?
+		List<Room> list = em.selectRooms();// TODO ¿Mostrar cuantas personas hay en las habitaciones? 	query count
 		for (Room r : list) {
 			System.out.println(r);
 		}
@@ -427,6 +426,11 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Resident r = em.getResident(id);
 		System.out.println(r.toStringRID());// It prints all the info of the person
+		System.out.println("Workers assigned to "+r.getName()+":");
+		List<Worker> workers_list=sqlm.selectWorkersFromResident(id);//TODO ver si funciona
+		for (Worker w : workers_list) {
+			System.out.println(w.toStringpartial());
+		}
 		// Now, we show the photo
 		if (r.getPhoto() != null) {
 			ByteArrayInputStream blobIn = new ByteArrayInputStream(r.getPhoto());
@@ -501,25 +505,79 @@ public class Ui {
 
 	}
 
+	public static void residentWorker() throws IOException {
+
+		int option = 0;
+		do {
+			System.out.println("Introduce the number:");
+
+			System.out.println("1.Assign a worker to a resident.\n"
+					+ "2.Delete a relationship between a worker and a resident.\n" + "3.Return to \"Residents\".\n");
+			option = Integer.parseInt(consola.readLine());
+			switch (option) {
+
+			case 1:
+				addWorker2resident();
+				break;
+
+			case 2:
+				deleteWorkerResident();
+				break;
+
+			case 3:
+				System.out.println("Going back to \"Residents\".");
+				break;
+			default:
+				break;
+			}
+		} while (option != 7);
+
+	}
+
 	public static void addWorker2resident() throws IOException {
 
-		System.out.println("Introduce the ID of the resident you want to assign a worker.");
-		List<Resident> listr = sqlm.selectResidents();
-		for (Resident r : listr) {
-			System.out.println(r.toStringpartial());
-		}
-		Integer r_id = Integer.parseInt(consola.readLine());
-		System.out.println("Now, introduce the ID of the worker you want to assign the resident you chose");
-
+		System.out.println("Introduce the ID of worker you want to assign to a resident.");
 		List<Worker> listw = sqlm.selectWorkers();
 		for (Worker w : listw) {
 			System.out.println(w.toStringpartial());
 		}
+		
+		Integer r_id = Integer.parseInt(consola.readLine());
+		System.out.println("Now, introduce the ID of the resident you want to assign to the worker you chose.");
+
+		List<Resident> listr = sqlm.selectResidents();
+		for (Resident r : listr) {
+			System.out.println(r.toStringpartial());
+		}
+		
 		Integer w_id = Integer.parseInt(consola.readLine());
 
 		sqlm.connectResidentWorker(w_id, r_id);
 		System.out.println("Assignment done.\n");
 	}
+	public static void deleteResidentWorker() throws IOException {
+
+		System.out.println("Introduce the ID of the resident you want to delete a worker from.");
+		List<Resident> listr = sqlm.selectResidents();
+		for (Resident r : listr) {
+			System.out.println(r.toStringpartial());
+		}
+		Integer r_id = Integer.parseInt(consola.readLine());
+		List<Worker> listw = sqlm.selectWorkersFromResident(r_id);
+		if (listw.size() == 0) {
+			System.out.println("There are no workers related to that resident.");
+		} else {
+			System.out.println("Now, introduce the ID of the worker you want to delete from the resident.");
+			for (Worker w : listw) {
+				System.out.println(w.toStringpartial());
+			}
+			Integer w_id = Integer.parseInt(consola.readLine());
+
+			sqlm.disconnectResidentWorker(w_id, r_id);
+			System.out.println("Deletion done.\n");
+		}
+		}
+
 
 /////////////////////////////////////ROOM MENU///////////////////////////////////
 	public static void room() throws IOException {
@@ -664,7 +722,7 @@ public class Ui {
 
 			System.out.println("1.New activity.\n" + "2.General information about all activities.\n"
 					+ "3.Details of one activity.\n" + "4.Update activity.\n" + "5.Delete activity.\n"
-					+ "6.Return to menu.\n");// Activity with worker and resident
+					+ "6.Activity management by workers.\n" + "7.Activity management of residents.\n"+ "8.Return to menu.\n");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -688,12 +746,18 @@ public class Ui {
 				deleteActivity();
 				break;
 			case 6:
+				//TODO workerActivity();
+				break;
+			case 7:
+				//TODO residentActivity();
+				break;
+			case 8:
 				System.out.println("Going back to the menu.");
 				break;
 			default:
 				break;
 			}
-		} while (option != 6);
+		} while (option != 8);
 
 	}
 
