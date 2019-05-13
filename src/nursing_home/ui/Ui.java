@@ -19,6 +19,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import nursing_home.db.jdbc.SQLManager;
 import nursing_home.db.jpa.JPAManager;
+import nursing_home.db.xml.XMLManager;
 import nursing_home.pojos.*;
 import sample.db.graphics.ImageWindow;
 //TODO
@@ -26,12 +27,13 @@ import sample.db.graphics.ImageWindow;
 //MENU ACTIVITY. RELACION CON WORKER Y RESIDENT.
 //WORKER Y RESIDENT RELACIÓN MUTUA. DISEÑO EN MAIN. ¿FUNCIONA?
 //Mostrar cuantas personas hay en las habitaciones antes de introducir un resident a una?
-//Get Treatment/select treatment
 //Update treatment
 //TODO change parameters in insertTreatment and updateTreatment
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
 	public static JPAManager em = new JPAManager();
+	public static XMLManager xm = new XMLManager();
+
 	static BufferedReader consola = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String[] args) throws NumberFormatException, IOException, JAXBException {
@@ -97,7 +99,7 @@ public class Ui {
 				break;
 
 			case 3:
-				workerDetails(); // TODO show the residents that the worker has in charge
+				workerDetails(); 
 				break;
 
 			case 4:
@@ -1089,56 +1091,31 @@ public class Ui {
 	}
 
 	public static void marshall() throws IOException, JAXBException {
-
-		// Create the JAXBContext
-		JAXBContext jaxbContext = JAXBContext.newInstance(Room_list.class);
-		// Get the marshaller
-		Marshaller marshaller = jaxbContext.createMarshaller();
-
-		// Pretty formatting
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-		// Choose the report to turn into an XML
-		// Choose his new department
-		// System.out.print("Choose a room to turn into a XML file:");
-
+		System.out.println("Type how do you want to name the XML document (including \"xml\")");
+		String name= consola.readLine();
+		System.out.println("Marshalling all rooms with their residents...");
 		List<Room> list = em.selectRooms();
-		/*
-		 * for (Room r: list) { System.out.println(r.toStringpartial()); } int id =
-		 * Integer.parseInt(consola.readLine()); Room r=em.getRoom(id);
-		 */
 		Room_list rooms = new Room_list(list);
-		// Use the Marshaller to marshal the Java object to a file
-		File file = new File("./xmls/Rooms.xml");//TODO nombre personalizado
-		marshaller.marshal(rooms, file);
-		// Printout
-		marshaller.marshal(rooms, System.out);
+		xm.marshallRooms(rooms,name);
 
 	}
 	public static void unmarshall() throws IOException, JAXBException {
 
-		// Create the JAXBContext
-		JAXBContext jaxbContext = JAXBContext.newInstance(Room_list.class);
-		// Get the marshaller
-		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
 		// Pretty formatting
-		File file = new File("./xmls/Rooms.xml");//TODO que el usuario meta lo que quiere
-		Room_list rooms = (Room_list) unmarshaller.unmarshal(file);
+		System.out.println("Introduce what XML file you want to unmarshall");
+		String name=consola.readLine();
+		Room_list rooms=xm.unmarshallRooms(name);
+		
 		for(Room r: rooms.getRooms() ) {
-			System.out.println(r);
+			
 			for(Resident res: r.getResidents()) {
-				System.out.println(res);
 				em.insertResident(res);
 				res.setRoom(r);
 			}
 			em.insertRoom(r);}
-			
 		}
-	public static void xlst() throws IOException {
-		simpleTransform("./xmls/Roomst.xml", "./xmls/Rooms-Style.xslt", "./xmls/Rooms.html");
-		
-	}
+	
+
 
 	public static void simpleTransform(String sourcePath, String xsltPath,String resultDir) {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
