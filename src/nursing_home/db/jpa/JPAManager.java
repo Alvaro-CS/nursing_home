@@ -107,6 +107,14 @@ public class JPAManager implements DBManager {
 		List <Room> rooms= (List<Room>) q1.getResultList();
 		return rooms;
 	}
+	
+	public int countResidentsFromRoom(int room) {
+		Query q1 = em.createNativeQuery("SELECT COUNT(id) FROM residents "
+				+ "WHERE room_id=?", Resident.class); 
+		q1.setParameter(1, room);
+		int residents=(Integer) q1.getSingleResult();
+		return residents;
+	}
 
 	@Override
 	public Room getRoom(Integer id) {
