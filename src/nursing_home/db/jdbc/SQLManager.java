@@ -1133,4 +1133,10 @@ public class SQLManager implements DBManager {
 
 	}
 
+	@Override
+	public int countResidentsFromRoom(int room) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

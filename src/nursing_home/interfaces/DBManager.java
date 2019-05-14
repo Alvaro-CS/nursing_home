@@ -49,10 +49,27 @@ public interface DBManager {
 	public void updateTreatment(Treatment t, Integer id_drug, String dosage);
 	
 	public void insertResidentRoom(Room r, Resident re);
-	public void connectResidentWorker(Integer w_id , Integer r_id);
+	public int countResidentsFromRoom(int room);
+	public boolean searchDrugByName(String name);
+	
 	public List<Resident> selectResidentsFromWorker(Integer idworker);
 	public List<Worker> selectWorkersFromResident(Integer idresident);
+	public List<Drug> selectDrugsFromTreatment(Integer id_treatment);
+	public List<Treatment> selectTreatmentsFromDrug(Integer id_drug);
+	public List<Activity> selectActivitiesFromResident(Integer idresident);
+	public List<Worker> selectWorkersFromActivity(Integer idactivity);
+	public List<Activity> selectActivitiesFromWorker(Integer idworker);
+	public List<Resident> selectResidentsFromActivity(Integer idactivity);
 
+
+	public void connectResidentWorker(Integer w_id , Integer r_id);
+	public void disconnectResidentWorker(Integer w_id, Integer r_id);
+	public void connectActivityWorker(Integer w_id, Integer a_id);
+	public void disconnectActivityWorker(Integer w_id, Integer a_id);
+	public void connectActivityResident(Integer r_id, Integer a_id);
+	public void disconnectActivityResident(Integer r_id, Integer a_id);
+	public void connectDrugTreatment(Integer d_id, Integer t_id);
+	public void disconnectDrugTreatment(Integer d_id, Integer t_id);
 	
 	
 }
