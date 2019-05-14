@@ -739,6 +739,29 @@ public class SQLManager implements DBManager {
 			return null;
 		}
 	}
+	public boolean searchDrugByName(String name) {
+		try {
+			String s = "SELECT id,name FROM drugs WHERE name=?";
+			PreparedStatement p = c.prepareStatement(s);
+			p.setString(1, name);
+			ResultSet rs = p.executeQuery();
+			Drug d = null;
+			while (rs.next()) {
+				Integer d_id = rs.getInt("id");
+				String d_name = rs.getString("name");
+				d = new Drug(d_id, d_name);
+			}
+			if(d==null) {
+				return false;
+			}else {
+				return true;
+			}
+					
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public List<Treatment> selectTreatments() {
 		try {
