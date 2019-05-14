@@ -532,7 +532,7 @@ public class Ui {
 			default:
 				break;
 			}
-		} while (option != 7);
+		} while (option != 3);
 
 	}
 
@@ -544,7 +544,7 @@ public class Ui {
 			System.out.println(w.toStringpartial());
 		}
 		
-		Integer r_id = Integer.parseInt(consola.readLine());
+		Integer w_id = Integer.parseInt(consola.readLine());
 		System.out.println("Now, introduce the ID of the resident you want to assign to the worker you chose.");
 
 		List<Resident> listr = sqlm.selectResidents();
@@ -552,7 +552,7 @@ public class Ui {
 			System.out.println(r.toStringpartial());
 		}
 		
-		Integer w_id = Integer.parseInt(consola.readLine());
+		Integer r_id = Integer.parseInt(consola.readLine());
 
 		sqlm.connectResidentWorker(w_id, r_id);
 		System.out.println("Assignment done.\n");
@@ -748,7 +748,7 @@ public class Ui {
 				deleteActivity();
 				break;
 			case 6:
-				//TODO workerActivity();
+				workerActivity();
 				break;
 			case 7:
 				//TODO residentActivity();
@@ -853,6 +853,78 @@ public class Ui {
 		System.out.println("Deletion completed.");
 
 	}
+	public static void workerActivity() throws IOException {
+
+		int option = 0;
+		do {
+			System.out.println("Introduce the number:");
+
+			System.out.println("1.Assign an activity to a worker.\n"
+					+ "2.Delete a relationship between an activity and a worker.\n" + "3.Return to \"Activities\".\n");
+			option = Integer.parseInt(consola.readLine());
+			switch (option) {
+
+			case 1:
+				addWorker2activity();
+				break;
+
+			case 2:
+				deleteWorkerActivity();
+				break;
+
+			case 3:
+				System.out.println("Going back to \"Activities\".");
+				break;
+			default:
+				break;
+			}
+		} while (option != 3);
+	}
+		public static void addWorker2activity() throws IOException {
+
+			System.out.println("Introduce the ID of worker you want to assign to an activity.");
+			List<Worker> listw = sqlm.selectWorkers();
+			for (Worker w : listw) {
+				System.out.println(w.toStringpartial());
+			}
+			
+			Integer w_id = Integer.parseInt(consola.readLine());
+			System.out.println("Now, introduce the ID of the activity you want to assign to the worker you chose.");
+
+			List<Activity> list = sqlm.selectActivities();
+			for (Activity a : list) {
+				System.out.println(a.toStringpartial());
+			}
+			
+			Integer a_id = Integer.parseInt(consola.readLine());
+
+			sqlm.connectActivityWorker(w_id, a_id);
+			System.out.println("Assignment done.\n");
+		}
+		public static void deleteWorkerActivity() throws IOException {
+
+			System.out.println("Introduce the ID of the activity you want to delete a worker from.");
+			List<Activity> list = sqlm.selectActivities();
+			for (Activity a : list) {
+				System.out.println(a.toStringpartial());
+			}
+			Integer a_id = Integer.parseInt(consola.readLine());
+			List<Worker> listw = sqlm.selectWorkersFromActivity(a_id);
+			if (listw.size() == 0) {
+				System.out.println("There are no workers in charge of that activity.");
+			} else {
+				System.out.println("Now, introduce the ID of the worker you want to delete from the activity.");
+				for (Worker w : listw) {
+					System.out.println(w.toStringpartial());
+				}
+				Integer w_id = Integer.parseInt(consola.readLine());
+
+				sqlm.disconnectActivityWorker(w_id, a_id);
+				System.out.println("Deletion done.\n");
+			}
+			}
+
+	
 
 /////////////////////////////////////DRUG MENU///////////////////////////////////
 
