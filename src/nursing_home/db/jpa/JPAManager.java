@@ -286,4 +286,88 @@ public class JPAManager implements DBManager {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean searchDrugByName(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Drug> selectDrugsFromTreatment(Integer id_treatment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Treatment> selectTreatmentsFromDrug(Integer id_drug) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Activity> selectActivitiesFromResident(Integer idresident) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Worker> selectWorkersFromActivity(Integer idactivity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Activity> selectActivitiesFromWorker(Integer idworker) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Resident> selectResidentsFromActivity(Integer idactivity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void disconnectResidentWorker(Integer w_id, Integer r_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void connectActivityWorker(Integer w_id, Integer a_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disconnectActivityWorker(Integer w_id, Integer a_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void connectActivityResident(Integer r_id, Integer a_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disconnectActivityResident(Integer r_id, Integer a_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void connectDrugTreatment(Integer d_id, Integer t_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disconnectDrugTreatment(Integer d_id, Integer t_id) {
+		// TODO Auto-generated method stub
+		
+	}
 }
