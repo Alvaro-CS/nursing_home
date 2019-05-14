@@ -400,7 +400,7 @@ public class Ui {
 		List<Room> list = em.selectRooms();
 		for (Room r : list) {
 			System.out.println(r);
-			int num=countResidentsFromRoom(r.getId());
+			int num=sqlm.countResidentsFromRoom(r.getId());
 			System.out.println("Residents in the room:"+num+".\n");
 		}
 		System.out.println("Type the id of the room you want to assign to the resident.");
