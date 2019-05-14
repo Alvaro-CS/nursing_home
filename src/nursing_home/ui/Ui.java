@@ -29,6 +29,7 @@ import sample.db.graphics.ImageWindow;
 //Mostrar cuantas personas hay en las habitaciones antes de introducir un resident a una?
 //Update treatment
 //TODO change parameters in insertTreatment and updateTreatment
+//TODO restringir habitaciones llenas
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
 	public static JPAManager em = new JPAManager();
@@ -396,9 +397,11 @@ public class Ui {
 		System.out.println("Now, assign the patient into a room.");
 		System.out.println("Rooms available:");
 
-		List<Room> list = em.selectRooms();// TODO ¿Mostrar cuantas personas hay en las habitaciones? 	query count
+		List<Room> list = em.selectRooms();
 		for (Room r : list) {
 			System.out.println(r);
+			int num=countResidentsFromRoom(r.getId());
+			System.out.println("Residents in the room:"+num+".\n");
 		}
 		System.out.println("Type the id of the room you want to assign to the resident.");
 		Integer id = Integer.parseInt(consola.readLine());
@@ -751,7 +754,7 @@ public class Ui {
 				workerActivity();
 				break;
 			case 7:
-				//TODO residentActivity();
+				residentActivity();
 				break;
 			case 8:
 				System.out.println("Going back to the menu.");
@@ -924,7 +927,77 @@ public class Ui {
 			}
 			}
 
-	
+		public static void residentActivity() throws IOException {
+
+			int option = 0;
+			do {
+				System.out.println("Introduce the number:");
+
+				System.out.println("1.Assign an activity to a resident.\n"
+						+ "2.Delete a relationship between an activity and a resident.\n" + "3.Return to \"Activities\".\n");
+				option = Integer.parseInt(consola.readLine());
+				switch (option) {
+
+				case 1:
+					addResident2activity();
+					break;
+
+				case 2:
+					deleteResidentActivity();
+					break;
+
+				case 3:
+					System.out.println("Going back to \"Activities\".");
+					break;
+				default:
+					break;
+				}
+			} while (option != 3);
+		}
+			public static void addResident2activity() throws IOException {
+
+				System.out.println("Introduce the ID of resident you want to assign to an activity.");
+				List<Resident> listr = sqlm.selectResidents();
+				for (Resident r : listr) {
+					System.out.println(r.toStringpartial());
+				}
+				
+				Integer r_id = Integer.parseInt(consola.readLine());
+				System.out.println("Now, introduce the ID of the activity you want to assign to the resident you chose.");
+
+				List<Activity> list = sqlm.selectActivities();
+				for (Activity a : list) {
+					System.out.println(a.toStringpartial());
+				}
+				
+				Integer a_id = Integer.parseInt(consola.readLine());
+
+				sqlm.connectActivityResident(r_id, a_id);
+				System.out.println("Assignment done.\n");
+			}
+			public static void deleteResidentActivity() throws IOException {
+
+				System.out.println("Introduce the ID of the activity you want to delete a resident from.");
+				List<Activity> list = sqlm.selectActivities();
+				for (Activity a : list) {
+					System.out.println(a.toStringpartial());
+				}
+				Integer a_id = Integer.parseInt(consola.readLine());
+				List<Resident> listr = sqlm.selectResidentsFromActivity(a_id);
+				if (listr.size() == 0) {
+					System.out.println("There are no residents in that activity.");
+				} else {
+					System.out.println("Now, introduce the ID of the resident you want to delete from the activity.");
+					for (Resident r : listr) {
+						System.out.println(r.toStringpartial());
+					}
+					Integer r_id = Integer.parseInt(consola.readLine());
+
+					sqlm.disconnectActivityResident(r_id, a_id);
+					System.out.println("Deletion done.\n");
+				}
+				}
+
 
 /////////////////////////////////////DRUG MENU///////////////////////////////////
 
