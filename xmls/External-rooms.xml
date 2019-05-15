@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE Room [
+   <!ELEMENT Room (floor,notes, Residents)>
+   <!ATTLIST Room roomtype CDATA #REQUIRED>
+   <!ELEMENT floor (#PCDATA)>
+   <!ELEMENT notes (#PCDATA)>
+   <!ELEMENT Residents (Resident+)>
+   <!ELEMENT Resident (dob,telephone,grade,checkin,notes)>
+   <!ATTLIST Resident name CDATA #REQUIRED
+                  	  id CDATA #REQUIRED
+                  	  gender CDATE #REQUIRED>
+   <!ELEMENT dob (#PCDATA)>
+   <!ELEMENT telephone (#PCDATA)>
+   <!ELEMENT grade (#PCDATA)>
+   <!ELEMENT checkin (#PCDATA)>
+   <!ELEMENT notes (#PCDATA)>
+]>
