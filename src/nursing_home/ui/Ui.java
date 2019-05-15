@@ -1282,15 +1282,21 @@ public class Ui {
 			switch (option) {
 
 			case 1:
-				marshall();
+				marshallRooms();
 				break;
 			case 2:
-				unmarshall();
+				unmarshallRooms();
 				break;
 			case 3:
 				xlst();
 				break;
 			case 4:
+				marshallActivitites();
+				break;
+			case 5:
+				unmarshallActivities();
+				break;
+			case 6:
 				System.out.println("Going back to the menu.");
 				break;
 			default:
@@ -1300,7 +1306,7 @@ public class Ui {
 
 	}
 
-	public static void marshall() throws IOException, JAXBException {
+	public static void marshallRooms() throws IOException, JAXBException {
 		System.out.println("Type how do you want to name the XML document (including \"xml\")");
 		String name= consola.readLine();
 		System.out.println("Marshalling all rooms with their residents...");
@@ -1309,7 +1315,7 @@ public class Ui {
 		xm.marshallRooms(rooms,name);
 
 	}
-	public static void unmarshall() throws IOException, JAXBException {
+	public static void unmarshallRooms() throws IOException, JAXBException {
 
 		// Pretty formatting
 		System.out.println("Introduce what XML file you want to unmarshall");

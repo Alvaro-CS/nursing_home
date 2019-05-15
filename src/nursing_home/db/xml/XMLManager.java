@@ -21,17 +21,30 @@ public class XMLManager {
 	}
 	
 	public void marshallRooms(Room_list rooms,String name) throws JAXBException {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Room_list.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(Activity_list.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			File file = new File("./xmls/"+name);
 			marshaller.marshal(rooms, file);
 	}
-	public Room_list unmarshallRooms(String name) throws JAXBException {
-		
+	public void marshallActivities(Activity_list activities,String name) throws JAXBException {
+		JAXBContext jaxbContext = JAXBContext.newInstance(Activity_list.class);
+		Marshaller marshaller = jaxbContext.createMarshaller();
 
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		File file = new File("./xmls/"+name);
+		marshaller.marshal(activities, file);
+}
+	public Room_list unmarshallRooms(String name) throws JAXBException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(Room_list.class);
+		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+		File file = new File("./xmls/"+name);
+		Room_list rooms = (Room_list) unmarshaller.unmarshal(file);
+		return rooms;
+	}
+	public Activity_list unmarshallActivities(String name) throws JAXBException {
+		JAXBContext jaxbContext = JAXBContext.newInstance(Activity_list.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		File file = new File("./xmls/"+name);
 		Room_list rooms = (Room_list) unmarshaller.unmarshal(file);

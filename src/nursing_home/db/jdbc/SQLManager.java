@@ -935,6 +935,32 @@ public class SQLManager implements DBManager {
 		return null;
 
 	}
+	
+	public String selectDosageFromTreatment(Integer id_treatment, Integer id_drug) {
+		try {
+
+			String sqltext = "SELECT dosage "
+					+ "FROM drug_treatment WHERE id_treatment=? AND id_drug=?";
+			PreparedStatement p = c.prepareStatement(sqltext);
+			p.setInt(1, id_treatment);
+			p.setInt(2, id_drug);
+			
+			ResultSet rs = p.executeQuery();
+			String dosage=null;
+			while (rs.next()) {
+				dosage = rs.getString("dosage");
+
+			}
+			rs.close();
+			p.close();
+			// stmt.close();
+			return dosage;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
 	public List<Treatment> selectTreatmentsFromDrug(Integer id_drug) {
 		try {
 
