@@ -186,6 +186,12 @@ public class Ui {
 		for (Resident r : listR) {
 			System.out.println(r.toStringpartial());//TODO ver si funciona
 		}
+		List<Activity> list_a = sqlm.selectActivitiesFromWorker(w.getId());
+		System.out.println(w.getName()+" is in charged of the following activities:");
+		for (Activity a : list_a) {
+			System.out.println(a.toStringpartial());//TODO ver si funciona
+		}
+		
 		// Now, we show the photo
 		if (w.getPhoto() != null) {
 			ByteArrayInputStream blobIn = new ByteArrayInputStream(w.getPhoto());
@@ -400,8 +406,12 @@ public class Ui {
 		List<Room> list = em.selectRooms();
 		for (Room r : list) {
 			System.out.println(r);
-			int num=em.countResidentsFromRoom(r.getId());
-			System.out.println("Residents in the room:"+num+".\n");
+			/*int num=em.countResidentsFromRoom(r.getId());
+			System.out.println("Residents in the room:"+num+".\n");*/
+			List<Resident> listr=r.getResidents();
+			System.out.println("Residents in the room:"+listr.size()+".\n");
+
+			
 		}
 		System.out.println("Type the id of the room you want to assign to the resident.");
 		Integer id = Integer.parseInt(consola.readLine());
@@ -435,6 +445,11 @@ public class Ui {
 		List<Worker> workers_list=sqlm.selectWorkersFromResident(id);//TODO ver si funciona
 		for (Worker w : workers_list) {
 			System.out.println(w.toStringpartial());
+		}
+		List<Activity> list_a = sqlm.selectActivitiesFromResident(r.getId());
+		System.out.println(r.getName()+" has sign up to these activities:");
+		for (Activity a : list_a) {
+			System.out.println(a.toStringpartial());//TODO ver si funciona
 		}
 		// Now, we show the photo
 		if (r.getPhoto() != null) {
@@ -793,6 +808,7 @@ public class Ui {
 		for (Activity a : list) {
 			System.out.println(a.toStringpartial());
 		}
+		System.out.print("\n");
 	}
 
 	public static void activityDetails() throws IOException {
@@ -1006,7 +1022,7 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number:");
 
-			System.out.println("1.New drug.\n" + "2.List of drugs.\n" + "3.Delete.\n" + "4.Return to the main menu.\n");
+			System.out.println("1.New drug.\n" + "2.List of drugs.\n"+ "3.Delete.\n" + "4.Search drug.\n" + "5.Return to the main menu.\n");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1015,21 +1031,24 @@ public class Ui {
 				break;
 
 			case 2:
-				System.out.println("Showing the drugs.");
-				System.out.println(sqlm.selectDrugs());
+				listDrugs();
 				break;
 
 			case 3:
 				deleteDrug();
 				break;
-
+				
 			case 4:
+				searchDrug();
+				break;
+
+			case 5:
 				System.out.println("Going back to the menu.");
 				break;
 			default:
 				break;
 			}
-		} while (option != 4);
+		} while (option != 5);
 
 	}
 
@@ -1037,10 +1056,7 @@ public class Ui {
 
 		System.out.println("Introduce the name of the drug.");
 		String name = consola.readLine();
-		Drug d = new Drug(name);
-		sqlm.insertDrug(d);
-		System.out.println("You have created succesfully the drug " + name + ".\n");
-
+		createDrug(name);
 	}
 
 	public static void deleteDrug() throws IOException {
@@ -1055,6 +1071,41 @@ public class Ui {
 		System.out.println("Deletion completed.");
 
 	}
+	public static void listDrugs() throws IOException {
+		System.out.println("Showing the drugs.");
+		List<Drug> list = sqlm.selectDrugs();
+		for (Drug d : list) {
+			System.out.println(d);
+		}
+		
+	}
+
+	public static void searchDrug() throws IOException {
+		System.out.println("Introduce the name of the drug you want to check if it's stored.");
+		String name=consola.readLine();
+		if(sqlm.searchDrugByName(name)) {
+			System.out.println("The drug "+name+" already exists in the database.");
+		}
+		else {
+			System.out.println("The drug "+name+" doesn't exist in the database.\n"
+					+ "Do you want to create it? Y/N");
+			String option= consola.readLine();
+			if(option.equalsIgnoreCase("Y")) {
+				createDrug(name);
+				System.out.println("The drug "+name+" was created.\n");
+			}
+			else {
+				System.out.println("The drug "+name+" wasn't created.\n");
+			}
+			
+		}
+	}
+		public static void createDrug(String name) {
+		Drug d = new Drug(name);
+		sqlm.insertDrug(d);
+		System.out.println("You have created succesfully the drug " + name + ".\n");
+		}
+	
 /////////////////////////////////////TREATMENT MENU///////////////////////////////////
 
 	public static void treatment() throws IOException {

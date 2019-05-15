@@ -121,7 +121,7 @@ public class JPAManager implements DBManager {
 		int room_id = id;
 		Query q1 = em.createNativeQuery("SELECT * FROM rooms WHERE id LIKE ?", Room.class);
 		q1.setParameter(1, room_id);
-		Room room = (Room) q1.getSingleResult();		
+		Room room = (Room) q1.getSingleResult();
 		return room;
 	}
 
