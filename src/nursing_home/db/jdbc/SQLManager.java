@@ -71,14 +71,13 @@ public class SQLManager implements DBManager {
 			stmt1.close();
 
 			Statement stmt2 = c.createStatement();
-			// ON UPDATE-CASCADE
+
 			String sql2 = "CREATE TABLE residents " + "(id INTEGER PRIMARY KEY AUTOINCREMENT," + "name TEXT NOT NULL ,"
 					+ "gender TEXT," + " dob DATE," + "telephone INTEGER," + "grade TEXT NOT NULL," + "checkin DATE,"
 					+ "notes TEXT," + "room_id INTEGER," + "photo BLOB,"
 					+ "FOREIGN KEY(room_id) REFERENCES rooms (id))";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
-
 			Statement stmt3 = c.createStatement();
 			String sql3 = "CREATE TABLE rooms (" + "id INTEGER PRIMARY KEY AUTOINCREMENT," + "roomtype TEXT NOT NULL,"
 					+ "floor INTEGER," + "gender TEXT," + "notes TEXT)";
@@ -564,7 +563,7 @@ public class SQLManager implements DBManager {
 			String sqltext = "SELECT a.id,a.name,a.hours,a.days,a.location "
 					+ "FROM activity_resident AS ar JOIN activities AS a "
 					+ "ON ar.id_activity=a.id "
-					+ "WHERE w.id_resident=?";
+					+ "WHERE ar.id_resident=?";
 			PreparedStatement p = c.prepareStatement(sqltext);
 			p.setInt(1, idresident);
 			ResultSet rs = p.executeQuery();
