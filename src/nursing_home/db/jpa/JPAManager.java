@@ -2,6 +2,7 @@ package nursing_home.db.jpa;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.ResultSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -109,9 +110,9 @@ public class JPAManager implements DBManager {
 	}
 	
 	public int countResidentsFromRoom(int room) {
-		Query q1 = em.createNativeQuery("SELECT COUNT(id) FROM residents WHERE room_id=?", Resident.class); 
+		Query q1 = em.createNativeQuery("SELECT COUNT(name) FROM residents WHERE room_id=?"); 
 		q1.setParameter(1, room);
-		int residents=(int) q1.getSingleResult();
+		int residents=(int)q1.getSingleResult();
 		return residents;
 	}
 
