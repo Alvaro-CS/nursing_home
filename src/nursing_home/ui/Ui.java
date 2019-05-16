@@ -1230,16 +1230,30 @@ public class Ui {
 			Date end_date = transform_date(dateend);
 			t.setFinal_date(end_date);
 		}
+		
 		System.out.println("Do you want to change the dosage of the Treatment?");
 		System.out.println("Y/N");
 		answer = consola.readLine();
+		Integer id_drug=0;
 		if (answer.equalsIgnoreCase("Y")) {
+			List <Drug> listd=sqlm.selectDrugsFromTreatment(id);
+			System.out.println("Type the id of the drug you want to change the dosage:");
+			for(Drug d: listd) {
+				
+				System.out.println(d);
+				
+			}
+			id_drug=Integer.parseInt(consola.readLine());
 			System.out.print("Type the new treatment's dosage: ");
 			dosage = consola.readLine();// TODO si no quiere cambiar el dosage, que dosage tenga el valor anterior
-		}
+			sqlm.updateTreatment(t, id_drug, dosage);
 
-		sqlm.updateTreatment(t, id_drug, dosage);
-		;// TODO PASS THE DOSAGE
+		}
+		else {
+		dosage=sqlm.selectDosageFromTreatment(t.getId());
+		sqlm.updateTreatment(t, id_drug, dosage );
+		}
+		
 		System.out.println("Treatment updated:\n" + t);
 
 	}
@@ -1327,7 +1341,7 @@ public class Ui {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}//TODO XMLmanager package?
+	}
 
 	public static Date transform_date(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
