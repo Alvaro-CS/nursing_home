@@ -369,9 +369,15 @@ public class Ui {
 		System.out.println("Introduce the name.");
 		String name = consola.readLine();
 
-		System.out.println("Introduce the gender.");
-		String gender = consola.readLine();
-
+		System.out.println("Introduce the gender.");;
+		System.out.println("Type \"M\" for male or \"F\" for female:");
+		String gender = "";
+		String option = consola.readLine();
+		if (option.equalsIgnoreCase("M"))
+			gender = "Male";
+		else {
+			gender = "Female";
+		}
 		System.out.println("Introduce the birth date(''yyyy-mm-dd'')");
 
 		String birth_date = consola.readLine();
@@ -402,43 +408,8 @@ public class Ui {
 		streamBlob.close();
 
 		System.out.println("Now, assign the patient into a room.");
-		System.out.println("Rooms available:");
-
-		List<Room> list = em.selectRooms();
-		boolean valid = false;
-		Room r = null;
-		List<Resident> listr=null;
-		do {
-		for (Room rl : list) {
-			System.out.println(rl);
-			/*
-			 * int num=em.countResidentsFromRoom(r.getId());
-			 * System.out.println("Residents in the room:"+num+".\n");
-			 */
-			listr = rl.getResidents();
-			System.out.println("Residents in the room:" + listr.size() + ".\n");
-
-		}
-		
-		System.out.println("Type the id of the room you want to assign to the resident.");
-		
-			Integer id = Integer.parseInt(consola.readLine());
-			r = em.getRoom(id);
-			if (r.getRoomtype().equalsIgnoreCase("Single") && listr.size() > 0) {
-				System.out.println("The room is full, it can only have 1 resident, please select another one.");
-			}
-			else {
-				if (r.getRoomtype().equalsIgnoreCase("Double") && listr.size() > 1) {
-					System.out.println("The room is full, it can only have 2 residents, please select another one.");
-				}
-				else {
-					valid=true;
-					}
-				}
-			
-		}while(valid==false);
-
-	Resident r1 = new Resident(name, gender, dob, tel, grade, date_check, bytesBlob, notes,
+		Room r=roomAssign(gender);
+		Resident r1 = new Resident(name, gender, dob, tel, grade, date_check, bytesBlob, notes,
 			r);
 	em.insertResident(r1);
 	System.out.println("Resident succesfully created.\n");
@@ -538,13 +509,56 @@ public class Ui {
 		answer = consola.readLine();
 		if (answer.equalsIgnoreCase("Y")) {
 			System.out.print("Type the new residents's room (id): ");
-			int room_id = Integer.parseInt(consola.readLine());
-			Room ro = em.getRoom(room_id);
+			Room ro = roomAssign(r.getGender());
 			r.setRoom(ro);
 		}
 
 		em.updateResident(r);
 		System.out.println("Resident updated:\n" + r);
+
+	}
+	public static Room roomAssign(String gender) throws IOException {
+		
+		System.out.println("Rooms available:");
+		List<Room> list = em.selectRooms();
+		boolean valid = false;
+		Room r = null;
+		List<Resident> listr=null;
+		do {
+		for (Room rl : list) {
+			System.out.println(rl);
+			/*
+			 * int num=em.countResidentsFromRoom(r.getId());
+			 * System.out.println("Residents in the room:"+num+".\n");
+			 */
+			listr = rl.getResidents();
+			System.out.println("Residents in the room:" + listr.size() + ".\n");
+
+		}
+		
+		System.out.println("Type the id of the room you want to assign to the resident.");
+		
+			Integer id = Integer.parseInt(consola.readLine());
+			r = em.getRoom(id);
+			if(r.getGender().equalsIgnoreCase(gender)||r.getGender().equalsIgnoreCase("Mixed")) {
+			if (r.getRoomtype().equalsIgnoreCase("Single") && listr.size() > 0) {
+				System.out.println("The room is full, it can only have 1 resident, please select another one.");
+			}
+			else {
+				if (r.getRoomtype().equalsIgnoreCase("Double") && listr.size() > 1) {
+					System.out.println("The room is full, it can only have 2 residents, please select another one.");
+				}
+				else {
+					valid=true;
+					}
+				}}
+			else {
+				System.out.println("The gender-type of the room doesn't match to the gender of the resident.\n"
+						+ "Please select a room valid for a "+gender+" person.");
+			}
+			
+		}while(valid==false);
+		return r;
 
 	}
 
@@ -674,13 +688,22 @@ public class Ui {
 		else {
 			roomtype = "Double";
 		}
-
+		
 		System.out.println("Introduce the floor in which the room is located.");
 		Integer floor = Integer.parseInt(consola.readLine());
 
-		System.out.println("Introduce the gender-type of the room (Male/female/mixed).");
-		String gender = consola.readLine();
-
+		System.out.println("Introduce the gender-type of the room.");
+		System.out.println("Type \"M\" for male, \"F\" for female or \"M\" for mixed:");
+		String gender = "";
+		option = consola.readLine();
+		if (option.equalsIgnoreCase("M"))
+			gender= "Male";
+		else if(option.equalsIgnoreCase("F")){
+			gender="Female";
+		}
+		else {
+			gender="Mixed";
+		}
 		System.out.println("Introduce the facilities that the room has.");
 		String notes = consola.readLine();
 		Room room = new Room(roomtype, floor, notes, gender);
