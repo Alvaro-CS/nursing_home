@@ -1,11 +1,7 @@
-<!--
-The type of the attribute "id" of Employee needs
-to be CDATA instead of ID, since DTD doesn't allow
-IDs that start with a number
--->
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE Room [
-   <!ELEMENT Room (floor,notes, Residents)>
-   <!ATTLIST Room roomtype CDATA #REQUIRED>
+   <!ATTLIST Activity  roomtype CDATA #REQUIRED>
    <!ELEMENT floor (#PCDATA)>
    <!ELEMENT notes (#PCDATA)>
    <!ELEMENT Residents (Resident+)>
