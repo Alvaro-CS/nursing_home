@@ -22,6 +22,7 @@ import nursing_home.db.jpa.JPAManager;
 import nursing_home.db.xml.XMLManager;
 import nursing_home.pojos.*;
 import sample.db.graphics.ImageWindow;
+
 //TODO
 //Schema? DTD
 //MENU ACTIVITY. RELACION CON WORKER Y RESIDENT.
@@ -100,7 +101,7 @@ public class Ui {
 				break;
 
 			case 3:
-				workerDetails(); 
+				workerDetails();
 				break;
 
 			case 4:
@@ -181,17 +182,17 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Worker w = sqlm.getWorker(id);
 		System.out.println(w);// It prints all the info of the person
-		System.out.println("Residents assigned to "+w.getName()+":");
+		System.out.println("Residents assigned to " + w.getName() + ":");
 		List<Resident> listR = sqlm.selectResidentsFromWorker(id);
 		for (Resident r : listR) {
-			System.out.println(r.toStringpartial());//TODO ver si funciona
+			System.out.println(r.toStringpartial());// TODO ver si funciona
 		}
 		List<Activity> list_a = sqlm.selectActivitiesFromWorker(w.getId());
-		System.out.println(w.getName()+" is in charged of the following activities:");
+		System.out.println(w.getName() + " is in charged of the following activities:");
 		for (Activity a : list_a) {
-			System.out.println(a.toStringpartial());//TODO ver si funciona
+			System.out.println(a.toStringpartial());// TODO ver si funciona
 		}
-		
+
 		// Now, we show the photo
 		if (w.getPhoto() != null) {
 			ByteArrayInputStream blobIn = new ByteArrayInputStream(w.getPhoto());
@@ -326,9 +327,9 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number");
 
-			System.out
-					.println("1.New resident.\n" + "2.Basic info.\n" + "3.See details of 1 resident.\n" + "4.Update.\n"
-							+ "5.Delete.\n" + "6.Manage relationship resident-worker.\n" + "7.Return to the main menu.");
+			System.out.println("1.New resident.\n" + "2.Basic info.\n" + "3.See details of 1 resident.\n"
+					+ "4.Update.\n" + "5.Delete.\n" + "6.Manage relationship resident-worker.\n"
+					+ "7.Return to the main menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -368,9 +369,15 @@ public class Ui {
 		System.out.println("Introduce the name.");
 		String name = consola.readLine();
 
-		System.out.println("Introduce the gender.");
-		String gender = consola.readLine();
-
+		System.out.println("Introduce the gender.");;
+		System.out.println("Type \"M\" for male or \"F\" for female:");
+		String gender = "";
+		String option = consola.readLine();
+		if (option.equalsIgnoreCase("M"))
+			gender = "Male";
+		else {
+			gender = "Female";
+		}
 		System.out.println("Introduce the birth date(''yyyy-mm-dd'')");
 
 		String birth_date = consola.readLine();
@@ -401,24 +408,11 @@ public class Ui {
 		streamBlob.close();
 
 		System.out.println("Now, assign the patient into a room.");
-		System.out.println("Rooms available:");
-
-		List<Room> list = em.selectRooms();
-		for (Room r : list) {
-			System.out.println(r);
-			/*int num=em.countResidentsFromRoom(r.getId());
-			System.out.println("Residents in the room:"+num+".\n");*/
-			List<Resident> listr=r.getResidents();
-			System.out.println("Residents in the room:"+listr.size()+".\n");
-
-			
-		}
-		System.out.println("Type the id of the room you want to assign to the resident.");
-		Integer id = Integer.parseInt(consola.readLine());
-		Room r = em.getRoom(id);
-		Resident r1 = new Resident(name, gender, dob, tel, grade, date_check, bytesBlob, notes, r);
-		em.insertResident(r1);
-		System.out.println("Resident succesfully created.\n");
+		Room r=roomAssign(gender);
+		Resident r1 = new Resident(name, gender, dob, tel, grade, date_check, bytesBlob, notes,
+			r);
+	em.insertResident(r1);
+	System.out.println("Resident succesfully created.\n");
 
 	}
 
@@ -441,15 +435,15 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Resident r = em.getResident(id);
 		System.out.println(r.toStringRID());// It prints all the info of the person
-		System.out.println("Workers assigned to "+r.getName()+":");
-		List<Worker> workers_list=sqlm.selectWorkersFromResident(id);//TODO ver si funciona
+		System.out.println("Workers assigned to " + r.getName() + ":");
+		List<Worker> workers_list = sqlm.selectWorkersFromResident(id);// TODO ver si funciona
 		for (Worker w : workers_list) {
 			System.out.println(w.toStringpartial());
 		}
 		List<Activity> list_a = sqlm.selectActivitiesFromResident(r.getId());
-		System.out.println(r.getName()+" has sign up to these activities:");
+		System.out.println(r.getName() + " has sign up to these activities:");
 		for (Activity a : list_a) {
-			System.out.println(a.toStringpartial());//TODO ver si funciona
+			System.out.println(a.toStringpartial());// TODO ver si funciona
 		}
 		// Now, we show the photo
 		if (r.getPhoto() != null) {
@@ -515,13 +509,56 @@ public class Ui {
 		answer = consola.readLine();
 		if (answer.equalsIgnoreCase("Y")) {
 			System.out.print("Type the new residents's room (id): ");
-			int room_id = Integer.parseInt(consola.readLine());
-			Room ro = em.getRoom(room_id);
+			Room ro = roomAssign(r.getGender());
 			r.setRoom(ro);
 		}
 
 		em.updateResident(r);
 		System.out.println("Resident updated:\n" + r);
+
+	}
+	public static Room roomAssign(String gender) throws IOException {
+		
+		System.out.println("Rooms available:");
+		List<Room> list = em.selectRooms();
+		boolean valid = false;
+		Room r = null;
+		List<Resident> listr=null;
+		do {
+		for (Room rl : list) {
+			System.out.println(rl);
+			/*
+			 * int num=em.countResidentsFromRoom(r.getId());
+			 * System.out.println("Residents in the room:"+num+".\n");
+			 */
+			listr = rl.getResidents();
+			System.out.println("Residents in the room:" + listr.size() + ".\n");
+
+		}
+		
+		System.out.println("Type the id of the room you want to assign to the resident.");
+		
+			Integer id = Integer.parseInt(consola.readLine());
+			r = em.getRoom(id);
+			if(r.getGender().equalsIgnoreCase(gender)||r.getGender().equalsIgnoreCase("Mixed")) {
+			if (r.getRoomtype().equalsIgnoreCase("Single") && listr.size() > 0) {
+				System.out.println("The room is full, it can only have 1 resident, please select another one.");
+			}
+			else {
+				if (r.getRoomtype().equalsIgnoreCase("Double") && listr.size() > 1) {
+					System.out.println("The room is full, it can only have 2 residents, please select another one.");
+				}
+				else {
+					valid=true;
+					}
+				}}
+			else {
+				System.out.println("The gender-type of the room doesn't match to the gender of the resident.\n"
+						+ "Please select a room valid for a "+gender+" person.");
+			}
+			
+		}while(valid==false);
+		return r;
 
 	}
 
@@ -561,7 +598,7 @@ public class Ui {
 		for (Worker w : listw) {
 			System.out.println(w.toStringpartial());
 		}
-		
+
 		Integer w_id = Integer.parseInt(consola.readLine());
 		System.out.println("Now, introduce the ID of the resident you want to assign to the worker you chose.");
 
@@ -569,12 +606,13 @@ public class Ui {
 		for (Resident r : listr) {
 			System.out.println(r.toStringpartial());
 		}
-		
+
 		Integer r_id = Integer.parseInt(consola.readLine());
 
 		sqlm.connectResidentWorker(w_id, r_id);
 		System.out.println("Assignment done.\n");
 	}
+
 	public static void deleteResidentWorker() throws IOException {
 
 		System.out.println("Introduce the ID of the resident you want to delete a worker from.");
@@ -596,8 +634,7 @@ public class Ui {
 			sqlm.disconnectResidentWorker(w_id, r_id);
 			System.out.println("Deletion done.\n");
 		}
-		}
-
+	}
 
 /////////////////////////////////////ROOM MENU///////////////////////////////////
 	public static void room() throws IOException {
@@ -643,14 +680,30 @@ public class Ui {
 	public static void newRoom() throws IOException {
 
 		System.out.println("Introduce the room type.");
-		String roomtype = consola.readLine();
-
+		System.out.println("Type \"S\" for single room or \"D\" for double room:");
+		String roomtype = "";
+		String option = consola.readLine();
+		if (option.equalsIgnoreCase("S"))
+			roomtype = "Single";
+		else {
+			roomtype = "Double";
+		}
+		
 		System.out.println("Introduce the floor in which the room is located.");
 		Integer floor = Integer.parseInt(consola.readLine());
 
-		System.out.println("Introduce the gender-type of the room (Male/female/mixed).");
-		String gender = consola.readLine();
-
+		System.out.println("Introduce the gender-type of the room.");
+		System.out.println("Type \"M\" for male, \"F\" for female or \"M\" for mixed:");
+		String gender = "";
+		option = consola.readLine();
+		if (option.equalsIgnoreCase("M"))
+			gender= "Male";
+		else if(option.equalsIgnoreCase("F")){
+			gender="Female";
+		}
+		else {
+			gender="Mixed";
+		}
 		System.out.println("Introduce the facilities that the room has.");
 		String notes = consola.readLine();
 		Room room = new Room(roomtype, floor, notes, gender);
@@ -697,8 +750,15 @@ public class Ui {
 		System.out.println("Y/N");
 		answer = consola.readLine();
 		if (answer.equalsIgnoreCase("Y")) {
-			System.out.print("Type the new room type: ");
-			r.setRoomtype(consola.readLine());
+			System.out.print("Type the new room type. ");
+			System.out.println("Type \"S\" for single room or \"D\" for double room:");
+			String room_type = consola.readLine();
+			if (room_type.equalsIgnoreCase("S"))
+				r.setRoomtype("Single");
+			else {
+				r.setRoomtype("Double");
+			}
+
 		}
 
 		System.out.println("Do you want to change the gender of the room?");
@@ -742,7 +802,8 @@ public class Ui {
 
 			System.out.println("1.New activity.\n" + "2.General information about all activities.\n"
 					+ "3.Details of one activity.\n" + "4.Update activity.\n" + "5.Delete activity.\n"
-					+ "6.Activity management by workers.\n" + "7.Activity management of residents.\n"+ "8.Return to menu.\n");
+					+ "6.Activity management by workers.\n" + "7.Activity management of residents.\n"
+					+ "8.Return to menu.\n");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -872,6 +933,7 @@ public class Ui {
 		System.out.println("Deletion completed.");
 
 	}
+
 	public static void workerActivity() throws IOException {
 
 		int option = 0;
@@ -899,121 +961,125 @@ public class Ui {
 			}
 		} while (option != 3);
 	}
-		public static void addWorker2activity() throws IOException {
 
-			System.out.println("Introduce the ID of worker you want to assign to an activity.");
-			List<Worker> listw = sqlm.selectWorkers();
+	public static void addWorker2activity() throws IOException {
+
+		System.out.println("Introduce the ID of worker you want to assign to an activity.");
+		List<Worker> listw = sqlm.selectWorkers();
+		for (Worker w : listw) {
+			System.out.println(w.toStringpartial());
+		}
+
+		Integer w_id = Integer.parseInt(consola.readLine());
+		System.out.println("Now, introduce the ID of the activity you want to assign to the worker you chose.");
+
+		List<Activity> list = sqlm.selectActivities();
+		for (Activity a : list) {
+			System.out.println(a.toStringpartial());
+		}
+
+		Integer a_id = Integer.parseInt(consola.readLine());
+
+		sqlm.connectActivityWorker(w_id, a_id);
+		System.out.println("Assignment done.\n");
+	}
+
+	public static void deleteWorkerActivity() throws IOException {
+
+		System.out.println("Introduce the ID of the activity you want to delete a worker from.");
+		List<Activity> list = sqlm.selectActivities();
+		for (Activity a : list) {
+			System.out.println(a.toStringpartial());
+		}
+		Integer a_id = Integer.parseInt(consola.readLine());
+		List<Worker> listw = sqlm.selectWorkersFromActivity(a_id);
+		if (listw.size() == 0) {
+			System.out.println("There are no workers in charge of that activity.");
+		} else {
+			System.out.println("Now, introduce the ID of the worker you want to delete from the activity.");
 			for (Worker w : listw) {
 				System.out.println(w.toStringpartial());
 			}
-			
 			Integer w_id = Integer.parseInt(consola.readLine());
-			System.out.println("Now, introduce the ID of the activity you want to assign to the worker you chose.");
 
-			List<Activity> list = sqlm.selectActivities();
-			for (Activity a : list) {
-				System.out.println(a.toStringpartial());
-			}
-			
-			Integer a_id = Integer.parseInt(consola.readLine());
-
-			sqlm.connectActivityWorker(w_id, a_id);
-			System.out.println("Assignment done.\n");
+			sqlm.disconnectActivityWorker(w_id, a_id);
+			System.out.println("Deletion done.\n");
 		}
-		public static void deleteWorkerActivity() throws IOException {
+	}
 
-			System.out.println("Introduce the ID of the activity you want to delete a worker from.");
-			List<Activity> list = sqlm.selectActivities();
-			for (Activity a : list) {
-				System.out.println(a.toStringpartial());
+	public static void residentActivity() throws IOException {
+
+		int option = 0;
+		do {
+			System.out.println("Introduce the number:");
+
+			System.out.println("1.Assign an activity to a resident.\n"
+					+ "2.Delete a relationship between an activity and a resident.\n"
+					+ "3.Return to \"Activities\".\n");
+			option = Integer.parseInt(consola.readLine());
+			switch (option) {
+
+			case 1:
+				addResident2activity();
+				break;
+
+			case 2:
+				deleteResidentActivity();
+				break;
+
+			case 3:
+				System.out.println("Going back to \"Activities\".");
+				break;
+			default:
+				break;
 			}
-			Integer a_id = Integer.parseInt(consola.readLine());
-			List<Worker> listw = sqlm.selectWorkersFromActivity(a_id);
-			if (listw.size() == 0) {
-				System.out.println("There are no workers in charge of that activity.");
-			} else {
-				System.out.println("Now, introduce the ID of the worker you want to delete from the activity.");
-				for (Worker w : listw) {
-					System.out.println(w.toStringpartial());
-				}
-				Integer w_id = Integer.parseInt(consola.readLine());
+		} while (option != 3);
+	}
 
-				sqlm.disconnectActivityWorker(w_id, a_id);
-				System.out.println("Deletion done.\n");
-			}
-			}
+	public static void addResident2activity() throws IOException {
 
-		public static void residentActivity() throws IOException {
-
-			int option = 0;
-			do {
-				System.out.println("Introduce the number:");
-
-				System.out.println("1.Assign an activity to a resident.\n"
-						+ "2.Delete a relationship between an activity and a resident.\n" + "3.Return to \"Activities\".\n");
-				option = Integer.parseInt(consola.readLine());
-				switch (option) {
-
-				case 1:
-					addResident2activity();
-					break;
-
-				case 2:
-					deleteResidentActivity();
-					break;
-
-				case 3:
-					System.out.println("Going back to \"Activities\".");
-					break;
-				default:
-					break;
-				}
-			} while (option != 3);
+		System.out.println("Introduce the ID of resident you want to assign to an activity.");
+		List<Resident> listr = sqlm.selectResidents();
+		for (Resident r : listr) {
+			System.out.println(r.toStringpartial());
 		}
-			public static void addResident2activity() throws IOException {
 
-				System.out.println("Introduce the ID of resident you want to assign to an activity.");
-				List<Resident> listr = sqlm.selectResidents();
-				for (Resident r : listr) {
-					System.out.println(r.toStringpartial());
-				}
-				
-				Integer r_id = Integer.parseInt(consola.readLine());
-				System.out.println("Now, introduce the ID of the activity you want to assign to the resident you chose.");
+		Integer r_id = Integer.parseInt(consola.readLine());
+		System.out.println("Now, introduce the ID of the activity you want to assign to the resident you chose.");
 
-				List<Activity> list = sqlm.selectActivities();
-				for (Activity a : list) {
-					System.out.println(a.toStringpartial());
-				}
-				
-				Integer a_id = Integer.parseInt(consola.readLine());
+		List<Activity> list = sqlm.selectActivities();
+		for (Activity a : list) {
+			System.out.println(a.toStringpartial());
+		}
 
-				sqlm.connectActivityResident(r_id, a_id);
-				System.out.println("Assignment done.\n");
+		Integer a_id = Integer.parseInt(consola.readLine());
+
+		sqlm.connectActivityResident(r_id, a_id);
+		System.out.println("Assignment done.\n");
+	}
+
+	public static void deleteResidentActivity() throws IOException {
+
+		System.out.println("Introduce the ID of the activity you want to delete a resident from.");
+		List<Activity> list = sqlm.selectActivities();
+		for (Activity a : list) {
+			System.out.println(a.toStringpartial());
+		}
+		Integer a_id = Integer.parseInt(consola.readLine());
+		List<Resident> listr = sqlm.selectResidentsFromActivity(a_id);
+		if (listr.size() == 0) {
+			System.out.println("There are no residents in that activity.");
+		} else {
+			System.out.println("Now, introduce the ID of the resident you want to delete from the activity.");
+			for (Resident r : listr) {
+				System.out.println(r.toStringpartial());
 			}
-			public static void deleteResidentActivity() throws IOException {
+			Integer r_id = Integer.parseInt(consola.readLine());
 
-				System.out.println("Introduce the ID of the activity you want to delete a resident from.");
-				List<Activity> list = sqlm.selectActivities();
-				for (Activity a : list) {
-					System.out.println(a.toStringpartial());
-				}
-				Integer a_id = Integer.parseInt(consola.readLine());
-				List<Resident> listr = sqlm.selectResidentsFromActivity(a_id);
-				if (listr.size() == 0) {
-					System.out.println("There are no residents in that activity.");
-				} else {
-					System.out.println("Now, introduce the ID of the resident you want to delete from the activity.");
-					for (Resident r : listr) {
-						System.out.println(r.toStringpartial());
-					}
-					Integer r_id = Integer.parseInt(consola.readLine());
-
-					sqlm.disconnectActivityResident(r_id, a_id);
-					System.out.println("Deletion done.\n");
-				}
-				}
-
+			sqlm.disconnectActivityResident(r_id, a_id);
+			System.out.println("Deletion done.\n");
+		}
+	}
 
 /////////////////////////////////////DRUG MENU///////////////////////////////////
 
@@ -1022,7 +1088,8 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number:");
 
-			System.out.println("1.New drug.\n" + "2.List of drugs.\n"+ "3.Delete.\n" + "4.Search drug.\n" + "5.Return to the main menu.\n");
+			System.out.println("1.New drug.\n" + "2.List of drugs.\n" + "3.Delete.\n" + "4.Search drug.\n"
+					+ "5.Return to the main menu.\n");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1037,7 +1104,7 @@ public class Ui {
 			case 3:
 				deleteDrug();
 				break;
-				
+
 			case 4:
 				searchDrug();
 				break;
@@ -1071,41 +1138,41 @@ public class Ui {
 		System.out.println("Deletion completed.");
 
 	}
+
 	public static void listDrugs() throws IOException {
 		System.out.println("Showing the drugs.");
 		List<Drug> list = sqlm.selectDrugs();
 		for (Drug d : list) {
 			System.out.println(d);
 		}
-		
+
 	}
 
 	public static void searchDrug() throws IOException {
 		System.out.println("Introduce the name of the drug you want to check if it's stored.");
-		String name=consola.readLine();
-		if(sqlm.searchDrugByName(name)) {
-			System.out.println("The drug "+name+" already exists in the database.");
-		}
-		else {
-			System.out.println("The drug "+name+" doesn't exist in the database.\n"
-					+ "Do you want to create it? Y/N");
-			String option= consola.readLine();
-			if(option.equalsIgnoreCase("Y")) {
+		String name = consola.readLine();
+		if (sqlm.searchDrugByName(name)) {
+			System.out.println("The drug " + name + " already exists in the database.");
+		} else {
+			System.out.println(
+					"The drug " + name + " doesn't exist in the database.\n" + "Do you want to create it? Y/N");
+			String option = consola.readLine();
+			if (option.equalsIgnoreCase("Y")) {
 				createDrug(name);
-				System.out.println("The drug "+name+" was created.\n");
+				System.out.println("The drug " + name + " was created.\n");
+			} else {
+				System.out.println("The drug " + name + " wasn't created.\n");
 			}
-			else {
-				System.out.println("The drug "+name+" wasn't created.\n");
-			}
-			
+
 		}
 	}
-		public static void createDrug(String name) {
+
+	public static void createDrug(String name) {
 		Drug d = new Drug(name);
 		sqlm.insertDrug(d);
 		System.out.println("You have created succesfully the drug " + name + ".\n");
-		}
-	
+	}
+
 /////////////////////////////////////TREATMENT MENU///////////////////////////////////
 
 	public static void treatment() throws IOException {
@@ -1114,7 +1181,8 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New treatment.\n" + "2.List all treatments.\n" + "3.Details of one treatment.\n"
-					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Return to the main menu.");// TODO ¿Menu extra?
+					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Return to the main menu.");// TODO ¿Menu
+																										// extra?
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1230,30 +1298,29 @@ public class Ui {
 			Date end_date = transform_date(dateend);
 			t.setFinal_date(end_date);
 		}
-		
+
 		System.out.println("Do you want to change the dosage of the Treatment?");
 		System.out.println("Y/N");
 		answer = consola.readLine();
-		Integer id_drug=0;
+		Integer id_drug = 0;
 		if (answer.equalsIgnoreCase("Y")) {
-			List <Drug> listd=sqlm.selectDrugsFromTreatment(id);
+			List<Drug> listd = sqlm.selectDrugsFromTreatment(id);
 			System.out.println("Type the id of the drug you want to change the dosage:");
-			for(Drug d: listd) {
-				
+			for (Drug d : listd) {
+
 				System.out.println(d);
-				
+
 			}
-			id_drug=Integer.parseInt(consola.readLine());
+			id_drug = Integer.parseInt(consola.readLine());
 			System.out.print("Type the new treatment's dosage: ");
 			dosage = consola.readLine();// TODO si no quiere cambiar el dosage, que dosage tenga el valor anterior
 			sqlm.updateTreatment(t, id_drug, dosage);
 
+		} else {
+			dosage = sqlm.selectDosageFromTreatment(t.getId(), id_drug);
+			sqlm.updateTreatment(t, id_drug, dosage);
 		}
-		else {
-		dosage=sqlm.selectDosageFromTreatment(t.getId());
-		sqlm.updateTreatment(t, id_drug, dosage );
-		}
-		
+
 		System.out.println("Treatment updated:\n" + t);
 
 	}
@@ -1308,36 +1375,36 @@ public class Ui {
 
 	public static void marshallRooms() throws IOException, JAXBException {
 		System.out.println("Type how do you want to name the XML document (including \"xml\")");
-		String name= consola.readLine();
+		String name = consola.readLine();
 		System.out.println("Marshalling all rooms with their residents...");
 		List<Room> list = em.selectRooms();
 		Room_list rooms = new Room_list(list);
-		xm.marshallRooms(rooms,name);
+		xm.marshallRooms(rooms, name);
 
 	}
+
 	public static void unmarshallRooms() throws IOException, JAXBException {
 
 		// Pretty formatting
 		System.out.println("Introduce what XML file you want to unmarshall");
-		String name=consola.readLine();
-		Room_list rooms=xm.unmarshallRooms(name);
-		
-		for(Room r: rooms.getRooms() ) {
-			
-			for(Resident res: r.getResidents()) {
+		String name = consola.readLine();
+		Room_list rooms = xm.unmarshallRooms(name);
+
+		for (Room r : rooms.getRooms()) {
+
+			for (Resident res : r.getResidents()) {
 				em.insertResident(res);
 				res.setRoom(r);
 			}
-			em.insertRoom(r);}
+			em.insertRoom(r);
 		}
-	
+	}
 
-
-	public static void simpleTransform(String sourcePath, String xsltPath,String resultDir) {
+	public static void simpleTransform(String sourcePath, String xsltPath, String resultDir) {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 		try {
 			Transformer transformer = tFactory.newTransformer(new StreamSource(new File(xsltPath)));
-			transformer.transform(new StreamSource(new File(sourcePath)),new StreamResult(new File(resultDir)));
+			transformer.transform(new StreamSource(new File(sourcePath)), new StreamResult(new File(resultDir)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -60,5 +60,9 @@ public class XMLManager {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void main(String[] args) {
+		simpleTransform("./xmls/Room.xml", "./xmls/Room-Style.xslt", "./xmls/Room.html");
+	}
 //TODO xlst
 }
