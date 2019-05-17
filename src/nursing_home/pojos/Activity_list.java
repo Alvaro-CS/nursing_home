@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {"activities" })
 
 public class Activity_list {
-	@XmlElement
+	@XmlElement(name="Activity")
 	private List<Activity> activities;
 
 

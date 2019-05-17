@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!DOCTYPE Activity_list [
+   <!ELEMENT Activity_list (Activity+)>
+   <!ATTLIST Activity name CDATA #REQUIRED
+   					  hours CDATA #REQUIRED
+                      days CDATA #REQUIRED
+                      location CDATA #REQUIRED>
+]>

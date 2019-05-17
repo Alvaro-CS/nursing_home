@@ -4,8 +4,8 @@
    <!ELEMENT Room_list (Room+)>
    <!ELEMENT Room (floor,notes, Residents)>
    <!ATTLIST Room roomtype CDATA #REQUIRED
-   				   id CDATA #REQUIRED
-                   gender CDATA #REQUIRED>
+   				  id CDATA #REQUIRED
+                  gender CDATA #REQUIRED>
    <!ELEMENT floor (#PCDATA)>
    <!ELEMENT notes (#PCDATA)>
    <!ELEMENT Residents (Resident+)>
