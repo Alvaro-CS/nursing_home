@@ -10,13 +10,14 @@
       <th>Floor</th>
       <th>Gender</th>
       <th>Notes</th>
-      <xsl:for-each select="Room">
+      <xsl:for-each select="Room_list/Room">
       <xsl:sort select="@id" />
+      <p>Room type: <xsl:value-of select="@roomtype" /></p>
             <tr>
             <td><xsl:value-of select="@id" /></td>
             <td><xsl:value-of select="@roomtype" /></td>
             <td><xsl:value-of select="floor" /></td>
-            <td><xsl:value-of select="gender" /></td>
+            <td><xsl:value-of select="@gender" /></td>
             <td><xsl:value-of select="notes" /></td>           
             </tr>
       </xsl:for-each>

@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {"rooms" })
 
 public class Room_list {
-	@XmlElement
+	@XmlElement(name="Room")
 	private List<Room> rooms;
 
 

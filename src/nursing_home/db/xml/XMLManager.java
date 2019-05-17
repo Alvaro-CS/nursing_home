@@ -47,8 +47,8 @@ public class XMLManager {
 		JAXBContext jaxbContext = JAXBContext.newInstance(Activity_list.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		File file = new File("./xmls/"+name);
-		Room_list rooms = (Room_list) unmarshaller.unmarshal(file);
-		return rooms;
+		Activity_list activities = (Activity_list) unmarshaller.unmarshal(file);
+		return activities;
 	}
 	
 	public static void simpleTransform(String sourcePath, String xsltPath,String resultDir) {
@@ -59,6 +59,10 @@ public class XMLManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String[] args) {
+		simpleTransform("./xmls/Room.xml", "./xmls/Room-Style.xslt", "./xmls/Room.html");
 	}
 //TODO xlst
 }

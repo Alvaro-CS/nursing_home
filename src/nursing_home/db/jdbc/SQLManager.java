@@ -626,7 +626,7 @@ public class SQLManager implements DBManager {
 			String sqltext = "SELECT a.id,a.name,a.hours,a.days,a.location "
 					+ "FROM activity_distribution AS ad JOIN activities AS a "
 					+ "ON ad.id_activity=a.id "
-					+ "WHERE w.id_worker=?";
+					+ "WHERE ad.id_worker=?";
 			PreparedStatement p = c.prepareStatement(sqltext);
 			p.setInt(1, idworker);
 			ResultSet rs = p.executeQuery();

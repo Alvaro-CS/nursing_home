@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!DOCTYPE Room_list [
+   <!ELEMENT Room_list (Room+)>
+   <!ELEMENT Room (floor,notes, Residents)>
+   <!ATTLIST Room roomtype CDATA #REQUIRED
+   				   id CDATA #REQUIRED
+                   gender CDATA #REQUIRED>
+   <!ELEMENT floor (#PCDATA)>
+   <!ELEMENT notes (#PCDATA)>
+   <!ELEMENT Residents (Resident+)>
+   <!ELEMENT Resident (dob,teleph,dep_grade,checkin,notes)>
+   <!ATTLIST Resident name CDATA #REQUIRED
+                  	  id CDATA #REQUIRED
+                  	  gender CDATA #REQUIRED>
+   <!ELEMENT dob (#PCDATA)>
+   <!ELEMENT teleph (#PCDATA)>
+   <!ELEMENT dep_grade (#PCDATA)>
+   <!ELEMENT checkin (#PCDATA)>
+]>
+
 <Room_list>
-    <rooms roomtype="Double" gender="Mixed" id="2">
+    <Room roomtype="Double" gender="Mixed" id="2">
         <floor>2</floor>
         <notes>Shower</notes>
         <Residents>
@@ -12,8 +32,8 @@
                 <notes>She likes badminton</notes>
             </Resident>
         </Residents>
-    </rooms>
-    <rooms roomtype="Single" gender="Mixed" id="3">
+    </Room>
+    <Room roomtype="Single" gender="Mixed" id="3">
         <floor>3</floor>
         <notes>Jacuzzi</notes>
         <Residents>
@@ -25,5 +45,5 @@
                 <notes>He has neumonia and respiratory illnesses</notes>
             </Resident>
         </Residents>
-    </rooms>
+    </Room>
 </Room_list>
