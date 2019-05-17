@@ -1344,7 +1344,7 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number:");
 
-			System.out.println("1.Marshall rooms.\n2.Unmarshall rooms.\n3.HTML convertion.\n4.Back to menu.\n");
+			System.out.println("1.Marshall rooms.\n2.Unmarshall rooms.\n3.HTML convertion.\n4.Marshall activities.\n5.Unmarshall activities.\n6.Back to menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1355,10 +1355,10 @@ public class Ui {
 				unmarshallRooms();
 				break;
 			case 3:
-				xlst();
+				//xlst();
 				break;
 			case 4:
-				marshallActivitites();
+				marshallActivities();
 				break;
 			case 5:
 				unmarshallActivities();
@@ -1369,7 +1369,7 @@ public class Ui {
 			default:
 				break;
 			}
-		} while (option != 3);
+		} while (option != 6);
 
 	}
 
@@ -1380,7 +1380,15 @@ public class Ui {
 		List<Room> list = em.selectRooms();
 		Room_list rooms = new Room_list(list);
 		xm.marshallRooms(rooms, name);
-
+	}
+	
+	public static void marshallActivities() throws IOException, JAXBException {
+		System.out.println("Type how do you want to name the XML document (including \"xml\")");
+		String name = consola.readLine();
+		System.out.println("Marshalling all activities...");
+		List<Activity> list = sqlm.selectActivities();
+		Activity_list activities = new Activity_list(list);
+		xm.marshallActivities(activities, name);
 	}
 
 	public static void unmarshallRooms() throws IOException, JAXBException {
@@ -1398,6 +1406,14 @@ public class Ui {
 			}
 			em.insertRoom(r);
 		}
+	}
+	public static void unmarshallActivities() throws IOException, JAXBException {
+
+		// Pretty formatting
+		System.out.println("Introduce what XML file you want to unmarshall");
+		String name = consola.readLine();
+		Activity_list activities = xm.unmarshallActivities(name);
+
 	}
 
 	public static void simpleTransform(String sourcePath, String xsltPath, String resultDir) {
