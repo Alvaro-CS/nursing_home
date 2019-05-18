@@ -359,14 +359,15 @@ public class JPAManager implements DBManager {
 		
 	}
 
+
 	@Override
-	public void connectDrugTreatment(Integer d_id, Integer t_id) {
+	public void disconnectDrugTreatment(Integer d_id, Integer t_id) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void disconnectDrugTreatment(Integer d_id, Integer t_id) {
+	public void connectDrugTreatment(Integer d_id, Integer t_id, String dosage) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -68,7 +68,7 @@ public interface DBManager {
 	public void disconnectActivityWorker(Integer w_id, Integer a_id);
 	public void connectActivityResident(Integer r_id, Integer a_id);
 	public void disconnectActivityResident(Integer r_id, Integer a_id);
-	public void connectDrugTreatment(Integer d_id, Integer t_id);
+	public void connectDrugTreatment(Integer d_id, Integer t_id,String dosage);
 	public void disconnectDrugTreatment(Integer d_id, Integer t_id);
 	
 	
