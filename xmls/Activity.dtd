@@ -2,8 +2,11 @@
 
 <!DOCTYPE Activity_list [
    <!ELEMENT Activity_list (Activity+)>
+   <!ELEMENT Activity EMPTY>
    <!ATTLIST Activity name CDATA #REQUIRED
+      				  id CDATA #REQUIRED
    					  hours CDATA #REQUIRED
                       days CDATA #REQUIRED
-                      location CDATA #REQUIRED>
+                      location CDATA #REQUIRED
+                      >
 ]>

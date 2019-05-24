@@ -60,9 +60,11 @@ public class XMLManager {
 			e.printStackTrace();
 		}
 	}
+	public static void HTMLgenRooms(String name) {}
 	
 	public static void main(String[] args) {
-		simpleTransform("./xmls/Room.xml", "./xmls/Room-Style.xslt", "./xmls/Room.html");
+		//simpleTransform("./xmls/Room.xml", "./xmls/Room-Style.xslt", "./xmls/Room.html");
+		simpleTransform("./xmls/Activity.xml", "./xmls/Activity-Style.xslt", "./xmls/Activity.html");
 	}
 //TODO xlst
 }

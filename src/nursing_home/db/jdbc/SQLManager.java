@@ -1,10 +1,7 @@
 package nursing_home.db.jdbc;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,13 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Basic;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-
 import nursing_home.pojos.Resident;
 import nursing_home.pojos.Worker;
 import nursing_home.pojos.Room;
@@ -880,13 +870,14 @@ public class SQLManager implements DBManager {
 	e.printStackTrace();
 }
 }
-	public void connectDrugTreatment(Integer d_id, Integer t_id) {
+	public void connectDrugTreatment(Integer d_id, Integer t_id,String dosage) {
 		try {
 
-			String sql = "INSERT INTO drug_treatment (id_drug,id_treatment) " + "VALUES (?,?);";
+			String sql = "INSERT INTO drug_treatment (id_drug,id_treatment,dosage) " + "VALUES (?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, d_id);
 			prep.setInt(2, t_id);
+			prep.setString(3, dosage);
 			prep.executeUpdate();
 			prep.close();
 		} catch (SQLException e) {
@@ -1135,7 +1126,7 @@ public class SQLManager implements DBManager {
 
 	public void updateTreatment(Treatment t, Integer id_drug, String dosage) {
 		try {
-			String sql = "UPDATE treatments SET name=?, end_dates=? WHERE id=?";
+			String sql = "UPDATE treatments SET name=?, end_date=? WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, t.getName());
 			prep.setDate(2, t.getFinal_date());

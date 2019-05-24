@@ -127,7 +127,7 @@ public class Treatment implements Serializable {
 	@Override
 	public String toString() {
 		return "Treatment [id=" + id + ", name=" + name + ", initial_date=" + initial_date + ", final_date="
-				+ final_date + "resident:"+resident.getName() +"]";
+				+ final_date + ", resident:"+resident.getName()+"]";
 	}
 	public String toStringpartial() {
 		return "Treatment [id=" + id + ", name=" + name +", Resident:"+resident.getName() +"]";
