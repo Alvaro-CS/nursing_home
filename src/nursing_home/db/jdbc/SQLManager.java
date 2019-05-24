@@ -1135,7 +1135,7 @@ public class SQLManager implements DBManager {
 
 	public void updateTreatment(Treatment t, Integer id_drug, String dosage) {
 		try {
-			String sql = "UPDATE treatments SET name=?, end_dates=? WHERE id=?";
+			String sql = "UPDATE treatments SET name=?, end_date=? WHERE id=?";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setString(1, t.getName());
 			prep.setDate(2, t.getFinal_date());

@@ -24,13 +24,12 @@ import nursing_home.pojos.*;
 import sample.db.graphics.ImageWindow;
 
 //TODO
+//If no rooms available, tell it
 //Schema? DTD
 //MENU ACTIVITY. RELACION CON WORKER Y RESIDENT.
 //WORKER Y RESIDENT RELACIÓN MUTUA. DISEÑO EN MAIN. ¿FUNCIONA?
-//Mostrar cuantas personas hay en las habitaciones antes de introducir un resident a una?
 //Update treatment
 //TODO change parameters in insertTreatment and updateTreatment
-//TODO restringir habitaciones llenas
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
 	public static JPAManager em = new JPAManager();
@@ -527,12 +526,8 @@ public class Ui {
 		do {
 		for (Room rl : list) {
 			System.out.println(rl);
-			/*
-			 * int num=em.countResidentsFromRoom(r.getId());
-			 * System.out.println("Residents in the room:"+num+".\n");
-			 */
 			listr = rl.getResidents();
-			System.out.println("Residents in the room:" + listr.size() + ".\n");
+			System.out.println("Residents in the room:" + em.countResidentsFromRoom(rl.getId()) + ".\n");
 
 		}
 		
@@ -541,11 +536,11 @@ public class Ui {
 			Integer id = Integer.parseInt(consola.readLine());
 			r = em.getRoom(id);
 			if(r.getGender().equalsIgnoreCase(gender)||r.getGender().equalsIgnoreCase("Mixed")) {
-			if (r.getRoomtype().equalsIgnoreCase("Single") && listr.size() > 0) {
+			if (r.getRoomtype().equalsIgnoreCase("Single") && em.countResidentsFromRoom(r.getId()) > 0) {
 				System.out.println("The room is full, it can only have 1 resident, please select another one.");
 			}
 			else {
-				if (r.getRoomtype().equalsIgnoreCase("Double") && listr.size() > 1) {
+				if (r.getRoomtype().equalsIgnoreCase("Double") && em.countResidentsFromRoom(r.getId()) > 1) {
 					System.out.println("The room is full, it can only have 2 residents, please select another one.");
 				}
 				else {
@@ -1181,7 +1176,7 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New treatment.\n" + "2.List all treatments.\n" + "3.Details of one treatment.\n"
-					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Return to the main menu.");// TODO ¿Menu
+					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Manage drugs of the treatments"+"7.Return to the main menu.");// TODO ¿Menu
 																										// extra?
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
@@ -1206,12 +1201,15 @@ public class Ui {
 				deleteTreatment();
 				break;
 			case 6:
+			drugsTreatment();
+				break;
+			case 7:
 				System.out.println("Going back to the menu.");
 				break;
 			default:
 				break;
 			}
-		} while (option != 6);
+		} while (option != 7);
 
 	}
 
@@ -1242,7 +1240,10 @@ public class Ui {
 		Resident r = sqlm.getResident(id);
 		Treatment t = new Treatment(name, start_date, end_date, r);
 		System.out.println("Type the id of the drug you want to assign to the treatment.");
-		System.out.println(sqlm.selectDrugs());
+		List<Drug> listd = sqlm.selectDrugs();
+		for (Drug d : listd) {
+			System.out.println(d);
+		}
 		Integer id_drug = Integer.parseInt(consola.readLine());
 		System.out.println("Type the dosage of that drug.");
 		String dosage = consola.readLine();
@@ -1264,20 +1265,26 @@ public class Ui {
 
 		List<Treatment> list = sqlm.selectTreatments();
 		for (Treatment t : list) {
-			System.out.println(t);
+			System.out.println(t.toStringpartial());
 		}
 		System.out.println("Type the id of the treatment to see in detail.");
 		Integer id = Integer.parseInt(consola.readLine());
 		Treatment t = sqlm.getTreatment(id);
 		System.out.println(t);
-		// A parte, mostrar la dosis y el drug.getname del treatment
-
+		List <Drug> drugs=sqlm.selectDrugsFromTreatment(id);
+		for(Drug d: drugs) {
+		System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(id,d.getId()));
+		}
 	}
 
 	public static void updateTreatment() throws IOException {
 
-		System.out.println(sqlm.selectTreatments());// A parte, mostrar la dosis y el drug.getname del treatment
-
+		List<Treatment> treatments=sqlm.selectTreatments();
+		for(Treatment t1: treatments) {
+		List <Drug> drugs=sqlm.selectDrugsFromTreatment(t1.getId());
+		for(Drug d: drugs) {
+		System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(t1.getId(),d.getId()));//TODO ver si va
+		}
 		System.out.println("Choose a treatment, type its ID: ");
 		Integer id = Integer.parseInt(consola.readLine());
 		String answer, dosage;
@@ -1322,6 +1329,10 @@ public class Ui {
 		}
 
 		System.out.println("Treatment updated:\n" + t);
+		for(Drug d: drugs) {
+		System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(id,d.getId()));
+		}
+		}
 
 	}
 
@@ -1337,6 +1348,55 @@ public class Ui {
 		System.out.println("Deletion completed.");
 
 	}
+	public static void drugsTreatment() throws IOException {
+
+		int option = 0;
+		do {
+			System.out.println("Introduce the number:");
+
+			System.out.println("1.Add a drug to a treatment.\n"
+					+ "2.Delete a drug from a treatment.\n" + "3.Return to \"Treatment\".\n");
+			option = Integer.parseInt(consola.readLine());
+			switch (option) {
+
+			case 1:
+				addDrug2Treatment();
+				break;
+
+			case 2:
+				deleteDrugTreatment();
+				break;
+
+			case 3:
+				System.out.println("Going back to \"Treatment\".");
+				break;
+			default:
+				break;
+			}
+		} while (option != 3);
+	}
+	public static void addDrug2Treatment() throws IOException {
+		List<Treatment> treatments=sqlm.selectTreatments();
+		for(Treatment t1: treatments) {
+		List <Drug> drugs=sqlm.selectDrugsFromTreatment(t1.getId());
+		for(Drug d: drugs) {
+		System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(t1.getId(),d.getId()));//TODO ver si va
+		}
+		}
+		System.out.println("Type the ID of the treatment you want to add a drug");
+		int id= Integer.parseInt(consola.readLine());
+		List<Drug> alldrugs=sqlm.selectDrugs();
+		for(Drug d: alldrugs) {
+			System.out.println(d);
+		}
+		System.out.println("Type the ID of the drug you want to add");
+		//TODO ACABAR ESTO
+
+		
+	}
+public static void deleteDrugTreatment() throws IOException {
+		
+	}
 /////////////////////////////////////XML MENU///////////////////////////////////
 
 	public static void xml() throws IOException, JAXBException {
@@ -1344,7 +1404,7 @@ public class Ui {
 		do {
 			System.out.println("Introduce the number:");
 
-			System.out.println("1.Marshall rooms.\n2.Unmarshall rooms.\n3.HTML convertion.\n4.Back to menu.\n");
+			System.out.println("1.Marshall rooms.\n2.Unmarshall rooms.\n3.HTML convertion.\n4.Marshall activities.\n5.Unmarshall activities.\n6.Back to menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1355,10 +1415,10 @@ public class Ui {
 				unmarshallRooms();
 				break;
 			case 3:
-				xlst();
+				//xlst();
 				break;
 			case 4:
-				marshallActivitites();
+				marshallActivities();
 				break;
 			case 5:
 				unmarshallActivities();
@@ -1369,7 +1429,7 @@ public class Ui {
 			default:
 				break;
 			}
-		} while (option != 3);
+		} while (option != 6);
 
 	}
 
@@ -1380,7 +1440,15 @@ public class Ui {
 		List<Room> list = em.selectRooms();
 		Room_list rooms = new Room_list(list);
 		xm.marshallRooms(rooms, name);
-
+	}
+	
+	public static void marshallActivities() throws IOException, JAXBException {
+		System.out.println("Type how do you want to name the XML document (including \"xml\")");
+		String name = consola.readLine();
+		System.out.println("Marshalling all activities...");
+		List<Activity> list = sqlm.selectActivities();
+		Activity_list activities = new Activity_list(list);
+		xm.marshallActivities(activities, name);
 	}
 
 	public static void unmarshallRooms() throws IOException, JAXBException {
@@ -1398,6 +1466,18 @@ public class Ui {
 			}
 			em.insertRoom(r);
 		}
+	}
+	public static void unmarshallActivities() throws IOException, JAXBException {
+
+		// Pretty formatting
+		System.out.println("Introduce what XML file you want to unmarshall");
+		String name = consola.readLine();
+		Activity_list activities = xm.unmarshallActivities(name);
+		for(Activity a : activities.getActivities()) {
+			sqlm.insertActivity(a);
+		}
+		
+
 	}
 
 	public static void simpleTransform(String sourcePath, String xsltPath, String resultDir) {

@@ -13,7 +13,7 @@ import nursing_home.db.xml.utils.CustomErrorHandler;
 public class DTDCheckerReport {
 
     public static void main(String[] args) {
-        File xmlFile = new File("./xmls/Room.xml"); 
+        File xmlFile = new File("./xmls/Activity.xml"); 
         try {
         	// Create a DocumentBuilderFactory
             DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();

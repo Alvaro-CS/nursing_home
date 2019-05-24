@@ -21,7 +21,7 @@ public class XMLManager {
 	}
 	
 	public void marshallRooms(Room_list rooms,String name) throws JAXBException {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Activity_list.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(Room_list.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -60,9 +60,11 @@ public class XMLManager {
 			e.printStackTrace();
 		}
 	}
+	public static void HTMLgenRooms(String name) {}
 	
 	public static void main(String[] args) {
-		simpleTransform("./xmls/Room.xml", "./xmls/Room-Style.xslt", "./xmls/Room.html");
+		//simpleTransform("./xmls/Room.xml", "./xmls/Room-Style.xslt", "./xmls/Room.html");
+		simpleTransform("./xmls/Activity.xml", "./xmls/Activity-Style.xslt", "./xmls/Activity.html");
 	}
 //TODO xlst
 }

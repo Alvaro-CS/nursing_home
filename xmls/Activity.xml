@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!DOCTYPE Activity_list [
+   <!ELEMENT Activity_list (Activity+)>
+   <!ELEMENT Activity EMPTY>
+   <!ATTLIST Activity name CDATA #REQUIRED
+      				  id CDATA #REQUIRED
+   					  hours CDATA #REQUIRED
+                      days CDATA #REQUIRED
+                      location CDATA #REQUIRED
+                      >
+]>
+
+
+<Activity_list>
+
+    <Activity name="Jogging" hours="14:00 23:00" days="Monday, tuesday" location="Outside" id="1"/>
+    <Activity name="Bingo" hours="18.00-20.00" days="Monday and Saturday" location="Cantine" id="2"/>
+</Activity_list>
