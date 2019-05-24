@@ -1384,18 +1384,57 @@ public class Ui {
 		}
 		}
 		System.out.println("Type the ID of the treatment you want to add a drug");
-		int id= Integer.parseInt(consola.readLine());
+		int id_treat= Integer.parseInt(consola.readLine());
+		int counter,id_drug;
+		do {
+			counter=0;
 		List<Drug> alldrugs=sqlm.selectDrugs();
 		for(Drug d: alldrugs) {
 			System.out.println(d);
 		}
 		System.out.println("Type the ID of the drug you want to add");
-		//TODO ACABAR ESTO
+		id_drug= Integer.parseInt(consola.readLine());
+		List<Drug> drugs_treat=sqlm.selectDrugsFromTreatment(id_treat);
+		for(Drug d: drugs_treat) {
+			if(d.getId()==id_drug) {
+				System.out.println("That drug is already assigned to the treatment. Please, select another:");
+				counter++;
+			}
+		}
 
+		}
+		while(counter!=0);
+		System.out.println("Finally, introduce the dosage of the drug.");
+		String dosage=consola.readLine();
+		sqlm.connectDrugTreatment(id_drug, id_treat,dosage);
+
+System.out.println("Drug added to treatment.");
 		
 	}
 public static void deleteDrugTreatment() throws IOException {
-		
+	List<Treatment> treatments=sqlm.selectTreatments();
+	for(Treatment t1: treatments) {
+	List <Drug> drugs=sqlm.selectDrugsFromTreatment(t1.getId());
+	for(Drug d: drugs) {
+	System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(t1.getId(),d.getId()));//TODO ver si va
+	}
+	}
+	System.out.println("Type the ID of the treatment you want to delete a drug");
+	int id_treat= Integer.parseInt(consola.readLine());
+	List<Drug> drugs_treat=sqlm.selectDrugsFromTreatment(id_treat);
+if(drugs_treat.size()==1) {
+	System.out.println("That treatment only has 1 drug. You can delete the whole treatment if you want to in the main menu of \"Treatment\".");
+}
+else {
+	
+	for(Drug d: drugs_treat) {
+		System.out.println(d);
+	}
+	System.out.println("Type the ID of the drug you want to remove:");
+	int id_drug= Integer.parseInt(consola.readLine());
+	sqlm.disconnectDrugTreatment(id_drug, id_treat);
+	System.out.println("Drug removed from the treatment.");
+}
 	}
 /////////////////////////////////////XML MENU///////////////////////////////////
 
