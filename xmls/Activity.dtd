@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!DOCTYPE Activity [
-   <!ATTLIST Activity name CDATA #REQUIRED
-   					  hours CDATA #REQUIRED 
-   					  days CDATA #REQUIRED
-   					  location CDATA #REQUIRED>
-
-=======
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 <!DOCTYPE Activity_list [
@@ -19,5 +9,4 @@
                       days CDATA #REQUIRED
                       location CDATA #REQUIRED
                       >
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
 ]>

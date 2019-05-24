@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!DOCTYPE Room [
-   <!ATTLIST Activity  roomtype CDATA #REQUIRED>
-=======
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 <!DOCTYPE Room_list [
@@ -12,7 +6,6 @@
    <!ATTLIST Room roomtype CDATA #REQUIRED
    				  id CDATA #REQUIRED
                   gender CDATA #REQUIRED>
->>>>>>> branch 'master' of https://github.com/Alvaro-CS/nursing_home
    <!ELEMENT floor (#PCDATA)>
    <!ELEMENT notes (#PCDATA)>
    <!ELEMENT Residents (Resident+)>
