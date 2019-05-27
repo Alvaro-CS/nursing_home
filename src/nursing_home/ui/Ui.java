@@ -25,11 +25,8 @@ import sample.db.graphics.ImageWindow;
 
 //TODO
 //If no rooms available, tell it
-//Schema? DTD
-//MENU ACTIVITY. RELACION CON WORKER Y RESIDENT.
 //WORKER Y RESIDENT RELACIÓN MUTUA. DISEÑO EN MAIN. ¿FUNCIONA?
-//Update treatment
-//TODO change parameters in insertTreatment and updateTreatment
+
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
 	public static JPAManager em = new JPAManager();
@@ -877,6 +874,14 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Activity a = sqlm.getActivity(id);
 		System.out.println(a);
+		List<Worker> listw= sqlm.selectWorkersFromActivity(id);
+		List<Resident> listr= sqlm.selectResidentsFromActivity(id);
+		for(Worker w:listw) {
+			System.out.println(w.toStringpartial());
+		}
+		for(Resident r:listr) {
+			System.out.println(r.toStringpartial());
+		}
 
 	}
 
@@ -1176,8 +1181,7 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New treatment.\n" + "2.List all treatments.\n" + "3.Details of one treatment.\n"
-					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Manage drugs of the treatments"+"7.Return to the main menu.");// TODO ¿Menu
-																										// extra?
+					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Manage drugs of the treatments"+"\n7.Return to the main menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1320,7 +1324,7 @@ public class Ui {
 			}
 			id_drug = Integer.parseInt(consola.readLine());
 			System.out.print("Type the new treatment's dosage: ");
-			dosage = consola.readLine();// TODO si no quiere cambiar el dosage, que dosage tenga el valor anterior
+			dosage = consola.readLine();
 			sqlm.updateTreatment(t, id_drug, dosage);
 
 		} else {
@@ -1454,13 +1458,14 @@ else {
 				unmarshallRooms();
 				break;
 			case 3:
-				//xlst();
-				break;
-			case 4:
 				marshallActivities();
 				break;
-			case 5:
+				
+			case 4:
 				unmarshallActivities();
+				break;
+			case 5:
+				generateHTML();
 				break;
 			case 6:
 				System.out.println("Going back to the menu.");
@@ -1518,17 +1523,23 @@ else {
 		
 
 	}
-
-	public static void simpleTransform(String sourcePath, String xsltPath, String resultDir) {
-		TransformerFactory tFactory = TransformerFactory.newInstance();
-		try {
-			Transformer transformer = tFactory.newTransformer(new StreamSource(new File(xsltPath)));
-			transformer.transform(new StreamSource(new File(sourcePath)), new StreamResult(new File(resultDir)));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
+	 public static void generateHTML()throws IOException{
+		System.out.println("Introduce the name of the XML file (./xmls/.......xml):");
+		String s1=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......xslt):");
+		String s2=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......html)");
+		String s3=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......xml):");
+		String a1=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......xslt):");
+		String a2=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......html)");
+		String a3=consola.readLine();
+		xm.simpleTransform(s1, s2, s3);
+		xm.simpleTransform(a1, a2, a3);
 	}
-
 	public static Date transform_date(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate final_date = LocalDate.parse(date, formatter);
