@@ -51,7 +51,7 @@ public class XMLManager {
 		return activities;
 	}
 	
-	public static void simpleTransform(String sourcePath, String xsltPath,String resultDir) {
+	public void simpleTransform(String sourcePath, String xsltPath,String resultDir) {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 		try {
 			Transformer transformer = tFactory.newTransformer(new StreamSource(new File(xsltPath)));
@@ -60,11 +60,6 @@ public class XMLManager {
 			e.printStackTrace();
 		}
 	}
-	public static void HTMLgenRooms(String name) {}
 	
-	public static void main(String[] args) {
-		//simpleTransform("./xmls/Room.xml", "./xmls/Room-Style.xslt", "./xmls/Room.html");
-		simpleTransform("./xmls/Activity.xml", "./xmls/Activity-Style.xslt", "./xmls/Activity.html");
-	}
-//TODO xlst
+
 }
