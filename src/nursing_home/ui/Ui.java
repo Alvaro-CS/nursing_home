@@ -25,11 +25,8 @@ import sample.db.graphics.ImageWindow;
 
 //TODO
 //If no rooms available, tell it
-//Schema? DTD
-//MENU ACTIVITY. RELACION CON WORKER Y RESIDENT.
 //WORKER Y RESIDENT RELACIÓN MUTUA. DISEÑO EN MAIN. ¿FUNCIONA?
-//Update treatment
-//TODO change parameters in insertTreatment and updateTreatment
+
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
 	public static JPAManager em = new JPAManager();
@@ -877,6 +874,14 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Activity a = sqlm.getActivity(id);
 		System.out.println(a);
+		List<Worker> listw= sqlm.selectWorkersFromActivity(id);
+		List<Resident> listr= sqlm.selectResidentsFromActivity(id);
+		for(Worker w:listw) {
+			System.out.println(w.toStringpartial());
+		}
+		for(Resident r:listr) {
+			System.out.println(r.toStringpartial());
+		}
 
 	}
 
@@ -1176,8 +1181,7 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New treatment.\n" + "2.List all treatments.\n" + "3.Details of one treatment.\n"
-					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Manage drugs of the treatments"+"7.Return to the main menu.");// TODO ¿Menu
-																										// extra?
+					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Manage drugs of the treatments"+"\n7.Return to the main menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1320,7 +1324,7 @@ public class Ui {
 			}
 			id_drug = Integer.parseInt(consola.readLine());
 			System.out.print("Type the new treatment's dosage: ");
-			dosage = consola.readLine();// TODO si no quiere cambiar el dosage, que dosage tenga el valor anterior
+			dosage = consola.readLine();
 			sqlm.updateTreatment(t, id_drug, dosage);
 
 		} else {
