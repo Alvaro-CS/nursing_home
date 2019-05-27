@@ -1454,13 +1454,14 @@ else {
 				unmarshallRooms();
 				break;
 			case 3:
-				//xlst();
-				break;
-			case 4:
 				marshallActivities();
 				break;
-			case 5:
+				
+			case 4:
 				unmarshallActivities();
+				break;
+			case 5:
+				generateHTML();
 				break;
 			case 6:
 				System.out.println("Going back to the menu.");
@@ -1518,17 +1519,23 @@ else {
 		
 
 	}
-
-	public static void simpleTransform(String sourcePath, String xsltPath, String resultDir) {
-		TransformerFactory tFactory = TransformerFactory.newInstance();
-		try {
-			Transformer transformer = tFactory.newTransformer(new StreamSource(new File(xsltPath)));
-			transformer.transform(new StreamSource(new File(sourcePath)), new StreamResult(new File(resultDir)));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
+	 public static void generateHTML()throws IOException{
+		System.out.println("Introduce the name of the XML file (./xmls/.......xml):");
+		String s1=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......xslt):");
+		String s2=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......html)");
+		String s3=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......xml):");
+		String a1=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......xslt):");
+		String a2=consola.readLine();
+		System.out.println("Introduce the name of the XML file (./xmls/.......html)");
+		String a3=consola.readLine();
+		xm.simpleTransform(s1, s2, s3);
+		xm.simpleTransform(a1, a2, a3);
 	}
-
 	public static Date transform_date(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate final_date = LocalDate.parse(date, formatter);
