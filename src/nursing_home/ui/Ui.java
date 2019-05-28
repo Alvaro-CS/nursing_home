@@ -178,12 +178,12 @@ public class Ui {
 		System.out.println("Residents assigned to " + w.getName() + ":");
 		List<Resident> listR = sqlm.selectResidentsFromWorker(id);
 		for (Resident r : listR) {
-			System.out.println(r.toStringpartial());// TODO ver si funciona
+			System.out.println(r.toStringpartial());
 		}
 		List<Activity> list_a = sqlm.selectActivitiesFromWorker(w.getId());
 		System.out.println(w.getName() + " is in charged of the following activities:");
 		for (Activity a : list_a) {
-			System.out.println(a.toStringpartial());// TODO ver si funciona
+			System.out.println(a.toStringpartial());
 		}
 
 		// Now, we show the photo
@@ -429,14 +429,14 @@ public class Ui {
 		Resident r = em.getResident(id);
 		System.out.println(r.toStringRID());// It prints all the info of the person
 		System.out.println("Workers assigned to " + r.getName() + ":");
-		List<Worker> workers_list = sqlm.selectWorkersFromResident(id);// TODO ver si funciona
+		List<Worker> workers_list = sqlm.selectWorkersFromResident(id);
 		for (Worker w : workers_list) {
 			System.out.println(w.toStringpartial());
 		}
 		List<Activity> list_a = sqlm.selectActivitiesFromResident(r.getId());
 		System.out.println(r.getName() + " has sign up to these activities:");
 		for (Activity a : list_a) {
-			System.out.println(a.toStringpartial());// TODO ver si funciona
+			System.out.println(a.toStringpartial());
 		}
 		// Now, we show the photo
 		if (r.getPhoto() != null) {
@@ -1444,7 +1444,7 @@ else {
 		do {
 			System.out.println("Introduce the number:");
 
-			System.out.println("1.Marshall rooms.\n2.Unmarshall rooms.\n3.Marshall activities.\n4.Unmarshall activities.\n57.HTML convertion.\n6.Back to menu.");
+			System.out.println("1.Marshall rooms.\n2.Unmarshall rooms.\n3.Marshall activities.\n4.Unmarshall activities.\n5.HTML convertion.\n6.Back to menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 

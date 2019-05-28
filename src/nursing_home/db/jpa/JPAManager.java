@@ -73,25 +73,21 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void insertActivity(Activity a) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void insertDrug(Drug d) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void insertTreatment(Treatment t, Integer id_drug, String dosage) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public List<Worker> selectWorkers() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -127,19 +123,16 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public List<Activity> selectActivities() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Drug> selectDrugs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Worker getWorker(Integer id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -154,7 +147,6 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void deleteWorker(Integer id) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -187,25 +179,21 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void deleteActivity(Integer id) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteDrug(Integer id) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteTreatment(Integer id) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void updateWorker(Worker w) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -234,141 +222,118 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void updateActivity(Activity a) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void connectResidentWorker(Integer w_id, Integer r_id) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public List<Resident> selectResidentsFromWorker(Integer idworker) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Worker> selectWorkersFromResident(Integer idresident) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Activity getActivity(Integer id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Treatment> selectTreatments() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Drug getDrug(Integer id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Treatment getTreatment(Integer id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
 	public void updateTreatment(Treatment t, Integer id_drug, String dosage) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public boolean searchDrugByName(String name) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public List<Drug> selectDrugsFromTreatment(Integer id_treatment) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Treatment> selectTreatmentsFromDrug(Integer id_drug) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Activity> selectActivitiesFromResident(Integer idresident) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Worker> selectWorkersFromActivity(Integer idactivity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Activity> selectActivitiesFromWorker(Integer idworker) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Resident> selectResidentsFromActivity(Integer idactivity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void disconnectResidentWorker(Integer w_id, Integer r_id) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void connectActivityWorker(Integer w_id, Integer a_id) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void disconnectActivityWorker(Integer w_id, Integer a_id) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void connectActivityResident(Integer r_id, Integer a_id) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void disconnectActivityResident(Integer r_id, Integer a_id) {
-		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
 	public void disconnectDrugTreatment(Integer d_id, Integer t_id) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void connectDrugTreatment(Integer d_id, Integer t_id, String dosage) {
-		// TODO Auto-generated method stub
-		
+
 	}
 }

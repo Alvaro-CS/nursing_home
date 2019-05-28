@@ -20,9 +20,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 public class Treatment implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7466068630410510066L;
 	@XmlAttribute
 	private Integer id;

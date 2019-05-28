@@ -15,9 +15,6 @@ import javax.xml.bind.annotation.XmlType;
 
 public class Drug implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3647401126213202256L;
 	@XmlAttribute
 	private Integer id;

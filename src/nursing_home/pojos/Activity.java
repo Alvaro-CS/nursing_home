@@ -14,9 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = {"name","hours","days","location"})
 
 public class Activity implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 6896487450338046523L;
 	@XmlAttribute
 	private Integer id;

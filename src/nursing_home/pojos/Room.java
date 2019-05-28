@@ -29,9 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "Room")
 @XmlType(propOrder = {"roomtype", "floor","gender","notes","residents" })
 public class Room implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 6749324661753403309L;
 	
 	@Id 
