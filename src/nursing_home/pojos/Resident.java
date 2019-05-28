@@ -29,7 +29,7 @@ public class Resident implements Serializable {
 	@Id
 	@GeneratedValue(generator="residents")
 	@TableGenerator (name="residents", table= "sqlite_sequence",
-		pkColumnName= "name", valueColumnName="seq", pkColumnValue="residents") //Create table
+		pkColumnName= "name", valueColumnName="seq", pkColumnValue="residents")
 	
 	@XmlAttribute
 	private Integer id;

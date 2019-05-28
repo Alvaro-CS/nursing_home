@@ -18,11 +18,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 public class Worker implements Serializable{
-/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 7225947562836015154L;
-	//serial version
 	@XmlAttribute
 	private Integer id;
 	@XmlAttribute
@@ -127,7 +124,6 @@ public class Worker implements Serializable{
 		this.dob = dob;
 	}
 
-
 	public Double getSalary() {
 		return salary;
 	}
@@ -167,5 +163,4 @@ public class Worker implements Serializable{
 			return false;
 		return true;
 	}
-	
 }
