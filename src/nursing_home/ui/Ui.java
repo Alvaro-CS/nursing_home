@@ -1306,9 +1306,7 @@ public class Ui {
 		for (Treatment t1 : treatments) {
 			List<Drug> drugs = sqlm.selectDrugsFromTreatment(t1.getId());
 			for (Drug d : drugs) {
-				System.out.println(d.getName() + ":" + sqlm.selectDosageFromTreatment(t1.getId(), d.getId()));// TODO
-																												// ver
-																												// si va
+				System.out.println(d.getName() + ":" + sqlm.selectDosageFromTreatment(t1.getId(), d.getId()));
 			}
 			System.out.println("Choose a treatment, type its ID: ");
 			Integer id = Integer.parseInt(consola.readLine());
