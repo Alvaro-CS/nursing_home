@@ -685,7 +685,7 @@ public class Ui {
 		Integer floor = Integer.parseInt(consola.readLine());
 
 		System.out.println("Introduce the gender-type of the room.");
-		System.out.println("Type \"M\" for male, \"F\" for female or \"M\" for mixed:");
+		System.out.println("Type \"M\" for male, \"F\" for female or \"X\" for mixed:");
 		String gender = "";
 		option = consola.readLine();
 		if (option.equalsIgnoreCase("M"))
@@ -732,7 +732,10 @@ public class Ui {
 
 	public static void updateRoom() throws IOException {
 
-		System.out.println(em.selectRooms());
+		List<Room> list = sqlm.selectRooms();
+		for (Room r : list) {
+			System.out.println(r.toStringpartial());
+		}
 		System.out.println("Choose a room, type its ID: ");
 		Integer id = Integer.parseInt(consola.readLine());
 		String answer;
@@ -756,7 +759,17 @@ public class Ui {
 		System.out.println("Y/N");
 		answer = consola.readLine();
 		if (answer.equalsIgnoreCase("Y")) {
-			System.out.print("Type the new gender of the room: ");
+			
+			System.out.println("Type \"M\" for male, \"F\" for female or \"X\" for mixed:");
+			String gender = "";
+			String option = consola.readLine();
+			if (option.equalsIgnoreCase("M"))
+				gender = "Male";
+			else if (option.equalsIgnoreCase("F")) {
+				gender = "Female";
+			} else {
+				gender = "Mixed";
+			}
 			r.setGender(consola.readLine());
 		}
 
