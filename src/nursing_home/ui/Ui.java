@@ -23,9 +23,6 @@ import nursing_home.db.xml.XMLManager;
 import nursing_home.pojos.*;
 import sample.db.graphics.ImageWindow;
 
-//TODO
-//If no rooms available, tell it
-//WORKER Y RESIDENT RELACIÓN MUTUA. DISEÑO EN MAIN. ¿FUNCIONA?
 
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
