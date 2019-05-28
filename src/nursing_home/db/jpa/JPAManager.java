@@ -50,13 +50,11 @@ public class JPAManager implements DBManager {
 
 	@Override
 	public void create() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void insertWorker(Worker w) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -205,19 +203,18 @@ public class JPAManager implements DBManager {
 		em.flush();
 		// End transaction
 		em.getTransaction().commit();
-			
+
 	}
 
 	@Override
 	public void updateRoom(Room r) {
-		
 		// Begin transaction
-		EntityTransaction t = em.getTransaction();
+		em.getTransaction().begin();
 		// Make changes
-		t.begin();
-		t.commit();
+		em.flush();
 		// End transaction
-		
+		em.getTransaction().commit();
+
 	}
 
 	@Override
