@@ -129,7 +129,7 @@ public class SQLManager implements DBManager {
 
 		} catch (SQLException e) {
 			if (e.getMessage().contains("already exists")) {
-				System.out.println("Tables are already created");
+				System.out.println("Tables are already created.");
 			} else {
 				e.printStackTrace();
 			}

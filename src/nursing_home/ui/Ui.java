@@ -38,6 +38,7 @@ public class Ui {
 
 		Integer option = 0;
 		do {
+			System.out.println("~ ~ ~ ~ MAIN MENU ~ ~ ~ ~");
 			System.out.println(
 					"Select what do you want to manage: \n1.Workers. \n2.Residents. \n3.Rooms. \n4.Activities. \n5.Drugs. \n6.Treatments. \n7.XML. \n8.Exit");
 			option = Integer.parseInt(consola.readLine());
