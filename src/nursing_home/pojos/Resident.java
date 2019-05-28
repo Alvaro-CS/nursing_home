@@ -61,9 +61,6 @@ public class Resident implements Serializable {
 	private Room room;
 	@Transient
 	@XmlTransient
-	/*
-	@XmlElement(name = "Treatment")
-    @XmlElementWrapper(name = "Treatments")*/
 	private List <Treatment> treatments;
 	
 	
