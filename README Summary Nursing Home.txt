@@ -2,9 +2,10 @@
 First of all, when you run the app, it will ask you what entity do you want to manage from the database.
 We have 7 different menus in our app. In 6 of them (worker, residents, rooms, activities, drugs, treatments) you can create a new entity of that type with its attributes. 
 You can also show a list of each different entity showing their id and name. 
+Important: you first need to create a room to create a resident
 
-
-There’s also an option in the menu  so you can see the details of each one. If it’s a worker or a resident you can see also their photo. 
+There’s also an option in the menu  so you can see the details of each one. If it’s a worker or a resident you can see also their photo. The photos can be selected from a selection
+that is in "photos".
 In the case of a room you can also see the list of residents that it has. In activities, it is shown all the residents that have signed up to the activity and also the workers
  in charge of it. Drug doesn’t have a details menu because it doesn’t have any. Treatment is a very special entity because it’s related to many drugs and it’s dosage(many to many
  relationship with an attribute), so in the details we show all the attributes of the treatment including each drug that it has with it’s dosage.
