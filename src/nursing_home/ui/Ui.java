@@ -1524,18 +1524,12 @@ else {
 	 public static void generateHTML()throws IOException{
 		System.out.println("Introduce the name of the XML file (./xmls/.......xml):");
 		String s1=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......xslt):");
+		System.out.println("Introduce the name of the XSLT file (./xmls/.......xslt):");
 		String s2=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......html)");
+		System.out.println("Introduce the name of the HTML file you want to create (./xmls/.......html)");
 		String s3=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......xml):");
-		String a1=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......xslt):");
-		String a2=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......html)");
-		String a3=consola.readLine();
 		xm.simpleTransform(s1, s2, s3);
-		xm.simpleTransform(a1, a2, a3);
+		
 	}
 	public static Date transform_date(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
