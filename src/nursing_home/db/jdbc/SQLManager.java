@@ -640,7 +640,7 @@ public class SQLManager implements DBManager {
 			String sqltext = "SELECT r.id,r.name,r.gender,r.dob,r.telephone,r.grade,r.checkin,r.photo,r.notes,r.room_id "
 					+ "FROM activity_resident AS ar JOIN residents AS r " 
 					+ "ON ar.id_resident=r.id "
-					+ "WHERE a.id_activity=?";
+					+ "WHERE ar.id_activity=?";
 			PreparedStatement p = c.prepareStatement(sqltext);
 			p.setInt(1, idactivity);
 			ResultSet rs = p.executeQuery();
