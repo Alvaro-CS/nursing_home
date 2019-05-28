@@ -23,7 +23,6 @@ import nursing_home.db.xml.XMLManager;
 import nursing_home.pojos.*;
 import sample.db.graphics.ImageWindow;
 
-
 public class Ui {
 	public static SQLManager sqlm = new SQLManager();
 	public static JPAManager em = new JPAManager();
@@ -358,55 +357,59 @@ public class Ui {
 	}
 
 	public static void newResident() throws IOException {
-
-		System.out.println("Introduce the name.");
-		String name = consola.readLine();
-
-		System.out.println("Introduce the gender.");;
-		System.out.println("Type \"M\" for male or \"F\" for female:");
-		String gender = "";
-		String option = consola.readLine();
-		if (option.equalsIgnoreCase("M"))
-			gender = "Male";
+		
+		if (sqlm.selectRooms().size() == 0) {
+			System.out.println("You first need to have at least one room created to create a new resident.");
+		} 
 		else {
-			gender = "Female";
+			System.out.println("Introduce the name.");
+			String name = consola.readLine();
+
+			System.out.println("Introduce the gender.");
+			;
+			System.out.println("Type \"M\" for male or \"F\" for female:");
+			String gender = "";
+			String option = consola.readLine();
+			if (option.equalsIgnoreCase("M"))
+				gender = "Male";
+			else {
+				gender = "Female";
+			}
+			System.out.println("Introduce the birth date(''yyyy-mm-dd'')");
+
+			String birth_date = consola.readLine();
+			Date dob = transform_date(birth_date);
+
+			System.out.println("Introduce the contact telephone.");
+			Integer tel = Integer.parseInt(consola.readLine());
+
+			System.out.println("Introduce the grade of dependency.");
+			String grade = consola.readLine();
+
+			System.out.println("Introduce the date of check-in(''yyyy-mm-dd'')");
+
+			String checkin = consola.readLine();
+			Date date_check = transform_date(checkin);
+
+			System.out.println("Introduce any extra notes or details about the resident.");
+			String notes = consola.readLine();
+
+			System.out.println("Introduce the name of the photo as it appears in the folder.");
+			String fileName = consola.readLine();
+
+			File photo = new File("./photos/" + fileName);
+			InputStream streamBlob = new FileInputStream(photo);
+
+			byte[] bytesBlob = new byte[streamBlob.available()];
+			streamBlob.read(bytesBlob);
+			streamBlob.close();
+
+			System.out.println("Now, assign the patient into a room.");
+			Room r = roomAssign(gender);
+			Resident r1 = new Resident(name, gender, dob, tel, grade, date_check, bytesBlob, notes, r);
+			em.insertResident(r1);
+			System.out.println("Resident succesfully created.\n");
 		}
-		System.out.println("Introduce the birth date(''yyyy-mm-dd'')");
-
-		String birth_date = consola.readLine();
-		Date dob = transform_date(birth_date);
-
-		System.out.println("Introduce the contact telephone.");
-		Integer tel = Integer.parseInt(consola.readLine());
-
-		System.out.println("Introduce the grade of dependency.");
-		String grade = consola.readLine();
-
-		System.out.println("Introduce the date of check-in(''yyyy-mm-dd'')");
-
-		String checkin = consola.readLine();
-		Date date_check = transform_date(checkin);
-
-		System.out.println("Introduce any extra notes or details about the resident.");
-		String notes = consola.readLine();
-
-		System.out.println("Introduce the name of the photo as it appears in the folder.");
-		String fileName = consola.readLine();
-
-		File photo = new File("./photos/" + fileName);
-		InputStream streamBlob = new FileInputStream(photo);
-
-		byte[] bytesBlob = new byte[streamBlob.available()];
-		streamBlob.read(bytesBlob);
-		streamBlob.close();
-
-		System.out.println("Now, assign the patient into a room.");
-		Room r=roomAssign(gender);
-		Resident r1 = new Resident(name, gender, dob, tel, grade, date_check, bytesBlob, notes,
-			r);
-	em.insertResident(r1);
-	System.out.println("Resident succesfully created.\n");
-
 	}
 
 	public static void infoResidents() throws IOException {
@@ -510,43 +513,43 @@ public class Ui {
 		System.out.println("Resident updated:\n" + r);
 
 	}
+
 	public static Room roomAssign(String gender) throws IOException {
-		
+
 		System.out.println("Rooms available:");
 		List<Room> list = em.selectRooms();
 		boolean valid = false;
 		Room r = null;
-		List<Resident> listr=null;
+		List<Resident> listr = null;
 		do {
-		for (Room rl : list) {
-			System.out.println(rl);
-			listr = rl.getResidents();
-			System.out.println("Residents in the room:" + em.countResidentsFromRoom(rl.getId()) + ".\n");
+			for (Room rl : list) {
+				System.out.println(rl);
+				listr = rl.getResidents();
+				System.out.println("Residents in the room:" + em.countResidentsFromRoom(rl.getId()) + ".\n");
 
-		}
-		
-		System.out.println("Type the id of the room you want to assign to the resident.");
-		
+			}
+
+			System.out.println("Type the id of the room you want to assign to the resident.");
+
 			Integer id = Integer.parseInt(consola.readLine());
 			r = em.getRoom(id);
-			if(r.getGender().equalsIgnoreCase(gender)||r.getGender().equalsIgnoreCase("Mixed")) {
-			if (r.getRoomtype().equalsIgnoreCase("Single") && em.countResidentsFromRoom(r.getId()) > 0) {
-				System.out.println("The room is full, it can only have 1 resident, please select another one.");
-			}
-			else {
-				if (r.getRoomtype().equalsIgnoreCase("Double") && em.countResidentsFromRoom(r.getId()) > 1) {
-					System.out.println("The room is full, it can only have 2 residents, please select another one.");
-				}
-				else {
-					valid=true;
+			if (r.getGender().equalsIgnoreCase(gender) || r.getGender().equalsIgnoreCase("Mixed")) {
+				if (r.getRoomtype().equalsIgnoreCase("Single") && em.countResidentsFromRoom(r.getId()) > 0) {
+					System.out.println("The room is full, it can only have 1 resident, please select another one.");
+				} else {
+					if (r.getRoomtype().equalsIgnoreCase("Double") && em.countResidentsFromRoom(r.getId()) > 1) {
+						System.out
+								.println("The room is full, it can only have 2 residents, please select another one.");
+					} else {
+						valid = true;
 					}
-				}}
-			else {
+				}
+			} else {
 				System.out.println("The gender-type of the room doesn't match to the gender of the resident.\n"
-						+ "Please select a room valid for a "+gender+" person.");
+						+ "Please select a room valid for a " + gender + " person.");
 			}
-			
-		}while(valid==false);
+
+		} while (valid == false);
 		return r;
 
 	}
@@ -677,21 +680,20 @@ public class Ui {
 		else {
 			roomtype = "Double";
 		}
-		
+
 		System.out.println("Introduce the floor in which the room is located.");
 		Integer floor = Integer.parseInt(consola.readLine());
 
 		System.out.println("Introduce the gender-type of the room.");
-		System.out.println("Type \"M\" for male, \"F\" for female or \"M\" for mixed:");
+		System.out.println("Type \"M\" for male, \"F\" for female or \"X\" for mixed:");
 		String gender = "";
 		option = consola.readLine();
 		if (option.equalsIgnoreCase("M"))
-			gender= "Male";
-		else if(option.equalsIgnoreCase("F")){
-			gender="Female";
-		}
-		else {
-			gender="Mixed";
+			gender = "Male";
+		else if (option.equalsIgnoreCase("F")) {
+			gender = "Female";
+		} else {
+			gender = "Mixed";
 		}
 		System.out.println("Introduce the facilities that the room has.");
 		String notes = consola.readLine();
@@ -730,7 +732,10 @@ public class Ui {
 
 	public static void updateRoom() throws IOException {
 
-		System.out.println(em.selectRooms());
+		List<Room> list = sqlm.selectRooms();
+		for (Room r : list) {
+			System.out.println(r.toStringpartial());
+		}
 		System.out.println("Choose a room, type its ID: ");
 		Integer id = Integer.parseInt(consola.readLine());
 		String answer;
@@ -754,7 +759,17 @@ public class Ui {
 		System.out.println("Y/N");
 		answer = consola.readLine();
 		if (answer.equalsIgnoreCase("Y")) {
-			System.out.print("Type the new gender of the room: ");
+			
+			System.out.println("Type \"M\" for male, \"F\" for female or \"X\" for mixed:");
+			String gender = "";
+			String option = consola.readLine();
+			if (option.equalsIgnoreCase("M"))
+				gender = "Male";
+			else if (option.equalsIgnoreCase("F")) {
+				gender = "Female";
+			} else {
+				gender = "Mixed";
+			}
 			r.setGender(consola.readLine());
 		}
 
@@ -871,12 +886,12 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Activity a = sqlm.getActivity(id);
 		System.out.println(a);
-		List<Worker> listw= sqlm.selectWorkersFromActivity(id);
-		List<Resident> listr= sqlm.selectResidentsFromActivity(id);
-		for(Worker w:listw) {
+		List<Worker> listw = sqlm.selectWorkersFromActivity(id);
+		List<Resident> listr = sqlm.selectResidentsFromActivity(id);
+		for (Worker w : listw) {
 			System.out.println(w.toStringpartial());
 		}
-		for(Resident r:listr) {
+		for (Resident r : listr) {
 			System.out.println(r.toStringpartial());
 		}
 
@@ -1178,7 +1193,8 @@ public class Ui {
 			System.out.println("Introduce the number:");
 
 			System.out.println("1.New treatment.\n" + "2.List all treatments.\n" + "3.Details of one treatment.\n"
-					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Manage drugs of the treatments"+"\n7.Return to the main menu.");
+					+ "4.Update treatment.\n" + "5.Delete treatment.\n" + "6.Manage drugs of the treatments"
+					+ "\n7.Return to the main menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1202,7 +1218,7 @@ public class Ui {
 				deleteTreatment();
 				break;
 			case 6:
-			drugsTreatment();
+				drugsTreatment();
 				break;
 			case 7:
 				System.out.println("Going back to the menu.");
@@ -1215,7 +1231,13 @@ public class Ui {
 	}
 
 	public static void newTreatment() throws IOException {
-
+		if (sqlm.selectResidents().size() == 0) {
+			System.out.println("You first need to have at least one resident created to create a new treatment.");
+		} 
+		else if(sqlm.selectDrugs().size() == 0) {
+			System.out.println("You first need to have at least one drug created to create a new treatment.");
+		} 
+		else {
 		System.out.println("Introduce the name of the treatment.");
 		String name = consola.readLine();
 
@@ -1250,7 +1272,7 @@ public class Ui {
 		String dosage = consola.readLine();
 		sqlm.insertTreatment(t, id_drug, dosage);
 		System.out.println("Treatment succesfully created.\n");
-
+		}
 	}
 
 	public static void infoTreatment() throws IOException {
@@ -1272,67 +1294,69 @@ public class Ui {
 		Integer id = Integer.parseInt(consola.readLine());
 		Treatment t = sqlm.getTreatment(id);
 		System.out.println(t);
-		List <Drug> drugs=sqlm.selectDrugsFromTreatment(id);
-		for(Drug d: drugs) {
-		System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(id,d.getId()));
+		List<Drug> drugs = sqlm.selectDrugsFromTreatment(id);
+		for (Drug d : drugs) {
+			System.out.println(d.getName() + ":" + sqlm.selectDosageFromTreatment(id, d.getId()));
 		}
 	}
 
 	public static void updateTreatment() throws IOException {
 
-		List<Treatment> treatments=sqlm.selectTreatments();
-		for(Treatment t1: treatments) {
-		List <Drug> drugs=sqlm.selectDrugsFromTreatment(t1.getId());
-		for(Drug d: drugs) {
-		System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(t1.getId(),d.getId()));//TODO ver si va
-		}
-		System.out.println("Choose a treatment, type its ID: ");
-		Integer id = Integer.parseInt(consola.readLine());
-		String answer, dosage;
-		Treatment t = sqlm.getTreatment(id);
-		System.out.println("Do you want to change the name of the Treatment?");
-		System.out.println("Y/N");
-		answer = consola.readLine();
-		if (answer.equalsIgnoreCase("Y")) {
-			System.out.print("Type the new treatment's name: ");
-			t.setName(consola.readLine());
-		}
-		System.out.println("Do you want to change when the treatment ends?");
-		System.out.println("Y/N");
-		answer = consola.readLine();
-		if (answer.equalsIgnoreCase("Y")) {
-			System.out.print("Type the new treatment's end date: ");
-			String dateend = consola.readLine();
-			Date end_date = transform_date(dateend);
-			t.setFinal_date(end_date);
-		}
-
-		System.out.println("Do you want to change the dosage of the Treatment?");
-		System.out.println("Y/N");
-		answer = consola.readLine();
-		Integer id_drug = 0;
-		if (answer.equalsIgnoreCase("Y")) {
-			List<Drug> listd = sqlm.selectDrugsFromTreatment(id);
-			System.out.println("Type the id of the drug you want to change the dosage:");
-			for (Drug d : listd) {
-
-				System.out.println(d);
-
+		List<Treatment> treatments = sqlm.selectTreatments();
+		for (Treatment t1 : treatments) {
+			List<Drug> drugs = sqlm.selectDrugsFromTreatment(t1.getId());
+			for (Drug d : drugs) {
+				System.out.println(d.getName() + ":" + sqlm.selectDosageFromTreatment(t1.getId(), d.getId()));// TODO
+																												// ver
+																												// si va
 			}
-			id_drug = Integer.parseInt(consola.readLine());
-			System.out.print("Type the new treatment's dosage: ");
-			dosage = consola.readLine();
-			sqlm.updateTreatment(t, id_drug, dosage);
+			System.out.println("Choose a treatment, type its ID: ");
+			Integer id = Integer.parseInt(consola.readLine());
+			String answer, dosage;
+			Treatment t = sqlm.getTreatment(id);
+			System.out.println("Do you want to change the name of the Treatment?");
+			System.out.println("Y/N");
+			answer = consola.readLine();
+			if (answer.equalsIgnoreCase("Y")) {
+				System.out.print("Type the new treatment's name: ");
+				t.setName(consola.readLine());
+			}
+			System.out.println("Do you want to change when the treatment ends?");
+			System.out.println("Y/N");
+			answer = consola.readLine();
+			if (answer.equalsIgnoreCase("Y")) {
+				System.out.print("Type the new treatment's end date: ");
+				String dateend = consola.readLine();
+				Date end_date = transform_date(dateend);
+				t.setFinal_date(end_date);
+			}
 
-		} else {
-			dosage = sqlm.selectDosageFromTreatment(t.getId(), id_drug);
-			sqlm.updateTreatment(t, id_drug, dosage);
-		}
+			System.out.println("Do you want to change the dosage of the Treatment?");
+			System.out.println("Y/N");
+			answer = consola.readLine();
+			Integer id_drug = 0;
+			if (answer.equalsIgnoreCase("Y")) {
+				List<Drug> listd = sqlm.selectDrugsFromTreatment(id);
+				System.out.println("Type the id of the drug you want to change the dosage:");
+				for (Drug d : listd) {
 
-		System.out.println("Treatment updated:\n" + t);
-		for(Drug d: drugs) {
-		System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(id,d.getId()));
-		}
+					System.out.println(d);
+
+				}
+				id_drug = Integer.parseInt(consola.readLine());
+				System.out.print("Type the new treatment's dosage: ");
+				dosage = consola.readLine();
+				sqlm.updateTreatment(t, id_drug, dosage);
+
+			} else {
+				dosage = sqlm.selectDosageFromTreatment(t.getId(), id_drug);
+				sqlm.updateTreatment(t, id_drug, dosage);
+			}
+
+			System.out.println("Treatment updated:\n" + t);
+			for (Drug d : drugs) {
+				System.out.println(d.getName() + ":" + sqlm.selectDosageFromTreatment(id, d.getId()));
+			}
 		}
 
 	}
@@ -1349,14 +1373,15 @@ public class Ui {
 		System.out.println("Deletion completed.");
 
 	}
+
 	public static void drugsTreatment() throws IOException {
 
 		int option = 0;
 		do {
 			System.out.println("Introduce the number:");
 
-			System.out.println("1.Add a drug to a treatment.\n"
-					+ "2.Delete a drug from a treatment.\n" + "3.Return to \"Treatment\".\n");
+			System.out.println("1.Add a drug to a treatment.\n" + "2.Delete a drug from a treatment.\n"
+					+ "3.Return to \"Treatment\".\n");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1376,66 +1401,71 @@ public class Ui {
 			}
 		} while (option != 3);
 	}
+
 	public static void addDrug2Treatment() throws IOException {
-		List<Treatment> treatments=sqlm.selectTreatments();
-		for(Treatment t1: treatments) {
-		List <Drug> drugs=sqlm.selectDrugsFromTreatment(t1.getId());
-		for(Drug d: drugs) {
-		System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(t1.getId(),d.getId()));//TODO ver si va
-		}
-		}
-		System.out.println("Type the ID of the treatment you want to add a drug");
-		int id_treat= Integer.parseInt(consola.readLine());
-		int counter,id_drug;
-		do {
-			counter=0;
-		List<Drug> alldrugs=sqlm.selectDrugs();
-		for(Drug d: alldrugs) {
-			System.out.println(d);
-		}
-		System.out.println("Type the ID of the drug you want to add");
-		id_drug= Integer.parseInt(consola.readLine());
-		List<Drug> drugs_treat=sqlm.selectDrugsFromTreatment(id_treat);
-		for(Drug d: drugs_treat) {
-			if(d.getId()==id_drug) {
-				System.out.println("That drug is already assigned to the treatment. Please, select another:");
-				counter++;
+		List<Treatment> treatments = sqlm.selectTreatments();
+		for (Treatment t1 : treatments) {
+			List<Drug> drugs = sqlm.selectDrugsFromTreatment(t1.getId());
+			for (Drug d : drugs) {
+				System.out.println(d.getName() + ":" + sqlm.selectDosageFromTreatment(t1.getId(), d.getId()));// TODO
+																												// ver
+																												// si va
 			}
 		}
+		System.out.println("Type the ID of the treatment you want to add a drug");
+		int id_treat = Integer.parseInt(consola.readLine());
+		int counter, id_drug;
+		do {
+			counter = 0;
+			List<Drug> alldrugs = sqlm.selectDrugs();
+			for (Drug d : alldrugs) {
+				System.out.println(d);
+			}
+			System.out.println("Type the ID of the drug you want to add");
+			id_drug = Integer.parseInt(consola.readLine());
+			List<Drug> drugs_treat = sqlm.selectDrugsFromTreatment(id_treat);
+			for (Drug d : drugs_treat) {
+				if (d.getId() == id_drug) {
+					System.out.println("That drug is already assigned to the treatment. Please, select another:");
+					counter++;
+				}
+			}
 
-		}
-		while(counter!=0);
+		} while (counter != 0);
 		System.out.println("Finally, introduce the dosage of the drug.");
-		String dosage=consola.readLine();
-		sqlm.connectDrugTreatment(id_drug, id_treat,dosage);
+		String dosage = consola.readLine();
+		sqlm.connectDrugTreatment(id_drug, id_treat, dosage);
 
-System.out.println("Drug added to treatment.");
-		
+		System.out.println("Drug added to treatment.");
+
 	}
-public static void deleteDrugTreatment() throws IOException {
-	List<Treatment> treatments=sqlm.selectTreatments();
-	for(Treatment t1: treatments) {
-	List <Drug> drugs=sqlm.selectDrugsFromTreatment(t1.getId());
-	for(Drug d: drugs) {
-	System.out.println(d.getName()+":"+sqlm.selectDosageFromTreatment(t1.getId(),d.getId()));//TODO ver si va
-	}
-	}
-	System.out.println("Type the ID of the treatment you want to delete a drug");
-	int id_treat= Integer.parseInt(consola.readLine());
-	List<Drug> drugs_treat=sqlm.selectDrugsFromTreatment(id_treat);
-if(drugs_treat.size()==1) {
-	System.out.println("That treatment only has 1 drug. You can delete the whole treatment if you want to in the main menu of \"Treatment\".");
-}
-else {
-	
-	for(Drug d: drugs_treat) {
-		System.out.println(d);
-	}
-	System.out.println("Type the ID of the drug you want to remove:");
-	int id_drug= Integer.parseInt(consola.readLine());
-	sqlm.disconnectDrugTreatment(id_drug, id_treat);
-	System.out.println("Drug removed from the treatment.");
-}
+
+	public static void deleteDrugTreatment() throws IOException {
+		List<Treatment> treatments = sqlm.selectTreatments();
+		for (Treatment t1 : treatments) {
+			List<Drug> drugs = sqlm.selectDrugsFromTreatment(t1.getId());
+			for (Drug d : drugs) {
+				System.out.println(d.getName() + ":" + sqlm.selectDosageFromTreatment(t1.getId(), d.getId()));// TODO
+																												// ver
+																												// si va
+			}
+		}
+		System.out.println("Type the ID of the treatment you want to delete a drug");
+		int id_treat = Integer.parseInt(consola.readLine());
+		List<Drug> drugs_treat = sqlm.selectDrugsFromTreatment(id_treat);
+		if (drugs_treat.size() == 1) {
+			System.out.println(
+					"That treatment only has 1 drug. You can delete the whole treatment if you want to in the main menu of \"Treatment\".");
+		} else {
+
+			for (Drug d : drugs_treat) {
+				System.out.println(d);
+			}
+			System.out.println("Type the ID of the drug you want to remove:");
+			int id_drug = Integer.parseInt(consola.readLine());
+			sqlm.disconnectDrugTreatment(id_drug, id_treat);
+			System.out.println("Drug removed from the treatment.");
+		}
 	}
 /////////////////////////////////////XML MENU///////////////////////////////////
 
@@ -1444,7 +1474,8 @@ else {
 		do {
 			System.out.println("Introduce the number:");
 
-			System.out.println("1.Marshall rooms.\n2.Unmarshall rooms.\n3.Marshall activities.\n4.Unmarshall activities.\n5.HTML convertion.\n6.Back to menu.");
+			System.out.println(
+					"1.Marshall rooms.\n2.Unmarshall rooms.\n3.Marshall activities.\n4.Unmarshall activities.\n5.HTML convertion.\n6.Back to menu.");
 			option = Integer.parseInt(consola.readLine());
 			switch (option) {
 
@@ -1457,7 +1488,7 @@ else {
 			case 3:
 				marshallActivities();
 				break;
-				
+
 			case 4:
 				unmarshallActivities();
 				break;
@@ -1482,7 +1513,7 @@ else {
 		Room_list rooms = new Room_list(list);
 		xm.marshallRooms(rooms, name);
 	}
-	
+
 	public static void marshallActivities() throws IOException, JAXBException {
 		System.out.println("Type how do you want to name the XML document (including \"xml\")");
 		String name = consola.readLine();
@@ -1508,35 +1539,29 @@ else {
 			em.insertRoom(r);
 		}
 	}
+
 	public static void unmarshallActivities() throws IOException, JAXBException {
 
-		// Pretty formatting
 		System.out.println("Introduce what XML file you want to unmarshall");
 		String name = consola.readLine();
 		Activity_list activities = xm.unmarshallActivities(name);
-		for(Activity a : activities.getActivities()) {
+		for (Activity a : activities.getActivities()) {
 			sqlm.insertActivity(a);
 		}
-		
 
 	}
-	
-	 public static void generateHTML()throws IOException{
+
+	public static void generateHTML() throws IOException {
 		System.out.println("Introduce the name of the XML file (./xmls/.......xml):");
-		String s1=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......xslt):");
-		String s2=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......html)");
-		String s3=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......xml):");
-		String a1=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......xslt):");
-		String a2=consola.readLine();
-		System.out.println("Introduce the name of the XML file (./xmls/.......html)");
-		String a3=consola.readLine();
+		String s1 = consola.readLine();
+		System.out.println("Introduce the name of the XSLT file (./xmls/.......xslt):");
+		String s2 = consola.readLine();
+		System.out.println("Introduce the name of the HTML file you want to create (./xmls/.......html)");
+		String s3 = consola.readLine();
 		xm.simpleTransform(s1, s2, s3);
-		xm.simpleTransform(a1, a2, a3);
+
 	}
+
 	public static Date transform_date(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate final_date = LocalDate.parse(date, formatter);
